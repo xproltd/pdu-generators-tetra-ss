@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-SNA-ASSIGN_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_SNA_02_Table">
+				<tr>
+					<th align="left">
+						Assignment result:
+					</th>
+					<td>
+						<select id="Assignment_result">
+							<option value="0">Assignment unsuccessful
+							<option value="1">Assignment successful
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Range type for short numbers:
+					</th>
+					<td>
+						<select id="Range_type_for_short_numbers">
+							<option value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Short number (0-255):
+					</th>
+					<td>
+						<input id="Short_number" value="133" size=4>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Assignment_result = document.getElementById('Assignment_result').value;
+				Range_type_for_short_numbers = document.getElementById('Range_type_for_short_numbers').value;
+				Short_number = document.getElementById('Short_number').value;
+				
+				Range_type_for_short_numbers_dec = parseInt(Range_type_for_short_numbers,2);
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(Assignment_result,1);
+				
+				pdu_bin_value += Range_type_for_short_numbers;
+				
+				if (Range_type_for_short_numbers == "1111")
+				{
+					pdu_bin_value += dec2bin(Short_number,8);
+					pdu_bin_value += dec2bin(Short_number,8);
+				}
+				else
+				{
+					for (i=0; i<Range_type_for_short_numbers_dec; i+=1)
+					{
+					pdu_bin_value += dec2bin(Short_number,8);
+					}
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+		</script>
+	</body>
+</html>

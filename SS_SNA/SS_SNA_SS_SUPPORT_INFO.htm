@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-SNA-SS_SUPPORT_INFO</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_SNA_07_Table">
+				<tr>
+					<th align="left">
+						Limitations on other supplementary service invocations/invocation overridings:
+					</th>
+					<td>
+						<input type="hidden" id="Limitations" value="000000">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;SS-COLP:
+					</th>
+					<td>
+                        <select id="LOR_field6" onChange="Encode_LOR(this.form)">
+							<option selected value="0">Not supported
+							<option value="1">Supported
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;Overriding of SS-CAD invocation for outgoing calls:
+					</th>
+					<td>
+                        <select id="LOR_field5" onChange="Encode_LOR(this.form)">
+							<option selected value="0">Not accepted
+							<option value="1">Accepted
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						 &nbsp;&nbsp;&nbsp;Overriding of SS-BOC invocation:
+					</th>
+					<td>
+                        <select id="LOR_field4" onChange="Encode_LOR(this.form)">
+							<option selected value="0">Not accepted
+							<option value="1">Accepted
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;SS-TPI:
+					</th>
+					<td>
+                        <select id="LOR_field3" onChange="OnChange_LOR_field3(this.form)">
+							<option selected value="0">Not supported
+							<option value="1">Supported
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;SS-TPI delivery of priority levels
+					</th>
+					<td>
+                        <select disabled id="LOR_field2" onChange="Encode_LOR(this.form)">
+							<option selected value="0">Not supported
+							<option value="1">Supported
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;SS-TPI delivery of mnemonic name
+					</th>
+					<td>
+                        <select disabled id="LOR_field1" onChange="Encode_LOR(this.form)">
+							<option selected value="0">Not supported
+							<option value="1">Supported
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Limitations = document.getElementById('Limitations').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Limitations;
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function Encode_LOR(form)
+			{
+				LOR_field1 = document.getElementById('LOR_field1').value
+				LOR_field2 = document.getElementById('LOR_field2').value
+				LOR_field3 = document.getElementById('LOR_field3').value
+				LOR_field4 = document.getElementById('LOR_field4').value
+				LOR_field5 = document.getElementById('LOR_field5').value
+				LOR_field6 = document.getElementById('LOR_field6').value
+				document.getElementById('Limitations').value = LOR_field1 + LOR_field2 + LOR_field3 + LOR_field4 + LOR_field5 + LOR_field6;
+			}
+			function OnChange_LOR_field3(form)
+			{
+				LOR_field3 = document.getElementById('LOR_field3').value
+				if (LOR_field3 == "0")
+				{
+					document.getElementById('LOR_field1').value = "0";
+					document.getElementById('LOR_field1').disabled = true;
+					document.getElementById('LOR_field2').value = "0";
+					document.getElementById('LOR_field2').disabled = true;
+				}
+				else
+				{
+					document.getElementById('LOR_field1').disabled = false;
+					document.getElementById('LOR_field2').disabled = false;
+				}
+				Encode_LOR(form);
+			}
+			function AllowDigitOnly(digits)
+			{
+				var charCode = (digits.which) ? digits.which : event.keyCode
+				if (charCode < 48 || charCode > 49)
+					return false;
+				return true;
+			}
+		</script>
+	</body>
+</html>

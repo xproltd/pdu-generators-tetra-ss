@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-SNA-INTERROGATE</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_SNA_05_Table">
+				<tr>
+					<th align="left">
+						Address type of served user:
+					</th>
+					<td>
+						<select id="Address_type_of_served_user" onChange="OnChange_Address_type_of_served_user(this.form)">
+							<option value="00">Short Number Address (SNA)
+							<option value="01">Short Subscriber Identity (SSI)
+							<option value="10">TETRA Subscriber Identity (TSI)
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Served user SNA:
+					</th>
+					<td>
+						<input id="Served_user_SNA" value="123" size=5>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Served user SSI:
+					</th>
+					<td>
+						<input disabled id="Served_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Served user extension:</th>
+					<td>
+						MCC: <input disabled id="Served_user_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Served_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+
+			
+			
+			<tr>
+					<th align="left">
+						Range type for short numbers:
+					</th>
+					<td>
+						<select id="Range_type_for_short_numbers">
+							<option value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Short number (0-255):
+					</th>
+					<td>
+						<input id="Short_number" value="133" size=4>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Address_type_of_served_user = document.getElementById('Address_type_of_served_user').value;
+				Served_user_SNA = document.getElementById('Served_user_SNA').value;
+				Served_user_SSI = document.getElementById('Served_user_SSI').value;
+				Served_user_extension_MCC = document.getElementById('Served_user_extension_MCC').value;
+				Served_user_extension_MNC = document.getElementById('Served_user_extension_MNC').value;
+				
+				Range_type_for_short_numbers = document.getElementById('Range_type_for_short_numbers').value;
+				Short_number = document.getElementById('Short_number').value;
+				
+				Range_type_for_short_numbers_dec = parseInt(Range_type_for_short_numbers,2);
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+
+				pdu_bin_value += Address_type_of_served_user;
+				
+				if (Address_type_of_served_user == "00")
+				{
+					pdu_bin_value += dec2bin(Served_user_SNA,8);
+				}
+				if (Address_type_of_served_user == "01")
+				{
+					pdu_bin_value += dec2bin(Served_user_SSI,24);
+				}
+				if (Address_type_of_served_user == "10")
+				{
+					pdu_bin_value += dec2bin(Served_user_SSI,24);
+					pdu_bin_value += dec2bin(Served_user_extension_MCC,10);
+					pdu_bin_value += dec2bin(Served_user_extension_MNC,14);
+				}
+				
+				pdu_bin_value += Range_type_for_short_numbers;
+				
+				if (Range_type_for_short_numbers == "1111")
+				{
+					pdu_bin_value += dec2bin(Short_number,8);
+					pdu_bin_value += dec2bin(Short_number,8);
+				}
+				else
+				{
+				for (i=0; i<Range_type_for_short_numbers_dec; i+=1)
+					{
+						pdu_bin_value += dec2bin(Short_number,8);
+					}
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Address_type_of_served_user(form)
+			{
+				Address_type_of_served_user = document.getElementById('Address_type_of_served_user').value;
+				if (Address_type_of_served_user == "00") 
+				{
+					document.getElementById('Served_user_SNA').disabled = false;
+					document.getElementById('Served_user_SSI').disabled = true;
+					document.getElementById('Served_user_extension_MCC').disabled = true;
+					document.getElementById('Served_user_extension_MNC').disabled = true;
+				}
+				if (Address_type_of_served_user == "01") 
+				{
+					document.getElementById('Served_user_SNA').disabled = true;
+					document.getElementById('Served_user_SSI').disabled = false;
+					document.getElementById('Served_user_extension_MCC').disabled = true;
+					document.getElementById('Served_user_extension_MNC').disabled = true;
+				}
+				else
+				if (Address_type_of_served_user == "10") 
+				{
+					document.getElementById('Served_user_SNA').disabled = true;
+					document.getElementById('Served_user_SSI').disabled = false;
+					document.getElementById('Served_user_extension_MCC').disabled = false;
+					document.getElementById('Served_user_extension_MNC').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

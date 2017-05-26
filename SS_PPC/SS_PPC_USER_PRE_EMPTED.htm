@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-PPC-USER_PRE_EMPTED</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_PPC_14_Table">
+				<tr>
+					<th align="left">
+						Number of pre-empted parties:
+					</th>
+					<td>
+						<select id="Number_of_pre_empted_parties">
+							<option value="00000">No pre-empted party identities
+							<option selected value="00001">1 pre-empted party identitiy
+							<option value="00010">2 pre-empted party identities
+							<option value="00011">3 pre-empted party identities
+							<option value="00100">4 pre-empted party identities
+							<option value="00101">5 pre-empted party identities
+							<option value="00110">6 pre-empted party identities
+							<option value="00111">7 pre-empted party identities
+							<option value="01000">8 pre-empted party identities
+							<option value="01001">9 pre-empted party identities
+							<option value="01010">10 pre-empted party identities
+							<option value="01011">11 pre-empted party identities
+							<option value="01100">12 pre-empted party identities
+							<option value="01101">13 pre-empted party identities
+							<option value="01110">14 pre-empted party identities
+							<option value="01111">15 pre-empted party identities
+							<option value="10000">16 pre-empted party identities
+							<option value="10001">17 pre-empted party identities
+							<option value="10010">18 pre-empted party identities
+							<option value="10011">19 pre-empted party identities
+							<option value="10100">20 pre-empted party identities
+							<option value="10101">21 pre-empted party identities
+							<option value="10110">22 pre-empted party identities
+							<option value="10111">23 pre-empted party identities
+							<option value="11000">24 pre-empted party identities
+							<option value="11001">25 pre-empted party identities
+							<option value="11010">26 pre-empted party identities
+							<option value="11011">27 pre-empted party identities
+							<option value="11100">28 pre-empted party identities
+							<option value="11101">29 pre-empted party identities
+							<option value="11110">30 pre-empted party identities
+							<option value="11111">31 pre-empted party identities
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Subscriber identity:
+					</th>
+					<td>
+						<select id="T2_Subscriber_identity" onChange="OnChange_T2_Subscriber_identity(this.form)">
+							<option value="0">T2 Not Present
+							<option selected value="1">T2 Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SSI:
+					</th>
+					<td>
+						<input id="SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Extension:
+					</th>
+					<td>
+						<select id="Extension_present" onChange="OnChange_Extension_present(this.form)">
+							<option selected value="0">Not present
+							<option value="1">Present
+						</select>
+						MCC: <input disabled id="Extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">External subscriber number</th>
+					<td>
+						<select onChange="OnChange_T2_External_subscriber_number(this.form)" ID="T2_External_subscriber_number">
+							<option selected value="0">T2 Not Present
+							<option value="1">T2 Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Number of external subscriber digits</th>
+					<td>
+						<input disabled onChange="OnChange_Number_of_external_subscriber_digits(this.form)" id="Number_of_external_subscriber_digits" value="13" size=2>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">External subscriber digits</th>
+					<td>
+						<input disabled id="External_subscriber_digits" value="+#*1234567890" size=20>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Number_of_pre_empted_parties = document.getElementById('Number_of_pre_empted_parties').value;
+				T2_Subscriber_identity = document.getElementById('T2_Subscriber_identity').value;
+				SSI = document.getElementById('SSI').value;
+				Extension_present = document.getElementById('Extension_present').value;
+				Extension_MCC = document.getElementById('Extension_MCC').value;
+				Extension_MNC = document.getElementById('Extension_MNC').value;
+				T2_External_subscriber_number = document.getElementById('T2_External_subscriber_number').value;
+				Number_of_external_subscriber_digits = document.getElementById('Number_of_external_subscriber_digits').value;
+				External_subscriber_digits = document.getElementById('External_subscriber_digits').value;
+				
+				Number_of_pre_empted_parties_dec = parseInt(Number_of_pre_empted_parties,2);
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Number_of_pre_empted_parties;
+				
+				Pre_empted_party = "";
+				T2_option = "0";
+				T2_bin_value = "";
+				
+				if (T2_Subscriber_identity == "1")
+				{
+					T2_option = "1";
+					T2_bin_value += "1" //presence bit
+					T2_bin_value += dec2bin(SSI,24);
+					T2_bin_value += dec2bin(Extension_present,1);
+					if (Extension_present == "1")
+					{
+						T2_bin_value += dec2bin(Extension_MCC,10);
+						T2_bin_value += dec2bin(Extension_MNC,14);
+					}
+				}
+				else
+				{
+					T2_bin_value += "0"; //presence bit
+				}
+				
+				
+				if (T2_External_subscriber_number == "1") 
+				{
+					T2_option = "1";
+					T2_bin_value += "1" //presence bit
+					T2_bin_value += dec2bin(Number_of_external_subscriber_digits,5);
+					
+					var Number_of_digits = parseInt(Number_of_external_subscriber_digits,10);
+					var digits = External_subscriber_digits.substring(0,Number_of_digits);
+					T2_bin_value += digit2bin(digits);
+				}
+				else
+				{
+					T2_bin_value += "0"; //presence bit
+				}
+				
+				if (T2_option == "1")
+				{
+					Pre_empted_party = T2_option + T2_bin_value;
+				}
+				else
+				{
+					Pre_empted_party = T2_option;
+				}
+				
+				for (i=0; i<Number_of_pre_empted_parties_dec; i+=1)
+				{
+					pdu_bin_value += Pre_empted_party;
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Extension_present(form)
+			{
+				Extension_present = document.getElementById('Extension_present').value;
+				if (Extension_present == "0")
+				{
+					document.getElementById('Extension_MCC').disabled = true;
+					document.getElementById('Extension_MNC').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Extension_MCC').disabled = false;
+					document.getElementById('Extension_MNC').disabled = false;
+				}
+			}
+			function OnChange_T2_Subscriber_identity(form)
+			{
+				T2_Subscriber_identity = document.getElementById('T2_Subscriber_identity').value;
+				if (T2_Subscriber_identity == "0")
+				{
+					document.getElementById('SSI').disabled = true;
+					document.getElementById('Extension_present').disabled = true;
+					document.getElementById('Extension_MCC').disabled = true;
+					document.getElementById('Extension_MNC').disabled = true;
+				}
+				else
+				{
+					document.getElementById('SSI').disabled = false;
+					document.getElementById('Extension_present').disabled = false;
+					document.getElementById('Extension_MCC').disabled = false;
+					document.getElementById('Extension_MNC').disabled = false;
+					OnChange_Extension_present(form);
+				}
+			}
+			function OnChange_T2_External_subscriber_number(form)
+			{
+				T2_External_subscriber_number = document.getElementById('T2_External_subscriber_number').value;
+				
+				if (T2_External_subscriber_number == "0")
+				{
+				document.getElementById('Number_of_external_subscriber_digits').disabled = true;
+				document.getElementById('External_subscriber_digits').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Number_of_external_subscriber_digits').disabled = false;
+					document.getElementById('External_subscriber_digits').disabled = false;
+					OnChange_Number_of_external_subscriber_digits(form);
+				}
+			}
+			
+			function OnChange_Number_of_external_subscriber_digits(form)
+			{
+				Number_of_external_subscriber_digits = document.getElementById('Number_of_external_subscriber_digits').value;
+				var var_external_subscriber_digits = "+#*12345678901234567890123456789";
+				
+				Number_of_digits = parseInt(Number_of_external_subscriber_digits,10);
+				if (Number_of_digits >= 32)
+				{
+					alert("Number of Digits between 0...31");
+					return;
+				}
+				External_subscriber_digits = var_external_subscriber_digits.substring(0,Number_of_digits);
+				document.getElementById('External_subscriber_digits').value = External_subscriber_digits;
+			}
+		</script>
+	</body>
+</html>

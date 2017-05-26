@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-PPC-IMPENDING_PRE_EMPTION</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_PPC_13_Table">
+				<tr>
+					<th align="left">
+						Time to pre-emption:
+					</th>
+					<td>
+						<select id="T2_Time_to_pre_emption" onChange="OnChange_T2_Time_to_pre_emption(this.form)">
+							<option selected value="0">T2 Not Present
+							<option value="1">T2 Present
+						</select>
+						<select disabled id="Time_to_pre_emption">
+							<option value="0000">0 second
+							<option value="0001">1 second
+							<option value="0010">2 seconds
+							<option value="0011">3 seconds
+							<option value="0100">4 seconds
+							<option value="0101">5 seconds
+							<option value="0110">6 seconds
+							<option value="0111">7 seconds
+							<option value="1000">8 seconds
+							<option value="1001">9 seconds
+							<option value="1010">10 seconds
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				T2_Time_to_pre_emption = document.getElementById('T2_Time_to_pre_emption').value;
+				Time_to_pre_emption = document.getElementById('Time_to_pre_emption').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				//If the T2_Time_to_pre_emption was set to "1", then we have the T2 IE to add to the PDU,
+				//otherwise we add a single "0" as the T2 presennce bit.
+				
+				if (T2_Time_to_pre_emption == "1")
+				{
+					pdu_bin_value += "11"+Time_to_pre_emption;
+				}
+				else
+				{
+					pdu_bin_value += "0";
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_T2_Time_to_pre_emption(form)
+			{
+				T2_Time_to_pre_emption = document.getElementById('T2_Time_to_pre_emption').value;
+				if (T2_Time_to_pre_emption == "0")
+				{
+					document.getElementById('Time_to_pre_emption').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Time_to_pre_emption').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

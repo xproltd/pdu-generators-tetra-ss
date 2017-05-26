@@ -1,0 +1,442 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <HEAD>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>SS-TPI-INTEROGATE ACK</TITLE>
+        <SCRIPT SRC="../SS_Util.js" language="JavaScript" type="text/JavaScript"></SCRIPT>
+        <LINK href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+    </HEAD>
+    <body class="PDU_page">        
+        <form id="Form1" action="">
+            <table ID="Table1">
+                    <tr>                    
+                        <th align="left">Range type for interogated parties</th>
+                        <td>
+                            <select onChange="OnChange_InterogatedPartiesRangeType(this.form)" ID="InterogatedPartiesRangeType" NAME="InterogatedPartiesRangeType">                          
+	                            <option value="0" >No Element
+	                            <option selected value="1" >1 Element
+	                            <option value="2" >2 Elements
+	                            <option value="3" >3 Elements
+	                            <option value="4" >4 Elements
+	                            <option value="5" >5 Elements
+	                            <option value="6" >6 Elements
+	                            <option value="7" >7 Elements
+	                            <option value="8" >8 Elements
+	                            <option value="9" >9 Elements
+	                            <option value="10">10 Elements
+	                            <option value="11">11 Elements
+	                            <option value="12">12 Elements
+	                            <option value="13">13 Elements
+	                            <option value="14">14 Elements
+	                            <option value="15">Range of Elements
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Interogated Parties Address Type</th>
+                        <td>
+                            <select disabled onChange="OnChange_InterogatedPartiesAddressType(this.form)" ID="InterogatedPartiesAddressType" NAME="InterogatedPartiesAddressType">                          
+	                            <option value="0" >SNA
+	                            <option selected value="1" >SSI
+	                            <option value="2" >TSI
+	                        </select>
+                            SNA <input disabled id="InterogatedParties_SNA" value="148" size=1 NAME="InterogatedParties_SNA">
+                            SSI <input disabled id="InterogatedParties_SSI" value="62033" size=3 NAME="InterogatedParties_SSI">                    
+                            TSI SSI <input disabled id="InterogatedParties_TSI_SSI" value="61044" size=3 NAME="InterogatedParties_TSI_SSI">
+	                        MCC <input value="234" size=1 disabled ID="InterogatedParties_TSI_MCC" NAME="InterogatedParties_TSI_MCC">
+	                        MNC <input value="73" size=1 disabled ID="InterogatedParties_TSI_MNC" NAME="InterogatedParties_TSI_MNC">
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Multiple user mask present</th>
+                        <td>
+                            <select ID="UserMaskPresent" NAME="UserMaskPresent">                          
+	                            <option value="0" >Not present
+	                            <option value="1" >Present
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Interrogation result</th>
+                        <td>
+                            <select onChange="OnChange_InterrogationResult(this.form)" ID="InterrogationResult">                          
+	                            <option value="0" >Interrogation unsuccessful
+	                            <option value="1" >Interrogation successful
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Mnemonic</th>
+                        <td>
+                            <input disabled id="Mnemonic" value="Interogated Mnemonic" size=25>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Speech call subscription</th>
+                        <td>
+                            <select disabled onChange="OnChange_SpeechCallSubscription(this.form)" ID="SpeechCallSubscription">                          
+	                            <option value="0" >Not subscribed
+	                            <option value="1" >Subscribed
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Speech call activation</th>
+                        <td>
+                            <select disabled onChange="OnChange_SpeechCallActivation(this.form)" ID="SpeechCallActivation">                          
+	                            <option selected value="0" >Deactivate
+	                            <option value="1" >Activate
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Speech call: talking party mnemonic name</th>
+                        <td>
+                            <select disabled ID="SpeechMnemonicName">                          
+	                            <option value="0" >No mnemonic name sent
+	                            <option value="1" >Mnemonic name sent
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Priority levels of the talking party speech requests</th>
+                        <td>
+                            <select disabled ID="SpeechPriorityLevels">                          
+	                            <option value="0" >No priority levels sent
+	                            <option value="1" >Priority levels sent
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Data call subscription</th>
+                        <td>
+                            <select disabled onChange="OnChange_DataCallSubscription(this.form)" ID="DataCallSubscription">                          
+	                            <option value="0" >Not subscribed
+	                            <option value="1" >Subscribed
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Data call activation</th>
+                        <td>
+                            <select disabled onChange="OnChange_DataCallActivation(this.form)" ID="DataCallActivation">                          
+	                            <option selected value="0" >Deactivate
+	                            <option value="1" >Activate
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Data call: sending party mnemonic name</th>
+                        <td>
+                            <select disabled ID="DataMnemonicName">                          
+	                            <option value="0" >No mnemonic name sent
+	                            <option value="1" >Mnemonic name sent
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Priority levels of the talking party speech requests</th>
+                        <td>
+                            <select disabled ID="DataPriorityLevels">                          
+	                            <option value="0" >No priority levels sent
+	                            <option value="1" >Priority levels sent
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Interrogation failure cause</th>
+                        <td>
+                            <select disabled ID="InterrogationFailureCause">                          
+	                            <option value="0" >Rejected for any reason
+	                            <option value="1" >User not authorized
+	                            <option value="2" >Range not supported
+	                            <option value="4" >Unknown TETRA identity
+	                            <option value="5" >Invalid PDU contents
+	                        </select>
+                        </td>
+                    </tr>
+            </table>
+        </form>
+        <script language="JavaScript" type="text/JavaScript">
+    
+            function GetPDUValue(pdu_header)
+            {
+                //Get Information Element values
+                InterogatedPartiesRangeType     = document.getElementById('InterogatedPartiesRangeType').value;
+                InterogatedPartiesAddressType   = document.getElementById('InterogatedPartiesAddressType').value;
+                
+                InterogatedParties_SNA          = document.getElementById('InterogatedParties_SNA').value;                
+                InterogatedParties_SSI          = document.getElementById('InterogatedParties_SSI').value;
+                InterogatedParties_TSI_SSI      = document.getElementById('InterogatedParties_TSI_SSI').value;
+                InterogatedParties_TSI_MCC      = document.getElementById('InterogatedParties_TSI_MCC').value;
+                InterogatedParties_TSI_MNC      = document.getElementById('InterogatedParties_TSI_MNC').value;
+                
+                InterrogationResult             = document.getElementById('InterrogationResult').value;
+                UserMaskPresent                 = document.getElementById('UserMaskPresent').value;
+                Mnemonic                        = document.getElementById('Mnemonic').value;
+                
+                SpeechCallSubscription          = document.getElementById('SpeechCallSubscription').value;
+                SpeechCallActivation            = document.getElementById('SpeechCallActivation').value;
+                SpeechMnemonicName              = document.getElementById('SpeechMnemonicName').value;
+                SpeechPriorityLevels            = document.getElementById('SpeechPriorityLevels').value;
+                DataCallSubscription            = document.getElementById('DataCallSubscription').value;
+                DataCallActivation              = document.getElementById('DataCallActivation').value;
+                DataMnemonicName                = document.getElementById('DataMnemonicName').value;
+                DataPriorityLevels              = document.getElementById('DataPriorityLevels').value;
+                
+                InterrogationFailureCause       = document.getElementById('InterrogationFailureCause').value;
+                
+                //Build PDU
+                
+                pdu_bin_value = pdu_header;
+                pdu_bin_addr_value = "";
+
+                pdu_bin_value += dec2bin(InterogatedPartiesRangeType,4);
+                
+                pdu_bin_addr_value = dec2bin(InterogatedPartiesAddressType,2);
+                if (InterogatedPartiesAddressType == "0")
+                {
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_SNA,8);
+                }   
+                else
+                if (InterogatedPartiesAddressType == "1")
+                {
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_SSI,24);
+                }   
+                else
+                if (InterogatedPartiesAddressType == "2")
+                {
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_TSI_SSI,24);
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_TSI_MCC,10);
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_TSI_MNC,14);
+                }   
+                
+                if (InterogatedPartiesRangeType == "15")
+                {
+                    pdu_bin_value += pdu_bin_addr_value;
+                    pdu_bin_value += pdu_bin_addr_value;
+                }
+                else
+                {
+                    Nr_of_Addr = parseInt(InterogatedPartiesRangeType,10);
+                    for (i=0; i<Nr_of_Addr; i+=1)
+                    {
+                        pdu_bin_value += pdu_bin_addr_value;
+                    }
+                }       
+                
+                pdu_bin_value += dec2bin(InterrogationResult,1);
+                pdu_bin_value += dec2bin(UserMaskPresent,1);
+                if (UserMaskPresent == "1")
+                {
+                    UserMaskLength = 0;
+                    if (InterogatedPartiesRangeType == "15")
+                    {
+                        UserMaskLength = 18;                        
+                    }
+                    else
+                    {
+                        UserMaskLength = parseInt(InterogatedPartiesRangeType,10);
+                    }       
+                    if (UserMaskLength > 0)                 
+                    {
+                        pdu_bin_addr_value = "";
+                        while(pdu_bin_addr_value.length < UserMaskLength)
+                            pdu_bin_addr_value += "1";
+                        pdu_bin_value += pdu_bin_addr_value; 
+                    }
+                    
+                }
+                if (InterrogationResult == "1")
+                {
+                    pdu_bin_value += dec2bin(8,7);
+                    pdu_bin_value += dec2bin(Mnemonic.length*8,8);
+                    pdu_bin_value += text2bin(Mnemonic);
+
+                    pdu_bin_value += dec2bin(SpeechCallSubscription,1);
+                    if (SpeechCallSubscription == "1")
+                    {
+                        pdu_bin_value += dec2bin(SpeechCallActivation,1);
+                        if (SpeechCallActivation == "1")
+                        {
+                            pdu_bin_value += dec2bin(SpeechMnemonicName,1);
+                            pdu_bin_value += dec2bin(SpeechPriorityLevels,1);
+                        }
+                    }
+                    pdu_bin_value += dec2bin(DataCallSubscription,1);
+                    if (DataCallSubscription == "1")
+                    {
+                        pdu_bin_value += dec2bin(DataCallActivation,1);
+                        if (DataCallActivation == "1")
+                        {
+                            pdu_bin_value += dec2bin(DataMnemonicName,1);
+                            pdu_bin_value += dec2bin(DataPriorityLevels,1);
+                        }
+                    }
+                }
+                else
+                {
+                    pdu_bin_value += dec2bin(InterrogationFailureCause,3);
+                }
+                                
+
+                
+                return pdu_bin_value;
+            }                                                
+            function OnChange_InterogatedPartiesRangeType(form)
+            {
+                InterogatedPartiesRangeType = document.getElementById('InterogatedPartiesRangeType').value;
+
+                if (InterogatedPartiesRangeType != "0")
+                {
+                    document.getElementById('InterogatedPartiesAddressType').disabled = false;
+                }
+                else
+                {
+                    document.getElementById('InterogatedPartiesAddressType').disabled = true;
+                    document.getElementById('InterogatedPartiesAddressType').value = 1;
+                }
+                
+                OnChange_InterogatedPartiesAddressType(form);
+            }    
+            
+            function OnChange_InterogatedPartiesAddressType(form)
+            {
+                InterogatedPartiesRangeType = document.getElementById('InterogatedPartiesRangeType').value;
+                InterogatedPartiesAddressType = document.getElementById('InterogatedPartiesAddressType').value;
+                
+                document.getElementById('InterogatedParties_SNA').disabled = true;
+                document.getElementById('InterogatedParties_SSI').disabled = true;
+                document.getElementById('InterogatedParties_TSI_SSI').disabled = true;
+                document.getElementById('InterogatedParties_TSI_MCC').disabled = true;
+                document.getElementById('InterogatedParties_TSI_MNC').disabled = true;
+                
+                if (InterogatedPartiesRangeType == "0")
+                    return;
+                
+                if (InterogatedPartiesAddressType == "0")
+                {
+                    document.getElementById('InterogatedParties_SNA').disabled = false;
+                }
+                else if (InterogatedPartiesAddressType == "1")
+                {
+                    document.getElementById('InterogatedParties_SSI').disabled = false;
+                }
+                else if (InterogatedPartiesAddressType == "2")
+                {
+                    document.getElementById('InterogatedParties_TSI_SSI').disabled = false;
+                    document.getElementById('InterogatedParties_TSI_MCC').disabled = false;
+                    document.getElementById('InterogatedParties_TSI_MNC').disabled = false;
+                }
+            }
+
+            function OnChange_InterrogationResult(form)
+            {
+                InterrogationResult = document.getElementById('InterrogationResult').value;
+               
+                document.getElementById('Mnemonic').disabled = true;
+                document.getElementById('SpeechCallSubscription').disabled = true;
+                document.getElementById('SpeechCallActivation').disabled = true;
+                document.getElementById('SpeechMnemonicName').disabled = true;
+                document.getElementById('SpeechPriorityLevels').disabled = true;
+                document.getElementById('DataCallSubscription').disabled = true;
+                document.getElementById('DataCallActivation').disabled = true;
+                document.getElementById('DataMnemonicName').disabled = true;
+                document.getElementById('DataPriorityLevels').disabled = true;
+                document.getElementById('InterrogationFailureCause').disabled = true;
+                
+                if (InterrogationResult == "0")
+                {
+                    document.getElementById('InterrogationFailureCause').disabled = false;
+                    document.getElementById('SpeechCallSubscription').value = 0;
+                    document.getElementById('DataCallSubscription').value = 0;
+                }
+                else
+                if (InterrogationResult == "1")
+                {
+                    document.getElementById('Mnemonic').disabled = false;
+                    document.getElementById('SpeechCallSubscription').disabled = false;
+                    document.getElementById('SpeechCallActivation').disabled = false;
+                    document.getElementById('SpeechMnemonicName').disabled = false;
+                    document.getElementById('SpeechPriorityLevels').disabled = false;
+                    document.getElementById('DataCallSubscription').disabled = false;
+                    document.getElementById('DataCallActivation').disabled = false;
+                    document.getElementById('DataMnemonicName').disabled = false;
+                    document.getElementById('DataPriorityLevels').disabled = false;
+                }
+                
+                OnChange_SpeechCallSubscription(form);
+                OnChange_DataCallSubscription(form);
+            }
+
+            function OnChange_SpeechCallSubscription(form)
+            {
+                SpeechCallSubscription = document.getElementById('SpeechCallSubscription').value;
+
+                document.getElementById('SpeechCallActivation').disabled = true;
+                document.getElementById('SpeechMnemonicName').disabled = true;
+                document.getElementById('SpeechPriorityLevels').disabled = true;
+
+                if (SpeechCallSubscription == "1")
+                {
+                    document.getElementById('SpeechCallActivation').disabled = false;
+                    document.getElementById('SpeechMnemonicName').disabled = false;
+                    document.getElementById('SpeechPriorityLevels').disabled = false;
+                }
+                else
+                    document.getElementById('SpeechCallActivation').value = 0;
+                OnChange_SpeechCallActivation(form);
+            }
+            
+            function OnChange_SpeechCallActivation(form)
+            {
+                SpeechCallActivation = document.getElementById('SpeechCallActivation').value;
+                if (SpeechCallActivation == "1")
+                {
+                    document.getElementById('SpeechMnemonicName').disabled = false;
+                    document.getElementById('SpeechPriorityLevels').disabled = false;
+                }
+                else
+                {
+                    document.getElementById('SpeechMnemonicName').disabled = true;
+                    document.getElementById('SpeechPriorityLevels').disabled = true;
+                }
+            }
+                        
+            function OnChange_DataCallSubscription(form)
+            {
+                DataCallSubscription = document.getElementById('DataCallSubscription').value;
+
+                document.getElementById('DataCallActivation').disabled = true;
+                document.getElementById('DataMnemonicName').disabled = true;
+                document.getElementById('DataPriorityLevels').disabled = true;
+
+                if (DataCallSubscription == "1")
+                {
+                    document.getElementById('DataCallActivation').disabled = false;
+                    document.getElementById('DataMnemonicName').disabled = false;
+                    document.getElementById('DataPriorityLevels').disabled = false;
+                }
+                else
+                    document.getElementById('DataCallActivation').value = 0;
+                OnChange_DataCallActivation(form);
+            }
+                                   
+            function OnChange_DataCallActivation(form)
+            {
+                DataCallActivation = document.getElementById('DataCallActivation').value;
+                if (DataCallActivation == "1")
+                {
+                    document.getElementById('DataMnemonicName').disabled = false;
+                    document.getElementById('DataPriorityLevels').disabled = false;
+                }
+                else
+                {
+                    document.getElementById('DataMnemonicName').disabled = true;
+                    document.getElementById('DataPriorityLevels').disabled = true;
+                }
+            }
+
+        </script>
+    </body>
+</HTML>

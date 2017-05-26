@@ -1,0 +1,645 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-SNA-INTERROGATE_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_SNA_06_Table">
+				<tr>
+					<th align="left">
+						Address type of served user:
+					</th>
+					<td>
+						<select id="Address_type_of_served_user" onChange="OnChange_Address_type_of_served_user(this.form)">
+							<option value="01">Short Subscriber Identity (SSI)
+							<option value="10">TETRA Subscriber Identity (TSI)
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Served user SSI:
+					</th>
+					<td>
+						<input id="Served_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Served user extension:</th>
+					<td>
+						MCC: <input disabled id="Served_user_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Served_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interrogation result:
+					</th>
+					<td>
+						<select id="Interrogation_result" onChange="OnChange_Interrogation_result(this.form)">
+							<option value="0">Interrogation unsuccessful
+							<option value="1">Interrogation successful
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Range type for short numbers:
+					</th>
+					<td>
+						<select id="Range_type_for_short_numbers"  onChange="Update_Multiple_short_number_mask(this.form)">
+							<option selected value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Short number (0-255):
+					</th>
+					<td>
+						<input id="Short_number" value="133" size=4>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Multiple short number mask present:
+					</th>
+					<td>
+						<select id="Multiple_short_number_mask_present" onChange="OnChange_Multiple_short_number_mask_present(this.form)">
+							<option value="0">Not Present
+							<option selected value="1">Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Multiple short number mask:
+					</th>
+					<td>
+						<input id="Multiple_short_number_mask" value="1" size="15" onkeypress="return AllowDigitOnly(event)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Address type of short number definition:
+					</th>
+					<td>
+						<select id="Address_type_of_short_number_definition" onChange="OnChange_Address_type_of_short_number_definition(this.form)">
+							<option value="000">SSI (only) with no external subscriber number
+							<option value="001">Full ITSI with no external subscriber number
+							<option value="010">SSI (only) with external subscriber number
+							<option value="011">Full ITSI with external subscriber number
+							<option value="111">Deletion of short number definition
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						SSI corresponding to short number:
+					</th>
+					<td>
+						<input id="SSI_corresponding_to_short_number" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Extension corresponding to short number:
+					</th>
+					<td>
+						MCC: <input disabled id="Extension_corresponding_to_short_number_MCC" value="234" size=5 >
+						MNC: <input disabled id="Extension_corresponding_to_short_number_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">External number length indicator:</th>
+					<td>
+						<input disabled id="External_number_length_indicator" value="13" size=2 onChange="OnChange_External_number_length_indicator(this.form)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">External subscriber number:</th>
+					<td>
+						<input disabled id="External_subscriber_number" value="+#*1234567890" size=20>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Other supplementary service invocation/invocation overriding:
+					</th>
+					<td>
+						<input type="hidden" id="Other_supplementary_service_invocation_overriding" value="0000000">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;Simultaneous SS-COLP invocation:
+					</th>
+					<td>
+                        <select id="OR_field7" onChange="Encode_OR(this.form)">
+							<option selected value="0">No
+							<option value="1">Yes
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;Overriding of SS-CAD invocation for incoming calls:
+					</th>
+					<td>
+                        <select id="OR_field6" onChange="Encode_OR(this.form)">
+							<option selected value="0">No
+							<option value="1">Yes
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;Overriding of SS-BIC invocation:
+					</th>
+					<td>
+                        <select id="OR_field5" onChange="OnChange_OR_field5(this.form)">
+							<option selected value="0">No
+							<option value="1">Yes
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;Overriding of SS-CAD invocation for outgoing calls:
+					</th>
+					<td>
+                        <select id="OR_field4" onChange="Encode_OR(this.form)">
+							<option selected value="0">No
+							<option value="1">Yes
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;Overriding of SS-BOC invocation:
+					</th>
+					<td>
+                        <select id="OR_field3" onChange="OnChange_OR_field3(this.form)">
+							<option selected value="0">No
+							<option value="1">Yes
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;Overriding of SS-CLIR invocation:
+					</th>
+					<td>
+                        <select id="OR_field2" onChange="Encode_OR(this.form)">
+							<option selected value="0">No
+							<option value="1">Yes
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;Simultaneous SS-TPI invocation:
+					</th>
+					<td>
+                        <select id="OR_field1" onChange="OnChange_OR_field1(this.form)">
+							<option selected value="0">No
+							<option value="1">Yes
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						SS-TPI subscription option(s):
+					</th>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;SS-TPI delivery of talking/sending party mnemonic name:
+					</th>
+					<td>
+						<select disabled id="SS_TPI_delivery_of_mnemonic_name">
+							<option value="0">Not set
+							<option selected value="1">Set
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;SS-TPI delivery of priority levels:
+					</th>
+					<td>
+						<select disabled id="SS_TPI_delivery_of_priority_levels">
+							<option value="0">Not set
+							<option selected value="1">Set
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Assignment requested:
+					</th>
+					<td>
+						<select disabled id="Assignment_requested" onChange="OnChange_Assignment_requested(this.form)">
+							<option value="0">Assignment to served user not requested
+							<option value="1">Assignment to served user requested
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Acknowledgement requested:
+					</th>
+					<td>
+						<select disabled id="Acknowledgement_requested">
+							<option value="0">Acknowledgement not requested from served user
+							<option value="1">Acknowledgement requested from served user
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interrogation failure cause:
+					</th>
+					<td>
+						<select id="Interrogation_failure_cause">
+							<option value="000">Rejected for any reason
+							<option value="001">User not authorized
+							<option value="010">Unknown TETRA identity
+							<option value="011">Range not supported
+							<option value="100">Invalid PDU contents
+							<option value="101">SS not subscribed for user addressed
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Address_type_of_served_user = document.getElementById('Address_type_of_served_user').value;
+				Served_user_SSI = document.getElementById('Served_user_SSI').value;
+				Served_user_extension_MCC = document.getElementById('Served_user_extension_MCC').value;
+				Served_user_extension_MNC = document.getElementById('Served_user_extension_MNC').value;
+				Interrogation_result = document.getElementById('Interrogation_result').value;
+				Range_type_for_short_numbers = document.getElementById('Range_type_for_short_numbers').value;
+				Short_number = document.getElementById('Short_number').value;
+				Multiple_short_number_mask_present = document.getElementById('Multiple_short_number_mask_present').value;
+				Multiple_short_number_mask = document.getElementById('Multiple_short_number_mask').value;
+				Address_type_of_short_number_definition = document.getElementById('Address_type_of_short_number_definition').value;
+				SSI_corresponding_to_short_number = document.getElementById('SSI_corresponding_to_short_number').value;
+				Extension_corresponding_to_short_number_MCC = document.getElementById('Extension_corresponding_to_short_number_MCC').value;
+				Extension_corresponding_to_short_number_MNC = document.getElementById('Extension_corresponding_to_short_number_MNC').value;
+				External_number_length_indicator = document.getElementById('External_number_length_indicator').value;
+				External_subscriber_number = document.getElementById('External_subscriber_number').value;
+				
+				Other_supplementary_service_invocation_overriding = document.getElementById('Other_supplementary_service_invocation_overriding').value;
+				SS_TPI_delivery_of_mnemonic_name = document.getElementById('SS_TPI_delivery_of_mnemonic_name').value;
+				SS_TPI_delivery_of_priority_levels = document.getElementById('SS_TPI_delivery_of_priority_levels').value;
+				Assignment_requested = document.getElementById('Assignment_requested').value;
+				Acknowledgement_requested = document.getElementById('Acknowledgement_requested').value;
+				Interrogation_failure_cause = document.getElementById('Interrogation_failure_cause').value;
+				
+				Range_type_for_short_numbers_dec = parseInt(Range_type_for_short_numbers,2);
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+
+				pdu_bin_value += Address_type_of_served_user;
+				
+				if (Address_type_of_served_user == "01")
+				{
+					pdu_bin_value += dec2bin(Served_user_SSI,24);
+				}
+				if (Address_type_of_served_user == "10")
+				{
+					pdu_bin_value += dec2bin(Served_user_SSI,24);
+					pdu_bin_value += dec2bin(Served_user_extension_MCC,10);
+					pdu_bin_value += dec2bin(Served_user_extension_MNC,14);
+				}
+				
+				pdu_bin_value += Interrogation_result;
+
+				pdu_bin_value += Range_type_for_short_numbers;
+				
+				if (Range_type_for_short_numbers == "1111")
+				{
+					pdu_bin_value += dec2bin(Short_number,8);
+					pdu_bin_value += dec2bin(Short_number,8);
+				}
+				else
+				{
+					for (i=0; i<Range_type_for_short_numbers_dec; i+=1)
+					{
+						pdu_bin_value += dec2bin(Short_number,8);
+					}
+				}
+				
+				pdu_bin_value += Multiple_short_number_mask_present;
+				
+				if ( Multiple_short_number_mask_present == "1")
+				{
+					//To validate the Multiple_short_number_mask first we calculate how many elements there are in the range
+					
+					Number_of_range_elements = 1;
+					if (Range_type_for_short_numbers_dec < 15)
+					{
+						Number_of_range_elements = Range_type_for_short_numbers_dec;
+					}
+					//The length of Multiple_short_number_mask is the Number_of_range_elements
+					//Let's trim it, and then pad with "0"s if it is shorter than it should be.
+					
+					Multiple_short_number_mask = Multiple_short_number_mask.substring(0,Number_of_range_elements);
+					while (Multiple_short_number_mask.length < Number_of_range_elements)
+					{
+						Multiple_short_number_mask = "0" + Multiple_short_number_mask; 
+					}
+					
+					pdu_bin_value += Multiple_short_number_mask;
+				}
+				
+				pdu_bin_value += Address_type_of_short_number_definition;
+				
+				if (Address_type_of_short_number_definition != "111")
+				{
+					pdu_bin_value += dec2bin(SSI_corresponding_to_short_number,24);
+				}
+				if (Address_type_of_short_number_definition == "001" || Address_type_of_short_number_definition == "011" )
+				{
+					pdu_bin_value += dec2bin(Extension_corresponding_to_short_number_MCC,10);
+					pdu_bin_value += dec2bin(Extension_corresponding_to_short_number_MNC,14);
+				}
+				if (Address_type_of_short_number_definition == "010" || Address_type_of_short_number_definition == "011" )
+				{
+					pdu_bin_value += dec2bin(External_number_length_indicator,5);
+					var Number_of_digits = parseInt(External_number_length_indicator,10);
+					var digits = External_subscriber_number.substring(0,Number_of_digits);
+					pdu_bin_value += digit2bin(digits);
+				}
+				
+				if (Address_type_of_short_number_definition != "111")
+				{
+					pdu_bin_value += Other_supplementary_service_invocation_overriding;
+					if (Other_supplementary_service_invocation_overriding >= "1000000")
+					{
+						pdu_bin_value += SS_TPI_subscription_options;
+					}
+				}
+				
+				if (Interrogation_result == "0")
+				{
+					pdu_bin_value += Interrogation_failure_cause;
+				}
+				else
+				{
+					pdu_bin_value += dec2bin(Assignment_requested,1);
+					if (Assignment_requested == "1")
+					{
+						pdu_bin_value += dec2bin(Acknowledgement_requested,1);
+					}
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Address_type_of_served_user(form)
+			{
+				Address_type_of_served_user = document.getElementById('Address_type_of_served_user').value;
+				if (Address_type_of_served_user == "01") 
+				{
+					document.getElementById('Served_user_SSI').disabled = false;
+					document.getElementById('Served_user_extension_MCC').disabled = true;
+					document.getElementById('Served_user_extension_MNC').disabled = true;
+				}
+				else
+				if (Address_type_of_served_user == "10") 
+				{
+					document.getElementById('Served_user_SSI').disabled = false;
+					document.getElementById('Served_user_extension_MCC').disabled = false;
+					document.getElementById('Served_user_extension_MNC').disabled = false;
+				}
+			}
+			function OnChange_Address_type_of_short_number_definition(form)
+			{
+				Address_type_of_short_number_definition = document.getElementById('Address_type_of_short_number_definition').value;
+				if (Address_type_of_short_number_definition == "000") 
+				{
+					document.getElementById('SSI_corresponding_to_short_number').disabled = false;
+					document.getElementById('Extension_corresponding_to_short_number_MCC').disabled = true;
+					document.getElementById('Extension_corresponding_to_short_number_MNC').disabled = true;
+					document.getElementById('External_number_length_indicator').disabled = true;
+					document.getElementById('External_subscriber_number').disabled = true;
+					Enable_OR(form);
+				}
+				else
+				if (Address_type_of_short_number_definition == "001")
+				{
+					document.getElementById('SSI_corresponding_to_short_number').disabled = false;
+					document.getElementById('Extension_corresponding_to_short_number_MCC').disabled = false;
+					document.getElementById('Extension_corresponding_to_short_number_MNC').disabled = false;
+					document.getElementById('External_number_length_indicator').disabled = true;
+					document.getElementById('External_subscriber_number').disabled = true;
+					Enable_OR(form);
+				}
+				else
+				if (Address_type_of_short_number_definition == "010") 
+				{
+					document.getElementById('SSI_corresponding_to_short_number').disabled = false;
+					document.getElementById('Extension_corresponding_to_short_number_MCC').disabled = true;
+					document.getElementById('Extension_corresponding_to_short_number_MNC').disabled = true;
+					document.getElementById('External_number_length_indicator').disabled = false;
+					document.getElementById('External_subscriber_number').disabled = false;
+					Enable_OR(form);
+				}
+				else
+				if (Address_type_of_short_number_definition == "011")
+				{
+					document.getElementById('SSI_corresponding_to_short_number').disabled = false;
+					document.getElementById('Extension_corresponding_to_short_number_MCC').disabled = false;
+					document.getElementById('Extension_corresponding_to_short_number_MNC').disabled = false;
+					document.getElementById('External_number_length_indicator').disabled = false;
+					document.getElementById('External_subscriber_number').disabled = false;
+					Enable_OR(form);
+				}
+				else
+				if (Address_type_of_short_number_definition == "111")
+				{
+					document.getElementById('SSI_corresponding_to_short_number').disabled = true;
+					document.getElementById('Extension_corresponding_to_short_number_MCC').disabled = true;
+					document.getElementById('Extension_corresponding_to_short_number_MNC').disabled = true;
+					document.getElementById('External_number_length_indicator').disabled = true;
+					document.getElementById('External_subscriber_number').disabled = true;
+					document.getElementById('SS_TPI_delivery_of_mnemonic_name').disabled = true;
+					document.getElementById('SS_TPI_delivery_of_priority_levels').disabled = true;
+					Disable_OR(form);
+				}
+			}
+			function OnChange_External_number_length_indicator(form)
+			{
+				External_number_length_indicator = document.getElementById('External_number_length_indicator').value;
+				var var_external_subscriber_digits = "+#*12345678901234567890123456789";
+				
+				Number_of_digits = parseInt(External_number_length_indicator,10);
+				if (Number_of_digits >= 32)
+				{
+					alert("Number of Digits between 0...31");
+					return;
+				}
+				External_subscriber_number = var_external_subscriber_digits.substring(0,Number_of_digits);
+				document.getElementById('External_subscriber_number').value = External_subscriber_number;
+			}
+			function Enable_OR(form)
+			{
+				document.getElementById('OR_field1').disabled = false;
+				document.getElementById('OR_field2').disabled = false;
+				document.getElementById('OR_field3').disabled = false;
+				document.getElementById('OR_field4').disabled = false;
+				document.getElementById('OR_field5').disabled = false;
+				document.getElementById('OR_field6').disabled = false;
+				document.getElementById('OR_field7').disabled = false;
+				OnChange_OR_field1(form);
+			}
+			function Disable_OR(form)
+			{
+				document.getElementById('OR_field1').disabled = true;
+				document.getElementById('OR_field2').disabled = true;
+				document.getElementById('OR_field3').disabled = true;
+				document.getElementById('OR_field4').disabled = true;
+				document.getElementById('OR_field5').disabled = true;
+				document.getElementById('OR_field6').disabled = true;
+				document.getElementById('OR_field7').disabled = true;
+			}
+			function Encode_OR(form)
+			{
+				OR_field1 = document.getElementById('OR_field1').value
+				OR_field2 = document.getElementById('OR_field2').value
+				OR_field3 = document.getElementById('OR_field3').value
+				OR_field4 = document.getElementById('OR_field4').value
+				OR_field5 = document.getElementById('OR_field5').value
+				OR_field6 = document.getElementById('OR_field6').value
+				OR_field7 = document.getElementById('OR_field7').value
+				document.getElementById('Other_supplementary_service_invocation_overriding').value = OR_field1 + OR_field2 + OR_field3 + OR_field4 + OR_field5 + OR_field6 + OR_field7;
+			}
+			function OnChange_OR_field1(form)
+			{
+				OR_field1 = document.getElementById('OR_field1').value;
+				if (OR_field1 == "1")
+				{
+					document.getElementById('SS_TPI_delivery_of_mnemonic_name').disabled = false;
+					document.getElementById('SS_TPI_delivery_of_priority_levels').disabled = false;
+				}
+				else
+				{
+					document.getElementById('SS_TPI_delivery_of_mnemonic_name').disabled = true;
+					document.getElementById('SS_TPI_delivery_of_priority_levels').disabled = true;
+				}
+				Encode_OR(form);
+			}
+			function OnChange_OR_field3(form)
+			{
+				OR_field3 = document.getElementById('OR_field3').value;
+				if (OR_field3 == "1")
+				{
+					document.getElementById('OR_field4').value = "0";
+					document.getElementById('OR_field4').disabled = true;
+				}
+				else
+				{
+					document.getElementById('OR_field4').disabled = false;
+				}
+				Encode_OR(form);
+			}
+			function OnChange_OR_field5(form)
+			{
+				OR_field5 = document.getElementById('OR_field5').value;
+				if (OR_field5 == "1")
+				{
+					document.getElementById('OR_field6').value = "0";
+					document.getElementById('OR_field6').disabled = true;
+				}
+				else
+				{
+					document.getElementById('OR_field6').disabled = false;
+				}
+				Encode_OR(form);
+			}
+			function OnChange_Interrogation_result(form)
+			{
+				Interrogation_result = document.getElementById('Interrogation_result').value;
+				if (Interrogation_result == "0")
+				{
+					document.getElementById('Interrogation_failure_cause').disabled = false;
+					document.getElementById('Assignment_requested').disabled = true;
+					document.getElementById('Acknowledgement_requested').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Interrogation_failure_cause').disabled = true;
+					document.getElementById('Assignment_requested').disabled = false;
+					OnChange_Assignment_requested(form);
+				}
+			}
+			function OnChange_Assignment_requested(form)
+			{
+				Assignment_requested = document.getElementById('Assignment_requested').value;
+				if (Assignment_requested == "0")
+				{
+					document.getElementById('Acknowledgement_requested').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Acknowledgement_requested').disabled = false;
+				}
+			}
+			function OnChange_Multiple_short_number_mask_present(form)
+			{
+				Multiple_short_number_mask_present = document.getElementById('Multiple_short_number_mask_present').value;
+				if (Multiple_short_number_mask_present == "0") 
+				{
+					document.getElementById('Multiple_short_number_mask').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Multiple_short_number_mask').disabled = false;
+				}
+			}
+			function Update_Multiple_short_number_mask(form)
+			{
+				Range_type_for_short_numbers = document.getElementById('Range_type_for_short_numbers').value;
+				Number_of_range_elements = 1;
+				if (parseInt(Range_type_for_short_numbers,2) > 1 && parseInt(Range_type_for_short_numbers,2) < 15)
+				{
+					Number_of_range_elements = parseInt(Range_type_for_short_numbers,2);
+				}
+				document.getElementById('Multiple_short_number_mask').value = "101010101010101010".substring(0,Number_of_range_elements);
+			}
+			function AllowDigitOnly(digits)
+			{
+				var charCode = (digits.which) ? digits.which : event.keyCode
+				if (charCode < 48 || charCode > 49)
+					return false;
+				return true;
+			}
+		</script>
+	</body>
+</html>

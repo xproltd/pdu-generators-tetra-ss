@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-PPC-WITHDRAW</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_PPC_09_Table">
+				<tr>
+					<th align="left">
+						Range type for subscriber identity:
+					</th>
+					<td>
+						<select id="Range_type_for_subscriber_identity">
+							<option selected value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						SSI:
+					</th>
+					<td>
+						<input id="SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Extension:</th>
+					<td>
+						<select id="Extension_present" onChange="OnChange_Extension_present(this.form)">
+							<option selected value="0">Not present
+							<option value="1">Present
+						</select>
+						MCC: <input disabled id="Extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Delivery to user A(s):
+					</th>
+					<td>
+						<select id="Delivery_to_user_A">
+							<option selected value="0">To be delivered
+							<option value="1">Not to be delivered
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Acknowledgement from user A(s):
+					</th>
+					<td>
+						<select id="Acknowledgement_from_user_A">
+							<option selected value="0">Acknowledgement requested
+							<option value="1">Acknowledgement not requested
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Range_type_for_subscriber_identity = document.getElementById('Range_type_for_subscriber_identity').value;
+				SSI = document.getElementById('SSI').value;
+				Extension_present = document.getElementById('Extension_present').value;
+				Extension_MCC = document.getElementById('Extension_MCC').value;
+				Extension_MNC = document.getElementById('Extension_MNC').value;
+				
+				Delivered_to_user_A = document.getElementById('Delivered_to_user_A').value;
+				Acknowledgement_from_user_A = document.getElementById('Acknowledgement_from_user_A').value;
+				
+				Range_type_for_subscriber_identity_dec = parseInt(Range_type_for_subscriber_identity,2);
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				//Contruct the Subscriber_identity, and add it to the PDU as many times
+				//as defined by the Range_type_for_subscriber_identity variable
+				
+				pdu_bin_value += Range_type_for_subscriber_identity;
+				
+				Subscriber_identity = dec2bin(SSI,24);
+				Subscriber_identity += dec2bin(Extension_present,1);
+				if (Extension_present == "1")
+				{
+					Subscriber_identity += dec2bin(Extension_MCC,10);
+					Subscriber_identity += dec2bin(Extension_MNC,14);
+				}
+				
+				if (Range_type_for_subscriber_identity == "1111")
+				{
+					pdu_bin_value += Subscriber_identity;
+					pdu_bin_value += Subscriber_identity;
+				}
+				else
+				{
+					for (i=0; i<Range_type_for_subscriber_identity_dec; i+=1)
+					{
+						pdu_bin_value += Subscriber_identity;
+					}
+				}
+				
+				pdu_bin_value += dec2bin(Delivered_to_user_A,1);
+				pdu_bin_value += dec2bin(Acknowledgement_from_user_A,1);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Extension_present(form)
+			{
+				Extension_present = document.getElementById('Extension_present').value;
+				if (Extension_present == "0")
+				{
+					document.getElementById('Extension_MCC').disabled = true;
+					document.getElementById('Extension_MNC').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Extension_MCC').disabled = false;
+					document.getElementById('Extension_MNC').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

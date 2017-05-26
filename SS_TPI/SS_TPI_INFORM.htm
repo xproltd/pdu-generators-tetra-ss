@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <HEAD>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>SS-TPI-ACTIVATE</TITLE>
+        <SCRIPT SRC="../SS_Util.js" language="JavaScript" type="text/JavaScript"></SCRIPT>
+        <LINK href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+    </HEAD>
+    <body class="PDU_page">
+        <form id="Form1" action="">
+            <table ID="Table1">
+                <tr>
+                    <th align="left">
+                        SS-CLIR invoked for talking/sending party</th>
+                    <td>
+                        <select ID="CLIR">
+                            <option value="0">SS-CLIR not invoked for talking/sending party
+                            <option value="1">SS-CLIR invoked for talking/sending party
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th align="left">
+                        Talking/Sending party Mnemonic</th>
+                    <td>
+                        <input id="Mnemonic" value="Inform Name" size="15">
+                    </td>
+                </tr>
+                <tr>
+                    <th align="left">Talking/Sending party address</th>
+                    <td><select onChange="OnEnableDisable_PartyAddress(this.form)" ID="T2_PartyAddress">
+                            <option selected value="0">T2 Not Present
+                            <option value="1">T2 Present
+                        </select>
+                        <select disabled onChange="OnChange_PartyAddressType(this.form)" ID="PartyAddressType">
+                            <option value="1">SSI
+                            <option value="2">TSI
+                        </select>
+                        SSI <input disabled id="Party_SSI" value="62033" size="3" NAME="Party_SSI"> TSI 
+                        SSI <input disabled id="Party_TSI_SSI" value="61044" size="3" NAME="Party_TSI_SSI">
+                        MCC <input value="234" size="1" disabled ID="Party_TSI_MCC" NAME="Party_TSI_MCC">
+                        MNC <input value="73" size="1" disabled ID="Party_TSI_MNC" NAME="Party_TSI_MNC">
+                    </td>
+                </tr>
+                <tr>
+                    <th align="left">TX demand priority</th>
+                    <td>
+                        <select ID="T2_TXDemandPriority" onChange="OnEnableDisable_Ctrl(this.form.T2_TXDemandPriority,this.form.TXDemandPriority)">
+                            <option selected value="0">T2 Not Present
+                            <option value="1">T2 Present
+                        </select>
+                        <select ID="TXDemandPriority">
+                            <option value="0">Low priority level
+                            <option value="1">High priority level
+                            <option value="2">Pre-emptive priority level
+                            <option value="3">Emergency pre-emptive priority level
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th align="left">
+                        Talking/Sending party digits</th>
+                    <td>
+                        <select ID="T2_PartyDigits" onChange="OnEnableDisable_Ctrl(this.form.T2_PartyDigits,this.form.PartyDigits)">
+                            <option selected value="0">T2 Not Present
+                            <option value="1">T2 Present
+                        </select>
+                        Digits <input disabled id="PartyDigits" value="012345678901234567890123456789" size="35">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <script language="JavaScript" type="text/JavaScript">
+    
+            function GetPDUValue(pdu_header)
+            {
+                //Get Information Element values
+                
+                CLIR =                      document.getElementById('CLIR').value;
+                Mnemonic =                  document.getElementById('Mnemonic').value;
+                T2_PartyAddress =           document.getElementById('T2_PartyAddress').value;
+                PartyAddressType =          document.getElementById('PartyAddressType').value;
+                Party_SSI =                 document.getElementById('Party_SSI').value;
+                Party_TSI_SSI =             document.getElementById('Party_TSI_SSI').value;
+                Party_TSI_MCC =             document.getElementById('Party_TSI_MCC').value;
+                Party_TSI_MNC =             document.getElementById('Party_TSI_MNC').value;
+                T2_PartyDigits =            document.getElementById('T2_PartyDigits').value;
+
+                T2_TXDemandPriority =       document.getElementById('T2_TXDemandPriority').value;
+                TXDemandPriority =          document.getElementById('TXDemandPriority').value;
+
+                //Build PDU
+                
+                pdu_bin_value = pdu_header;
+                pdu_bin_addr_value = "";
+                T2_pdu_bin_value = "";
+                
+                pdu_bin_value += dec2bin(CLIR,1);
+                
+                pdu_bin_value += dec2bin(8,7);
+                pdu_bin_value += dec2bin(Mnemonic.length*8,8);
+                pdu_bin_value += text2bin(Mnemonic);
+                
+                T2_pdu_bin_value += T2_PartyAddress;
+                if (T2_PartyAddress != "0")
+                {
+                    T2_pdu_bin_value += dec2bin(PartyAddressType,2);
+                    if (PartyAddressType == "1")
+                    {
+                        T2_pdu_bin_value += dec2bin(Party_SSI,24);
+                    }   
+                    else
+                    if (PartyAddressType == "2")
+                    {
+                        T2_pdu_bin_value += dec2bin(Party_TSI_SSI,24);
+                        T2_pdu_bin_value += dec2bin(Party_TSI_MCC,10);
+                        T2_pdu_bin_value += dec2bin(Party_TSI_MNC,14);
+                    }   
+                }
+
+                T2_pdu_bin_value += T2_TXDemandPriority;
+                if (T2_TXDemandPriority != "0")
+                {
+                    T2_pdu_bin_value += dec2bin(TXDemandPriority,2);
+                }
+                                
+                T2_pdu_bin_value += T2_PartyDigits;
+                if (T2_PartyDigits != "0")
+                {
+                    T2_pdu_bin_value += dec2bin(30,5);
+                    T2_pdu_bin_value +="000000010010001101000101011001111000100110101011110000000001001000110100010101100111100010011010101111000000000100100011010001010110011110001001101010111100"
+                }
+                
+                T2_str = T2_PartyAddress + T2_TXDemandPriority + T2_PartyDigits;
+                T2 = parseInt(T2_str,2);                
+                if (T2 > 0)
+                    T2_pdu_bin_value = "1" + T2_pdu_bin_value;
+                else
+                    T2_pdu_bin_value = "0";
+                    
+                pdu_bin_value += T2_pdu_bin_value;
+                
+                
+                return pdu_bin_value;
+            }    
+            
+            function OnEnableDisable_PartyAddress(form)
+            {
+                T2_PartyAddress = document.getElementById('T2_PartyAddress').value;
+
+                if (T2_PartyAddress != "0")
+                {
+                    document.getElementById('PartyAddressType').disabled = false;
+                }
+                else
+                {
+                    document.getElementById('PartyAddressType').value = 1;
+                    document.getElementById('PartyAddressType').disabled = true;
+                }
+                
+                OnChange_PartyAddressType(form);
+            }    
+
+            function OnChange_PartyAddressType(form)
+            {
+                T2_PartyAddress = document.getElementById('T2_PartyAddress').value;
+                PartyAddressType = document.getElementById('PartyAddressType').value;
+
+                document.getElementById('Party_SSI').disabled = true;
+                document.getElementById('Party_TSI_SSI').disabled = true;
+                document.getElementById('Party_TSI_MCC').disabled = true;
+                document.getElementById('Party_TSI_MNC').disabled = true;
+                
+                if (T2_PartyAddress == "0")
+                    return;
+                
+                if (PartyAddressType == "1")
+                {
+                    document.getElementById('Party_SSI').disabled = false;
+                }
+                else
+                if (PartyAddressType == "2")
+                {
+                    document.getElementById('Party_TSI_SSI').disabled = false;
+                    document.getElementById('Party_TSI_MCC').disabled = false;
+                    document.getElementById('Party_TSI_MNC').disabled = false;
+                }
+            }    
+                                            
+        </script>
+    </body>
+</HTML>

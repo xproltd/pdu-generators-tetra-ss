@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-PC-ASSIGN</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_PC_01_Table">
+				<tr>
+					<th align="left">
+						Activated/Deactivated:
+					</th>
+					<td>
+						<select id="Activated_Deactivated">
+							<option selected value="0">Activated
+							<option value="1">Deactivated
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Number of SS-PC definitions:
+					</th>
+					<td>
+						<select id="Number_of_SS_PC_definitions">
+							<option value="001">1
+							<option value="010">2
+							<option value="011">3
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						SS PC Assignment
+					</th>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Basic service:
+					</th>
+					<td>
+						<select id="Basic_service">
+							<option value="000">all applicable basic services
+							<option value="001">circuit mode speech
+							<option value="010">circuit mode data
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;High priority value:
+					</th>
+					<td>
+						<select id="T2_High_priority_value" onChange="OnChange_T2_High_priority_value(this.form)">
+							<option value="0">T2 Not Present
+							<option selected value="1">T2 Present
+						</select>
+						<select id="High_priority_value">
+							<option value="0000">Priority not defined
+							<option value="0001">1
+							<option value="0010">2
+							<option value="0011">3
+							<option value="0100">4
+							<option value="0101">5
+							<option value="0110">6
+							<option value="0111">7
+							<option value="1000">8
+							<option value="1001">9
+							<option value="1010">10
+							<option value="1011">11
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Low priority value:
+					</th>
+					<td>
+						<select id="T2_Low_priority_value" onChange="OnChange_T2_Low_priority_value(this.form)">
+							<option value="0">T2 Not Present
+							<option selected value="1">T2 Present
+						</select>
+						<select id="Low_priority_value">
+							<option value="0000">Priority not defined
+							<option value="0001">1
+							<option value="0010">2
+							<option value="0011">3
+							<option value="0100">4
+							<option value="0101">5
+							<option value="0110">6
+							<option value="0111">7
+							<option value="1000">8
+							<option value="1001">9
+							<option value="1010">10
+							<option value="1011">11
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Acknowledgement from user A(s):
+					</th>
+					<td>
+						<select id="Acknowledgement_from_user_A">
+							<option selected value="0">Acknowledgement requested
+							<option value="1">Acknowledgement not requested
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Activated_Deactivated = document.getElementById('Activated_Deactivated').value;
+				Number_of_SS_PC_definitions = document.getElementById('Number_of_SS_PC_definitions').value;
+				Basic_service = document.getElementById('Basic_service').value;
+				T2_High_priority_value = document.getElementById('T2_High_priority_value').value;
+				High_priority_value = document.getElementById('High_priority_value').value;
+				T2_Low_priority_value = document.getElementById('T2_Low_priority_value').value;
+				Low_priority_value = document.getElementById('Low_priority_value').value;
+				Acknowledgement_from_user_A = document.getElementById('Acknowledgement_from_user_A').value;
+				
+				Number_of_SS_PC_definitions_dec = parseInt(Number_of_SS_PC_definitions,2);
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(Activated_Deactivated,1);
+				pdu_bin_value += Number_of_SS_PC_definitions;
+				
+				//Create the SS_PC_Definition value
+				//Set the T2_option_bit to "0", process the T2 IEs
+				//After processing the T2 IEs, check if the option is still 0 or was changed to 1
+				
+				SS_PC_Definition = Basic_service;
+				T2_option_bit = "0";
+				if (T2_High_priority_value == "1")
+				{
+					T2_option_bit = "1";
+					T2_bin_value = "1"+High_priority_value;
+				}
+				else
+				{
+					T2_bin_value = "0";
+				}
+
+				if (T2_Low_priority_value == "1")
+				{
+					T2_option_bit = "1";
+					T2_bin_value += "1"+Low_priority_value;
+				}
+				else
+				{
+					T2_bin_value += "0";
+				}
+				
+				//If the T2_option_bit was set to "1",then we have at least 1 T2 IE
+				
+				if (T2_option_bit == "1")
+				{
+					SS_PC_Definition += "1"+T2_bin_value;
+				}
+				else
+				{
+					SS_PC_Definition += "0";
+				}
+				
+				//Now that we have the SS_PC_Definition put together lets repeat it as many times
+				//as defined by the Number_of_SS_PC_definitions
+				
+				for (i=0; i<Number_of_SS_PC_definitions_dec; i+=1)
+					{
+						pdu_bin_value += SS_PC_Definition;
+					}
+				
+				pdu_bin_value += dec2bin(Acknowledgement_from_user_A,1);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_T2_High_priority_value(form)
+			{
+				T2_High_priority_value = document.getElementById('T2_High_priority_value').value;
+				if (T2_High_priority_value == "0")
+				{
+					document.getElementById('High_priority_value').disabled = true;
+				}
+				else
+				{
+					document.getElementById('High_priority_value').disabled = false;
+				}
+			}
+			function OnChange_T2_Low_priority_value(form)
+			{
+				T2_Low_priority_value = document.getElementById('T2_Low_priority_value').value;
+				if (T2_Low_priority_value == "0")
+				{
+					document.getElementById('Low_priority_value').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Low_priority_value').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

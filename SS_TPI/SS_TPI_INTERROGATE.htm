@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <HEAD>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>SS-TPI-INTEROGATE</TITLE>
+        <SCRIPT SRC="../SS_Util.js" language="JavaScript" type="text/JavaScript"></SCRIPT>
+        <LINK href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+    </HEAD>
+    <body class="PDU_page">        
+        <form id="Form1" action="">
+            <table ID="Table1">
+                    <tr>                    
+                        <th align="left">Range type for interogated parties</th>
+                        <td>
+                            <select onChange="OnChange_InterogatedPartiesRangeType(this.form)" ID="InterogatedPartiesRangeType" NAME="InterogatedPartiesRangeType">                          
+	                        <option value="0" >No Element
+	                        <option selected value="1" >1 Element
+	                        <option value="2" >2 Elements
+	                        <option value="3" >3 Elements
+	                        <option value="4" >4 Elements
+	                        <option value="5" >5 Elements
+	                        <option value="6" >6 Elements
+	                        <option value="7" >7 Elements
+	                        <option value="8" >8 Elements
+	                        <option value="9" >9 Elements
+	                        <option value="10">10 Elements
+	                        <option value="11">11 Elements
+	                        <option value="12">12 Elements
+	                        <option value="13">13 Elements
+	                        <option value="14">14 Elements
+	                        <option value="15">Range of Elements
+	                        </select>
+                        </td>
+                    </tr>
+                <tr>                    
+                    <th align="left">Interogated Parties Address Type</th>
+                    <td>
+                        <select disabled onChange="OnChange_InterogatedPartiesAddressType(this.form)" ID="InterogatedPartiesAddressType" NAME="InterogatedPartiesAddressType">                          
+	                        <option value="0" >SNA
+	                        <option selected value="1" >SSI
+	                        <option value="2" >TSI
+	                    </select>
+                        SNA <input disabled id="InterogatedParties_SNA" value="148" size=1 NAME="InterogatedParties_SNA">
+                        SSI <input disabled id="InterogatedParties_SSI" value="62033" size=3 NAME="InterogatedParties_SSI">                    
+                        TSI SSI <input disabled id="InterogatedParties_TSI_SSI" value="61044" size=3 NAME="InterogatedParties_TSI_SSI">
+	                    MCC <input value="234" size=1 disabled ID="InterogatedParties_TSI_MCC" NAME="InterogatedParties_TSI_MCC">
+	                    MNC <input value="73" size=1 disabled ID="InterogatedParties_TSI_MNC" NAME="InterogatedParties_TSI_MNC">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <script language="JavaScript" type="text/JavaScript">
+    
+            function GetPDUValue(pdu_header)
+            {
+                //Get Information Element values
+                InterogatedPartiesRangeType   = document.getElementById('InterogatedPartiesRangeType').value;
+                InterogatedPartiesAddressType = document.getElementById('InterogatedPartiesAddressType').value;
+                
+                InterogatedParties_SNA        = document.getElementById('InterogatedParties_SNA').value;                
+                InterogatedParties_SSI        = document.getElementById('InterogatedParties_SSI').value;
+                InterogatedParties_TSI_SSI    = document.getElementById('InterogatedParties_TSI_SSI').value;
+                InterogatedParties_TSI_MCC    = document.getElementById('InterogatedParties_TSI_MCC').value;
+                InterogatedParties_TSI_MNC    = document.getElementById('InterogatedParties_TSI_MNC').value;
+                
+                //Build PDU
+                
+                pdu_bin_value = pdu_header;
+                pdu_bin_addr_value = "";
+
+                pdu_bin_value += dec2bin(InterogatedPartiesRangeType,4);
+                
+                pdu_bin_addr_value = dec2bin(InterogatedPartiesAddressType,2);
+                if (InterogatedPartiesAddressType == "0")
+                {
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_SNA,8);
+                }   
+                else
+                if (InterogatedPartiesAddressType == "1")
+                {
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_SSI,24);
+                }   
+                else
+                if (InterogatedPartiesAddressType == "2")
+                {
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_TSI_SSI,24);
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_TSI_MCC,10);
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_TSI_MNC,14);
+                }   
+                
+                if (InterogatedPartiesRangeType == "15")
+                {
+                    pdu_bin_value += pdu_bin_addr_value;
+                    pdu_bin_value += pdu_bin_addr_value;
+                }
+                else
+                {
+                    Nr_of_Addr = parseInt(InterogatedPartiesRangeType,10);
+                    for (i=0; i<Nr_of_Addr; i+=1)
+                    {
+                        pdu_bin_value += pdu_bin_addr_value;
+                    }
+                }       
+                
+
+                
+                return pdu_bin_value;
+            }                                                
+            function OnChange_InterogatedPartiesRangeType(form)
+            {
+                InterogatedPartiesRangeType = document.getElementById('InterogatedPartiesRangeType').value;
+
+                if (InterogatedPartiesRangeType != "0")
+                {
+                    document.getElementById('InterogatedPartiesAddressType').disabled = false;
+                }
+                else
+                {
+                    document.getElementById('InterogatedPartiesAddressType').disabled = true;
+                    document.getElementById('InterogatedPartiesAddressType').value = 1;
+                }
+                
+                OnChange_InterogatedPartiesAddressType(form);
+            }    
+            
+            function OnChange_InterogatedPartiesAddressType(form)
+            {
+                InterogatedPartiesRangeType = document.getElementById('InterogatedPartiesRangeType').value;
+                InterogatedPartiesAddressType = document.getElementById('InterogatedPartiesAddressType').value;
+                
+                document.getElementById('InterogatedParties_SNA').disabled = true;
+                document.getElementById('InterogatedParties_SSI').disabled = true;
+                document.getElementById('InterogatedParties_TSI_SSI').disabled = true;
+                document.getElementById('InterogatedParties_TSI_MCC').disabled = true;
+                document.getElementById('InterogatedParties_TSI_MNC').disabled = true;
+                
+                if (InterogatedPartiesRangeType == "0")
+                    return;
+                
+                if (InterogatedPartiesAddressType == "0")
+                {
+                    document.getElementById('InterogatedParties_SNA').disabled = false;
+                }
+                else if (InterogatedPartiesAddressType == "1")
+                {
+                    document.getElementById('InterogatedParties_SSI').disabled = false;
+                }
+                else if (InterogatedPartiesAddressType == "2")
+                {
+                    document.getElementById('InterogatedParties_TSI_SSI').disabled = false;
+                    document.getElementById('InterogatedParties_TSI_MCC').disabled = false;
+                    document.getElementById('InterogatedParties_TSI_MNC').disabled = false;
+                }
+            }
+
+        </script>
+    </body>
+</HTML>

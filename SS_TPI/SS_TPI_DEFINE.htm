@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <HEAD>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>SS-TPI-DEFINE</TITLE>
+        <SCRIPT SRC="../SS_Util.js" language="JavaScript" type="text/JavaScript"></SCRIPT>
+        <LINK href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+    </HEAD>
+    <body class="PDU_page">        
+        <form id="Form1" action="">
+            <table ID="Table1">
+                    <tr>                    
+                        <th align="left">Defined Parties Range Type</th>
+                        <td>
+                            <select onChange="OnChange_DefinedPartiesRangeType(this.form)" ID="DefinedPartiesRangeType">                          
+	                            <option value="0" >No Element
+	                            <option selected value="1" >1 Element
+	                            <option value="2" >2 Elements
+	                            <option value="3" >3 Elements
+	                            <option value="4" >4 Elements
+	                            <option value="5" >5 Elements
+	                            <option value="6" >6 Elements
+	                            <option value="7" >7 Elements
+	                            <option value="8" >8 Elements
+	                            <option value="9" >9 Elements
+	                            <option value="10">10 Elements
+	                            <option value="11">11 Elements
+	                            <option value="12">12 Elements
+	                            <option value="13">13 Elements
+	                            <option value="14">14 Elements
+	                            <option value="15">Range of Elements
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Defined Parties Address Type</th>
+                        <td>
+                            <select disabled onChange="OnChange_DefinedPartiesAddressType(this.form)" ID="DefinedPartiesAddressType">                          
+	                            <option value="0" >SNA
+	                            <option value="1" >SSI
+	                            <option value="2" >TSI
+	                        </select>
+                            SNA <input disabled id="DefinedParties_SNA" value="148" size=1>
+                            SSI <input disabled id="DefinedParties_SSI" value="62033" size=3>                    
+                            TSI SSI <input disabled id="DefinedParties_TSI_SSI" value="61044" size=3>
+	                        MCC <input value="234" size=1 disabled ID="DefinedParties_TSI_MCC">
+	                        MNC <input value="73" size=1 disabled ID="DefinedParties_TSI_MNC">
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Mnemonic</th>
+                        <td>
+                            <input disabled id="Mnemonic" value="Defined Mnemonic" size=25>
+                        </td>
+                    </tr>
+            </table>
+        </form>
+        <script language="JavaScript" type="text/JavaScript">
+    
+            function GetPDUValue(pdu_header)
+            {
+                //Get Information Element values
+                DefinedPartiesRangeType       = document.getElementById('DefinedPartiesRangeType').value;
+
+                DefinedPartiesAddressType     = document.getElementById('DefinedPartiesAddressType').value;
+                DefinedParties_SNA            = document.getElementById('DefinedParties_SNA').value;                
+                DefinedParties_SSI            = document.getElementById('DefinedParties_SSI').value;
+                DefinedParties_TSI_SSI        = document.getElementById('DefinedParties_TSI_SSI').value;
+                DefinedParties_TSI_MCC        = document.getElementById('DefinedParties_TSI_MCC').value;
+                DefinedParties_TSI_MNC        = document.getElementById('DefinedParties_TSI_MNC').value;
+
+                Mnemonic                        = document.getElementById('Mnemonic').value;
+                
+                //Build PDU
+                pdu_bin_value = pdu_header;
+                pdu_bin_addr_value = "";
+
+                pdu_bin_value += dec2bin(DefinedPartiesRangeType,4);
+                
+                pdu_bin_addr_value = dec2bin(DefinedPartiesAddressType,2);
+                if (DefinedPartiesAddressType == "0")
+                {
+                    pdu_bin_addr_value += dec2bin(DefinedParties_SNA,8);
+                }   
+                else
+                if (DefinedPartiesAddressType == "1")
+                {
+                    pdu_bin_addr_value += dec2bin(DefinedParties_SSI,24);
+                }   
+                else
+                if (DefinedPartiesAddressType == "2")
+                {
+                    pdu_bin_addr_value += dec2bin(DefinedParties_TSI_SSI,24);
+                    pdu_bin_addr_value += dec2bin(DefinedParties_TSI_MCC,10);
+                    pdu_bin_addr_value += dec2bin(DefinedParties_TSI_MNC,14);
+                }   
+                
+                pdu_bin_addr_value += dec2bin(8,7);
+                pdu_bin_addr_value += dec2bin(Mnemonic.length*8,8);
+                pdu_bin_addr_value += text2bin(Mnemonic);
+                
+                if (DefinedPartiesRangeType == "15")
+                {
+                    pdu_bin_value += pdu_bin_addr_value;
+                    pdu_bin_value += pdu_bin_addr_value;
+                }
+                else
+                {
+                    Nr_of_Addr = parseInt(DefinedPartiesRangeType,10);
+                    for (i=0; i<Nr_of_Addr; i+=1)
+                    {
+                        pdu_bin_value += pdu_bin_addr_value;
+                    }
+                }       
+
+                
+                return pdu_bin_value;
+            }          
+
+            function OnChange_DefinedPartiesRangeType(form)
+            {
+                DefinedPartiesRangeType = document.getElementById('DefinedPartiesRangeType').value;
+
+                if (DefinedPartiesRangeType != "0")
+                {
+                    document.getElementById('DefinedPartiesAddressType').disabled = false;
+                    document.getElementById('Mnemonic').disabled = false;
+                }
+                else
+                {
+                    document.getElementById('DefinedPartiesAddressType').disabled = true;
+                    document.getElementById('DefinedPartiesAddressType').value = 1;
+                    document.getElementById('Mnemonic').disabled = true;
+                }
+                
+                OnChange_DefinedPartiesAddressType(form);
+            }    
+            
+            function OnChange_DefinedPartiesAddressType(form)
+            {
+                DefinedPartiesRangeType = document.getElementById('DefinedPartiesRangeType').value;
+                DefinedPartiesAddressType = document.getElementById('DefinedPartiesAddressType').value;
+                
+                document.getElementById('DefinedParties_SNA').disabled = true;
+                document.getElementById('DefinedParties_SSI').disabled = true;
+                document.getElementById('DefinedParties_TSI_SSI').disabled = true;
+                document.getElementById('DefinedParties_TSI_MCC').disabled = true;
+                document.getElementById('DefinedParties_TSI_MNC').disabled = true;
+                
+                if (DefinedPartiesRangeType == "0")
+                    return;
+                
+                if (DefinedPartiesAddressType == "0")
+                {
+                    document.getElementById('DefinedParties_SNA').disabled = false;
+                }
+                else if (DefinedPartiesAddressType == "1")
+                {
+                    document.getElementById('DefinedParties_SSI').disabled = false;
+                }
+                else if (DefinedPartiesAddressType == "2")
+                {
+                    document.getElementById('DefinedParties_TSI_SSI').disabled = false;
+                    document.getElementById('DefinedParties_TSI_MCC').disabled = false;
+                    document.getElementById('DefinedParties_TSI_MNC').disabled = false;
+                }
+            }
+                                                  
+        </script>
+    </body>
+</HTML>

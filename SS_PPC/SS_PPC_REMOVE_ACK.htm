@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-PPC-REMOVE_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_PPC_08_Table">
+				<tr>
+					<th align="left">
+						Result for withdrawal:
+					</th>
+					<td>
+					<select id="Result_for_withdrawal">
+							<option value="000">Accepted by SwMI Accepted by MS
+							<option value="010">User A(s) was not reachable
+							<option value="011">Request failed for any reason
+							<option value="100">User not authorized
+							<option value="101">Unknown TETRA identity
+							<option value="110">Parameters not valid
+							<option value="111">Insufficient information
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Result_for_withdrawal = document.getElementById('Result_for_withdrawal').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Result_for_withdrawal;
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+		</script>
+	</body>
+</html>
