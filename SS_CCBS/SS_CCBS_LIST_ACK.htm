@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CCBS-LIST_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CCBS_11_Table">
+				<tr>
+					<th align="left">
+						Accept/Reject:
+					</th>
+					<td>
+						<select id="Accept_reject" onChange="OnChange_Accept_reject(this.form)">
+							<option selected value="0">Accept
+							<option value="1">Reject
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Reject cause:
+					</th>
+					<td>
+						<select disabled id="Reject_cause">
+							<option value="00000">Rejected for any reason
+							<option value="00001">User not subscribed to service
+							<option value="00010">No invoked SS-CCBS requests exist.
+							<option value="00011">Incompatible basic service
+							<option value="00100">SS-CCBS not provided locally
+							<option value="00101">Invalid PDU contents (note)
+							<option value="00110">Maximum number of invocations exceeded locally
+							<option value="00111">Maximum number of invocations exceeded remotely
+							<option value="01000">Inter-working with a network that does not support SS-CCBS
+							<option value="01001">Network congestion
+							<option value="01010">Call failure reason not busy
+							<option value="01011">User B busy (again)
+							<option value="01100">User A MS busy
+							<option value="01101">Signaling Connection failed
+							<option value="01110">Wrong TETRA Call Identifier
+							<option value="01111">Invalid CCBSI reference
+							<option value="10000">SS-CCBS not provided remotely
+							<option value="10001">Supplementary service interaction not allowed
+							<option value="10010">Lack of resources at terminating SwMI
+							<option value="10011">Other short term denial
+							<option value="10100">Other long term denial
+							<option value="10101">Not ready for call
+							<option value="10110">Already accepted
+							<option value="10111">Lack of resources at User A MS
+							<option value="11000">Unrecognized operation
+							<option value="11001">Failure to match
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Length of CCBS List:
+					</th>
+					<td>
+						<select id="Length_of_CCBS_list">
+							<option value="000">0 no list
+							<option selected value="001">1
+							<option value="010">2
+							<option value="011">3
+							<option value="100">4
+							<option value="101">5
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						List request:
+					</th>
+					<td>
+						<select id="List_request" onChange="OnChange_List_request(this.form)">
+							<option value="00">Number of CCBS requests
+							<option selected value="01">CCBSIs
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Number of CCBS requests:
+					</th>
+					<td>
+						<select disabled id="Number_of_CCBS_requests">
+							<option value="000">0 no list
+							<option selected value="001">1
+							<option value="010">2
+							<option value="011">3
+							<option value="100">4
+							<option value="101">5
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						CCBSI:
+					</th>
+					<td>
+						<input id="CCBSI" value="010" size=3 maxlength=3 onkeypress="return AllowDigitOnly(event)">
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				Accept_reject = document.getElementById('Accept_reject').value;
+				Reject_cause = document.getElementById('Reject_cause').value;
+				Length_of_CCBS_list = document.getElementById('Length_of_CCBS_list').value;
+				List_request = document.getElementById('List_request').value;
+				Number_of_CCBS_requests = document.getElementById('Number_of_CCBS_requests').value;
+				CCBSI = document.getElementById('CCBSI').value;
+				
+				//Make sure CCBSI is padded to 3 bits if it was less
+				while (CCBSI.length < 3)
+				{
+						CCBSI = "0" + CCBSI; 
+				}
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Accept_reject;
+				
+				if (Accept_reject == "1")
+				{
+					pdu_bin_value += Reject_cause;
+				}
+				else
+				{
+					pdu_bin_value += Length_of_CCBS_list;
+					pdu_bin_value += List_request;
+					if (List_request == "00")
+					{
+						List_element = Number_of_CCBS_requests;
+					}
+					if (List_request == "01")
+					{
+						List_element = CCBSI;
+					}
+					
+					//Add the List element to the PDU as many times as defined by Length_of_CCBS_list
+					for (i=0; i<parseInt(Length_of_CCBS_list,2); i+=1)
+					{
+						pdu_bin_value += List_element;
+					}
+				}	
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Accept_reject(form)
+			{
+				Accept_reject = document.getElementById('Accept_reject').value;
+				if (Accept_reject == "0") 
+				{
+					document.getElementById('Reject_cause').disabled = true;
+					document.getElementById('Length_of_CCBS_list').disabled = false;
+					document.getElementById('List_request').disabled = false;
+					document.getElementById('Number_of_CCBS_requests').disabled = false;
+					document.getElementById('CCBSI').disabled = false;
+				}
+ 				else
+				{
+					document.getElementById('Reject_cause').disabled = false;
+					document.getElementById('Length_of_CCBS_list').disabled = true;
+					document.getElementById('List_request').disabled = true;
+					document.getElementById('Number_of_CCBS_requests').disabled = true;
+					document.getElementById('CCBSI').disabled = true;
+				}
+			}
+			function OnChange_List_request(form)
+			{
+				List_request = document.getElementById('List_request').value;
+				if (List_request == "00")
+				{
+					document.getElementById('Number_of_CCBS_requests').disabled = false;
+					document.getElementById('CCBSI').disabled = true;
+				}
+ 				else if (List_request == "01")
+				{
+					document.getElementById('Number_of_CCBS_requests').disabled = true;
+					document.getElementById('CCBSI').disabled = false;
+				}
+			}
+			function AllowDigitOnly(digits)
+			{
+					var charCode = (digits.which) ? digits.which : event.keyCode
+					if (charCode < 48 || charCode > 49)
+							return false;
+					return true;
+			}
+		</script>
+	</body>
+</html>

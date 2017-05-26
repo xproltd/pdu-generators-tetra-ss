@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CCBS-FAILED</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CCBS_08_Table">
+				<tr>
+					<th align="left">
+						CCBSI:
+					</th>
+					<td>
+						<input id="CCBSI" value="010" size=3 maxlength=3 onkeypress="return AllowDigitOnly(event)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Failure cause:
+					</th>
+					<td>
+						<select id="Failure_cause">
+							<option value="000">Failed for any reason
+							<option value="001">User B busy again
+							<option value="010">Network congestion
+							<option value="011">Signaling Connection failed
+							<option value="100">Incompatible class of service
+							<option value="101">Due to inter-working
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Request maintained:
+					</th>
+					<td>
+						<select id="Request_maintained">
+							<option value="0">Request not maintained
+							<option value="1">Request maintained
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				CCBSI = document.getElementById('CCBSI').value;
+				Failure_cause = document.getElementById('Failure_cause').value;
+				Request_maintained = document.getElementById('Request_maintained').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				while (CCBSI.length < 3)
+				{
+						CCBSI = "0" + CCBSI; 
+				}
+				
+				pdu_bin_value += CCBSI;
+				
+				pdu_bin_value += Failure_cause;
+				pdu_bin_value += Request_maintained;
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function AllowDigitOnly(digits)
+			{
+					var charCode = (digits.which) ? digits.which : event.keyCode
+					if (charCode < 48 || charCode > 49)
+							return false;
+					return true;
+			}
+		</script>
+	</body>
+</html>

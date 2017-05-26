@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CCBS-USER_B_FREE</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CCBS_20_Table">
+				<tr>
+					<th align="left">
+						CCBSI:
+					</th>
+					<td>
+						<input id="CCBSI" value="010" size=3 maxlength=3 onkeypress="return AllowDigitOnly(event)">
+					</td>
+				</tr>
+ 			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				CCBSI = document.getElementById('CCBSI').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				while (CCBSI.length < 3)
+				{
+						CCBSI = "0" + CCBSI; 
+				}
+				
+				pdu_bin_value += CCBSI;
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function AllowDigitOnly(digits)
+			{
+					var charCode = (digits.which) ? digits.which : event.keyCode
+					if (charCode < 48 || charCode > 49)
+							return false;
+					return true;
+			}
+		</script>
+	</body>
+</html>

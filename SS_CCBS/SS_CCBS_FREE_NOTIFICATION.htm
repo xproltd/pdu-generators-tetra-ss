@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CCBS-FREE_NOTIFICATION</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CCBS_09_Table">
+				<tr>
+					<th align="left">
+						CCBSI:
+					</th>
+					<td>
+						<input id="CCBSI" value="010" size=3 maxlength=3 onkeypress="return AllowDigitOnly(event)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Calling party SSI:
+					</th>
+					<td>
+						<input id="Calling_party_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Calling party extension:</th>
+					<td>
+						MCC: <input id="Calling_party_extension_MCC" value="234" size=5 >
+						MNC: <input id="Calling_party_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Called party SSI:
+					</th>
+					<td>
+						<input id="Called_party_SSI" value="62034" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Called party extension:</th>
+					<td>
+						MCC: <input id="Called_party_extension_MCC" value="234" size=5 >
+						MNC: <input id="Called_party_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				CCBSI = document.getElementById('CCBSI').value;
+				Calling_party_SSI = document.getElementById('Calling_party_SSI').value;
+				Calling_party_extension_MCC = document.getElementById('Calling_party_extension_MCC').value;
+				Calling_party_extension_MNC = document.getElementById('Calling_party_extension_MNC').value;
+				Called_party_SSI = document.getElementById('Called_party_SSI').value;
+				Called_party_extension_MCC = document.getElementById('Called_party_extension_MCC').value;
+				Called_party_extension_MNC = document.getElementById('Called_party_extension_MNC').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				while (CCBSI.length < 3)
+				{
+						CCBSI = "0" + CCBSI; 
+				}
+				
+				pdu_bin_value += CCBSI;
+				
+				pdu_bin_value += dec2bin(Calling_party_SSI,24);
+				pdu_bin_value += dec2bin(Calling_party_extension_MCC,10);
+				pdu_bin_value += dec2bin(Calling_party_extension_MNC,14);
+				pdu_bin_value += dec2bin(Called_party_SSI,24);
+				pdu_bin_value += dec2bin(Called_party_extension_MCC,10);
+				pdu_bin_value += dec2bin(Called_party_extension_MNC,14);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function AllowDigitOnly(digits)
+			{
+					var charCode = (digits.which) ? digits.which : event.keyCode
+					if (charCode < 48 || charCode > 49)
+							return false;
+					return true;
+			}
+		</script>
+	</body>
+</html>

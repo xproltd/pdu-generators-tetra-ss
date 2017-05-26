@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CCBS-CANCEL_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CCBS_04_Table">
+				<tr>
+					<th align="left">
+						CCBSI:
+					</th>
+					<td>
+						<input id="CCBSI" value="010" size=3 maxlength=3 onkeypress="return AllowDigitOnly(event)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Cancellation result:
+					</th>
+					<td>
+						<select id="Cancellation_result" onChange="OnChange_Cancellation_result(this.form)">
+							<option value="0">Cancellation accepted
+							<option value="1">Cancellation rejected
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Reject cause:
+					</th>
+					<td>
+						<select disabled id="Reject_cause">
+							<option value="00000">Rejected for any reason
+							<option value="00001">User not subscribed to service
+							<option value="00010">No invoked SS-CCBS requests exist.
+							<option value="00011">Incompatible basic service
+							<option value="00100">SS-CCBS not provided locally
+							<option value="00101">Invalid PDU contents (note)
+							<option value="00110">Maximum number of invocations exceeded locally
+							<option value="00111">Maximum number of invocations exceeded remotely
+							<option value="01000">Inter-working with a network that does not support SS-CCBS
+							<option value="01001">Network congestion
+							<option value="01010">Call failure reason not busy
+							<option value="01011">User B busy (again)
+							<option value="01100">User A MS busy
+							<option value="01101">Signaling Connection failed
+							<option value="01110">Wrong TETRA Call Identifier
+							<option value="01111">Invalid CCBSI reference
+							<option value="10000">SS-CCBS not provided remotely
+							<option value="10001">Supplementary service interaction not allowed
+							<option value="10010">Lack of resources at terminating SwMI
+							<option value="10011">Other short term denial
+							<option value="10100">Other long term denial
+							<option value="10101">Not ready for call
+							<option value="10110">Already accepted
+							<option value="10111">Lack of resources at User A MS
+							<option value="11000">Unrecognized operation
+							<option value="11001">Failure to match
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				CCBSI = document.getElementById('CCBSI').value;
+				Cancellation_result = document.getElementById('Cancellation_result').value;
+				Reject_cause = document.getElementById('Reject_cause').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				while (CCBSI.length < 3)
+				{
+						CCBSI = "0" + CCBSI; 
+				}
+				
+				pdu_bin_value += CCBSI;
+				
+				pdu_bin_value += Cancellation_result;
+				
+				if (Cancellation_result == "1")
+				{
+					pdu_bin_value += Reject_cause;
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Cancellation_result(form)
+			{
+				Cancellation_result = document.getElementById('Cancellation_result').value;
+				if (Cancellation_result == "0") 
+				{
+					document.getElementById('Reject_cause').disabled = true;
+				}
+ 				else
+				{
+					document.getElementById('Reject_cause').disabled = false;
+				}
+			}
+			function AllowDigitOnly(digits)
+			{
+					var charCode = (digits.which) ? digits.which : event.keyCode
+					if (charCode < 48 || charCode > 49)
+							return false;
+					return true;
+			}
+		</script>
+	</body>
+</html>

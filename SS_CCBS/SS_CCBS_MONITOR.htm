@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CCBS-MONITOR</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CCBS_12_Table">
+				<tr>
+					<th align="left">
+						CCBSI:
+					</th>
+					<td>
+						<input id="CCBSI" value="010" size=3 maxlength=3 onkeypress="return AllowDigitOnly(event)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Calling party SSI:
+					</th>
+					<td>
+						<input id="Calling_party_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Calling party extension:</th>
+					<td>
+						MCC: <input id="Calling_party_extension_MCC" value="234" size=5 >
+						MNC: <input id="Calling_party_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Called party SSI:
+					</th>
+					<td>
+						<input id="Called_party_SSI" value="62034" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Called party extension:</th>
+					<td>
+						MCC: <input id="Called_party_extension_MCC" value="234" size=5 >
+						MNC: <input id="Called_party_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Call priority:
+					</th>
+					<td>
+						<select id="Call_priority">
+							<option value="0000">Priority not defined
+							<option value="0001">1
+							<option value="0010">2
+							<option value="0011">3
+							<option value="0100">4
+							<option value="0101">5
+							<option value="0110">6
+							<option value="0111">7
+							<option value="1000">8
+							<option value="1001">9
+							<option value="1010">10
+							<option value="1011">11
+							<option value="1100">Pre-emptive priority 1
+							<option value="1101">Pre-emptive priority 2
+							<option value="1110">Pre-emptive priority 3
+							<option value="1111">Pre-emptive priority 4 (Emergency)
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Circuit mode type:
+					</th>
+					<td>
+						<select id="Circuit_mode_type" onChange="OnChange_Circuit_mode_type(this.form)">
+							<option selected value="000">Speech: TCH/S
+							<option value="001">Unprotected: TCH/7,2
+							<option value="010">Low Protection: TCH/4,8, N = 1
+							<option value="011">Low Protection: TCH/4,8, N = 4
+							<option value="100">Low Protection: TCH/4,8, N = 8
+							<option value="101">High Protection: TCH/2,4, N = 1
+							<option value="110">High Protection: TCH/2,4, N = 4
+							<option value="111">High Protection: TCH/2,4, N = 8
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Encryption flag:
+					</th>
+					<td>
+						<select id="Encryption_flag">
+							<option selected value="0">Clear Mode
+							<option value="1">TETRA end-to-end encryption
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Communication type:
+					</th>
+					<td>
+						<select id="Communication_type">
+							<option selected value="00">Point-to-point
+							<option value="01">Point-to-multipoint
+							<option value="10">Point-to-multipoint Acknowledged
+							<option value="11">Broadcast
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Slots per frame:
+					</th>
+					<td>
+						<select disabled id="Slots_per_frame">
+							<option selected value="00">One slot
+							<option value="01">Two slots
+							<option value="10">Three slots
+							<option value="11">Four slots
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Retain capability:
+					</th>
+					<td>
+						<select id="Retain_capability">
+							<option selected value="01">Retain capability
+							<option value="10">No retain capability
+						</select>
+					</td>
+				</tr>
+ 			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				CCBSI = document.getElementById('CCBSI').value;
+				Calling_party_SSI = document.getElementById('Calling_party_SSI').value;
+				Calling_party_extension_MCC = document.getElementById('Calling_party_extension_MCC').value;
+				Calling_party_extension_MNC = document.getElementById('Calling_party_extension_MNC').value;
+				Called_party_SSI = document.getElementById('Called_party_SSI').value;
+				Called_party_extension_MCC = document.getElementById('Called_party_extension_MCC').value;
+				Called_party_extension_MNC = document.getElementById('Called_party_extension_MNC').value;
+				
+				Call_priority = document.getElementById('Call_priority').value;
+				
+				Circuit_mode_type = document.getElementById('Circuit_mode_type').value;
+				Encryption_flag = document.getElementById('Encryption_flag').value;
+				Communication_type = document.getElementById('Communication_type').value;
+				Slots_per_frame = document.getElementById('Slots_per_frame').value;
+				
+				Retain_capability = document.getElementById('Retain_capability').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				while (CCBSI.length < 3)
+				{
+						CCBSI = "0" + CCBSI; 
+				}
+				
+				pdu_bin_value += CCBSI;
+				
+				pdu_bin_value += dec2bin(Calling_party_SSI,24);
+				pdu_bin_value += dec2bin(Calling_party_extension_MCC,10);
+				pdu_bin_value += dec2bin(Calling_party_extension_MNC,14);
+				pdu_bin_value += dec2bin(Called_party_SSI,24);
+				pdu_bin_value += dec2bin(Called_party_extension_MCC,10);
+				pdu_bin_value += dec2bin(Called_party_extension_MNC,14);
+				
+				pdu_bin_value += Call_priority;
+				
+				pdu_bin_value += Circuit_mode_type;
+				pdu_bin_value += Encryption_flag;
+				pdu_bin_value += Communication_type;
+				pdu_bin_value += Slots_per_frame;
+				
+				pdu_bin_value += Retain_capability;
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Circuit_mode_type(form)
+			{
+				Circuit_mode_type = document.getElementById('Circuit_mode_type').value;
+				if (Circuit_mode_type == "000") 
+				{
+					document.getElementById('Slots_per_frame').value = "00";
+					document.getElementById('Slots_per_frame').disabled = true;
+				}
+ 				else
+				{
+					document.getElementById('Slots_per_frame').disabled = false;
+				}
+			}
+			function AllowDigitOnly(digits)
+			{
+					var charCode = (digits.which) ? digits.which : event.keyCode
+					if (charCode < 48 || charCode > 49)
+							return false;
+					return true;
+			}
+		</script>
+	</body>
+</html>
