@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-HOLD-INTERROGATE_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_HOLD_02_Table">
+				<tr>
+					<th align="left">
+						Interrogation result:
+					</th>
+					<td>
+						<select id="Interrogation_result" onChange="OnChange_Interrogation_result(this.form)">
+							<option selected value="0">Interrogation unsuccessful
+							<option value="1">Interrogation successful
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interrogation failure cause:
+					</th>
+					<td>
+						<select id="Interrogation_failure_cause">
+							<option selected value="0">Rejected for any reason
+							<option value="1">Supplementary service not subscribed for user
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Number of calls on hold:
+					</th>
+					<td>
+						<select id="Number_of_calls_on_hold" onChange="OnChange_Number_of_calls_on_hold(this.form)">
+							<option value="000">No calls still on hold
+							<option selected value="001">One call still on hold
+							<option value="010">2 calls on hold
+							<option value="011">3 calls on hold
+							<option value="100">4 calls on hold
+							<option value="101">5 calls on hold
+							<option value="110">6 calls on hold
+							<option value="111">7 calls on hold
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Call identifier:
+					</th>
+					<td>
+						<input id="Call_identifier" value="2012" size="5" maxlength="5">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Address type of affected user:
+					</th>
+					<td>
+						<select id="Address_type_of_affected_user" onChange="OnChange_Address_type_of_affected_user(this.form)">
+							<option selected value="000">SSI (only) with no external subscriber number
+							<option value="001">Full ITSI with no external subscriber number
+							<option value="010">SSI (only) with external subscriber number
+							<option value="011">Full ITSI with external subscriber number
+							<option value="111">Identity presentation restricted (SS-CLIR)
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Affected user SSI:
+					</th>
+					<td>
+						<input id="Affected_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Affected user extension:
+					</th>
+					<td>
+						MCC: <input disabled id="Affected_user_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Affected_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">External number length indicator:</th>
+					<td>
+						<input disabled id="External_number_length_indicator" value="13" size=2 onChange="OnChange_External_number_length_indicator(this.form)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">External subscriber number:</th>
+					<td>
+						<input disabled id="External_subscriber_number" value="+#*1234567890" size=20>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Interrogation_result = document.getElementById('Interrogation_result').value;
+				Interrogation_failure_cause = document.getElementById('Interrogation_failure_cause').value;
+				Number_of_calls_on_hold = document.getElementById('Number_of_calls_on_hold').value;
+				Call_identifier = document.getElementById('Call_identifier').value;
+				Address_type_of_affected_user = document.getElementById('Address_type_of_affected_user').value;
+				Affected_user_SSI = document.getElementById('Affected_user_SSI').value;
+				Affected_user_extension_MCC = document.getElementById('Affected_user_extension_MCC').value;
+				Affected_user_extension_MNC = document.getElementById('Affected_user_extension_MNC').value;
+				External_number_length_indicator = document.getElementById('External_number_length_indicator').value;
+				External_subscriber_number = document.getElementById('External_subscriber_number').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(Interrogation_result,1);
+				
+				if (Interrogation_result == "0")
+				{
+					pdu_bin_value += dec2bin(Interrogation_failure_cause,1);
+				}
+				
+				pdu_bin_value += Number_of_calls_on_hold;
+				
+				Affected_user_address_definition = Address_type_of_affected_user;
+				
+				if (Address_type_of_affected_user != "111")
+				{
+					Affected_user_address_definition += dec2bin(Affected_user_SSI,24);
+				}
+				if (Address_type_of_affected_user == "001" || Address_type_of_affected_user == "011" )
+				{
+					Affected_user_address_definition += dec2bin(Affected_user_extension_MCC,10);
+					Affected_user_address_definition += dec2bin(Affected_user_extension_MNC,14);
+				}
+				if (Address_type_of_affected_user == "010" || Address_type_of_affected_user == "011" )
+				{
+					Affected_user_address_definition += dec2bin(External_number_length_indicator,5);
+					var Number_of_digits = parseInt(External_number_length_indicator,10);
+					var digits = External_subscriber_number.substring(0,Number_of_digits);
+					Affected_user_address_definition += digit2bin(digits);
+				}
+				
+				for (i=0; i<parseInt(Number_of_calls_on_hold,2); i+=1)
+				{
+					pdu_bin_value += Affected_user_address_definition;
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Address_type_of_affected_user(form)
+			{
+				Address_type_of_affected_user = document.getElementById('Address_type_of_affected_user').value;
+				if (Address_type_of_affected_user == "000") 
+				{
+					document.getElementById('Affected_user_SSI').disabled = false;
+					document.getElementById('Affected_user_extension_MCC').disabled = true;
+					document.getElementById('Affected_user_extension_MNC').disabled = true;
+					document.getElementById('External_number_length_indicator').disabled = true;
+					document.getElementById('External_subscriber_number').disabled = true;
+				}
+				else
+				if (Address_type_of_affected_user == "001")
+				{
+					document.getElementById('Affected_user_SSI').disabled = false;
+					document.getElementById('Affected_user_extension_MCC').disabled = false;
+					document.getElementById('Affected_user_extension_MNC').disabled = false;
+					document.getElementById('External_number_length_indicator').disabled = true;
+					document.getElementById('External_subscriber_number').disabled = true;
+				}
+				else
+				if (Address_type_of_affected_user == "010") 
+				{
+					document.getElementById('Affected_user_SSI').disabled = false;
+					document.getElementById('Affected_user_extension_MCC').disabled = true;
+					document.getElementById('Affected_user_extension_MNC').disabled = true;
+					document.getElementById('External_number_length_indicator').disabled = false;
+					document.getElementById('External_subscriber_number').disabled = false;
+				}
+				else
+				if (Address_type_of_affected_user == "011")
+				{
+					document.getElementById('Affected_user_SSI').disabled = false;
+					document.getElementById('Affected_user_extension_MCC').disabled = false;
+					document.getElementById('Affected_user_extension_MNC').disabled = false;
+					document.getElementById('External_number_length_indicator').disabled = false;
+					document.getElementById('External_subscriber_number').disabled = false;
+				}
+				else
+				if (Address_type_of_affected_user == "111")
+				{
+					document.getElementById('Affected_user_SSI').disabled = true;
+					document.getElementById('Affected_user_extension_MCC').disabled = true;
+					document.getElementById('Affected_user_extension_MNC').disabled = true;
+					document.getElementById('External_number_length_indicator').disabled = true;
+					document.getElementById('External_subscriber_number').disabled = true;
+				}
+			}
+			function OnChange_External_number_length_indicator(form)
+			{
+				External_number_length_indicator = document.getElementById('External_number_length_indicator').value;
+				var var_external_subscriber_digits = "+#*12345678901234567890123456789";
+				
+				Number_of_digits = parseInt(External_number_length_indicator,10);
+				if (Number_of_digits >= 32)
+				{
+					alert("Number of Digits between 0...31");
+					return;
+				}
+				External_subscriber_number = var_external_subscriber_digits.substring(0,Number_of_digits);
+				document.getElementById('External_subscriber_number').value = External_subscriber_number;
+			}
+			function OnChange_Interrogation_result(form)
+			{
+				Interrogation_result = document.getElementById('Interrogation_result').value;
+				if (Interrogation_result == "0")
+				{
+					document.getElementById('Interrogation_failure_cause').disabled = false;
+				}
+				else
+				{
+					document.getElementById('Interrogation_failure_cause').disabled = true;
+				}
+			}
+			function OnChange_Number_of_calls_on_hold(form)
+			{
+				Number_of_calls_on_hold = document.getElementById('Number_of_calls_on_hold').value;
+				if (Number_of_calls_on_hold == "000")
+				{
+					document.getElementById('Call_identifier').disabled = true;
+					document.getElementById('Address_type_of_affected_user').disabled = true;
+					document.getElementById('Affected_user_SSI').disabled = true;
+					document.getElementById('Affected_user_extension_MCC').disabled = true;
+					document.getElementById('Affected_user_extension_MNC').disabled = true;
+					document.getElementById('External_number_length_indicator').disabled = true;
+					document.getElementById('External_subscriber_number').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Call_identifier').disabled = false;
+					document.getElementById('Address_type_of_affected_user').disabled = false;
+					document.getElementById('Affected_user_SSI').disabled = false;
+					document.getElementById('Affected_user_extension_MCC').disabled = false;
+					document.getElementById('Affected_user_extension_MNC').disabled = false;
+					document.getElementById('External_number_length_indicator').disabled = false;
+					document.getElementById('External_subscriber_number').disabled = false;
+					OnChange_Address_type_of_affected_user(form);
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-DOTAM-DEASSIGN</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_DOTAM_05_Table">
+				<tr>
+					<th align="left">DMO group deassign type:</th>
+					<td>
+						<select id="DMO_group_deassign_type">
+							<option value="0">Deassign DMO groups as defined by the Number of deassignments IE
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Number of deassignments present:</th>
+					<td>
+						<select id="Number_of_deassignments_present" onChange="OnChange_Number_of_deassignments_present(this.form)">
+							<option value="0">Not present
+							<option selected value="1">Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Number of deassignments:</th>
+					<td>
+						<select id="Number_of_deassignments" onChange="OnChange_Number_of_deassignments(this.form)">
+							<option value="0000">No deassignment
+							<option value="0001">1 deassignment
+							<option selected value="0010">2 deassignments
+							<option value="0011">3 deassignments
+							<option value="0100">3 deassignments
+							<option value="0101">4 deassignments
+							<option value="0110">5 deassignments
+							<option value="0111">6 deassignments
+							<option value="1000">7 deassignments
+							<option value="1001">9 deassignments
+							<option value="1010">10 deassignments
+							<option value="1011">11 deassignments
+							<option value="1100">12 deassignments
+							<option value="1101">13 deassignments
+							<option value="1110">14 deassignments
+							<option value="1111">15 deassignments
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Group SSI:
+					</th>
+					<td>
+						<input id="Group_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">MNI extension indicator:</th>
+					<td>
+						<select id="MNI_extension_indicator" onChange="OnChange_MNI_extension_indicator(this.form)">
+							<option selected value="0">Not present
+							<option value="1">Present
+						</select>
+						MCC: <input disabled id="Extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Additional DMO group identifier:</th>
+					<td>
+						<select id="Additional_DMO_group_identifier">
+							<option selected value="0">0
+							<option value="1">1
+							<option value="2">2
+							<option value="3">3
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">DMO carrier (0-4095):</th>
+					<td>
+						<input id="DMO_carrier" value="842" size="4" maxlength="4">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Frequency band:</th>
+					<td>
+						<select id="Frequency_band">
+							<option value="0001">100,000 MHz
+							<option value="0010">200,000 MHz
+							<option selected value="0011">300,000 MHz
+							<option value="0100">400,000 MHz
+							<option value="0101">500,000 MHz
+							<option value="0110">600,000 MHz
+							<option value="0111">700,000 MHz
+							<option value="1000">800,000 MHz
+							<option value="1001">900,000 MHz
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Offset:</th>
+					<td>
+						<select id="Offset">
+							<option selected value="00">0 kHz offset
+							<option value="01">+6,25 kHz offset
+							<option value="10">-6,25 kHz offset
+							<option value="11">+12,5 kHz offset
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Acknowledgement request:</th>
+					<td>
+						<select id="Acknowledgement_request">
+							<option selected value="0">No acknowledgement requested
+							<option value="1">Acknowledgement requested
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Reserved IE present:</th>
+					<td>
+						<select disabled id="Reserved_IE_present">
+							<option selected value="0">Not present
+							<option value="1">Present
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Information Element values
+				DMO_group_deassign_type = document.getElementById('DMO_group_deassign_type').value;
+				Number_of_deassignments_present = document.getElementById('Number_of_deassignments_present').value;
+				Number_of_deassignments = document.getElementById('Number_of_deassignments').value;
+				
+				Group_SSI = document.getElementById('Group_SSI').value;
+				MNI_extension_indicator = document.getElementById('MNI_extension_indicator').value;
+				Extension_MCC = document.getElementById('Extension_MCC').value;
+				Extension_MNC = document.getElementById('Extension_MNC').value;
+				Additional_DMO_group_identifier = document.getElementById('Additional_DMO_group_identifier').value;
+				DMO_carrier = document.getElementById('DMO_carrier').value;
+				Frequency_band = document.getElementById('Frequency_band').value;
+				Offset = document.getElementById('Offset').value;
+				
+				Acknowledgement_request = document.getElementById('Acknowledgement_request').value;
+				Reserved_IE_present = document.getElementById('Reserved_IE_present').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(DMO_group_deassign_type,2);
+				pdu_bin_value += dec2bin(Number_of_deassignments_present,1);
+				
+				if (Number_of_deassignments_present == "1")
+				{
+					pdu_bin_value += Number_of_deassignments;
+					
+					Unique_DMO_group_identifier = dec2bin(Group_SSI,24);
+					Unique_DMO_group_identifier += dec2bin(MNI_extension_indicator,1);
+					if (MNI_extension_indicator == "1")
+					{
+						Unique_DMO_group_identifier += dec2bin(Extension_MCC,10);
+						Unique_DMO_group_identifier += dec2bin(Extension_MNC,14);
+					}
+					
+					Unique_DMO_group_identifier += dec2bin(Additional_DMO_group_identifier,2);
+					Unique_DMO_group_identifier += "000"; // Reserved
+					Unique_DMO_group_identifier += dec2bin(DMO_carrier,12);
+					Unique_DMO_group_identifier += Frequency_band;
+					Unique_DMO_group_identifier += Offset;
+					
+					for (i=0; i<parseInt(Number_of_deassignments,2); i+=1)
+					{
+						pdu_bin_value += Unique_DMO_group_identifier;
+						pdu_bin_value += dec2bin(Acknowledgement_request,1);
+					}
+				}
+				
+				pdu_bin_value += dec2bin(Reserved_IE_present,1);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Number_of_deassignments_present(form)
+			{
+				Number_of_deassignments_present = document.getElementById('Number_of_deassignments_present').value;
+				if (Number_of_deassignments_present == "0")
+				{
+					document.getElementById('Number_of_deassignments').disabled = true;
+					for(i=3;i<12;i++)
+					{
+						form.elements[i].disabled = true;
+					}
+				}
+				else
+				{
+					document.getElementById('Number_of_deassignments').disabled = false;
+					OnChange_Number_of_deassignments(form);
+				}
+			}
+			function OnChange_Number_of_deassignments(form)
+			{
+				Number_of_deassignments = document.getElementById('Number_of_deassignments').value;
+				if (Number_of_deassignments == "0000")
+				{
+					for(i=3;i<12;i++)
+					{
+						form.elements[i].disabled = true;
+					}
+				}
+				else
+				{
+					for(i=3;i<12;i++)
+					{
+						form.elements[i].disabled = false;
+					}
+					OnChange_MNI_extension_indicator(form);
+				}
+			}
+			function OnChange_MNI_extension_indicator(form)
+			{
+				MNI_extension_indicator = document.getElementById('MNI_extension_indicator').value;
+				if (MNI_extension_indicator == "0")
+				{
+					document.getElementById('Extension_MCC').disabled = true;
+					document.getElementById('Extension_MNC').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Extension_MCC').disabled = false;
+					document.getElementById('Extension_MNC').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

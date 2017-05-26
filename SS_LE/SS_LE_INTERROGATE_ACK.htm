@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-LE-INTERROGATE_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_LE_05_Table">
+				<tr>
+					<th align="left">
+						Range type for defined groups:
+					</th>
+					<td>
+						<select id="Range_type_for_interrogated_groups">
+							<option value="0000">No element
+							<option selected value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interrogated group address type:
+					</th>
+					<td>
+						<select id="Interrogated_group_address_type" onChange="OnChange_Interrogated_group_address_type(this.form)">
+							<option value="00">SNA
+							<option value="01">SSI
+							<option value="10">SSI+Extension
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interrogated group SNA:
+					</th>
+					<td>
+						<input id="Interrogated_group_SNA" value="123" size=5>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interrogated group SSI:
+					</th>
+					<td>
+						<input disabled id="Interrogated_group_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Interrogated group extension:</th>
+					<td>
+						MCC: <input disabled id="Interrogated_group_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Interrogated_group_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Result of interrogation:</th>
+					<td>
+						<select id="Result_of_interrogation" onChange="OnChange_Result_of_interrogation(this.form)">
+							<option value="000">Rejected for any reason
+							<option selected value="001">Accepted
+							<option value="010">LE not defined
+							<option value="011">User not authorized
+							<option value="100">Unknown TETRA identity
+							<option value="110">Parameters not valid
+							<option value="111">Insufficient information
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">LE used over ISI:</th>
+					<td>
+						<select id="LE_used_over_ISI">
+							<option value="0">LE not extended over ISI
+							<option selected value="1">LE not extended over ISI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Call behaviour:</th>
+					<td>
+						<select id="Call_behaviour">
+							<option value="00">call area does not change during the call
+							<option selected value="01">call area may change during the call
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Basic service type:</th>
+					<td>
+						<select id="Basic_service_type">
+							<option value="01">Multipoint circuit mode speech call
+							<option value="10">Multipoint circuit mode data call
+							<option selected value="11">All multipoint circuit mode call types
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Repetition rate:</th>
+					<td>
+						<select id="Repetition_rate">
+							<option selected value="00">Any rate
+							<option value="01">Low
+							<option value="10">Normal
+							<option value="11">High
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Range_type_for_interrogated_groups = document.getElementById('Range_type_for_interrogated_groups').value;
+				Interrogated_group_address_type = document.getElementById('Interrogated_group_address_type').value;
+				Interrogated_group_SNA = document.getElementById('Interrogated_group_SNA').value;
+				Interrogated_group_SSI = document.getElementById('Interrogated_group_SSI').value;
+				Interrogated_group_extension_MCC = document.getElementById('Interrogated_group_extension_MCC').value;
+				Interrogated_group_extension_MNC = document.getElementById('Interrogated_group_extension_MNC').value;
+
+				Result_of_interrogation = document.getElementById('Result_of_interrogation').value;
+				LE_used_over_ISI = document.getElementById('LE_used_over_ISI').value;
+				Call_behaviour = document.getElementById('Call_behaviour').value;
+				Basic_service_type = document.getElementById('Basic_service_type').value;
+				Repetition_rate = document.getElementById('Repetition_rate').value;
+				
+				Range_type_for_interrogated_groups_dec = parseInt(Range_type_for_interrogated_groups,2);
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Range_type_for_interrogated_groups;
+				Group_address_value = Interrogated_group_address_type;
+				
+				if (Interrogated_group_address_type == "00")
+				{
+					Group_address_value += dec2bin(Interrogated_group_SNA,8);
+				}
+				if (Interrogated_group_address_type == "01")
+				{
+					Group_address_value += dec2bin(Interrogated_group_SSI,24);
+				}
+				if (Interrogated_group_address_type == "10")
+				{
+					Group_address_value += dec2bin(Interrogated_group_SSI,24);
+					Group_address_value += dec2bin(Interrogated_group_extension_MCC,10);
+					Group_address_value += dec2bin(Interrogated_group_extension_MNC,14);
+				}
+				
+				if (Range_type_for_interrogated_groups == "1111")
+				{
+					pdu_bin_value += Group_address_value;
+					pdu_bin_value += Group_address_value;
+				}
+				else
+				{
+					for (i=0; i<Range_type_for_interrogated_groups_dec; i+=1)
+					{
+						pdu_bin_value += Group_address_value;
+					}
+				}
+				
+				pdu_bin_value += dec2bin(Result_of_interrogation,3);
+				if (Result_of_interrogation == "1")
+				{
+					pdu_bin_value += dec2bin(LE_used_over_ISI,1);
+					pdu_bin_value += Call_behaviour;
+					pdu_bin_value += Basic_service_type;
+					pdu_bin_value += Repetition_rate;
+				}
+					
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Result_of_interrogation(form)
+			{
+				Result_of_interrogation = document.getElementById('Result_of_interrogation').value;
+				if (Result_of_interrogation == "001")
+				{
+					document.getElementById('LE_used_over_ISI').disabled = false;
+					document.getElementById('Call_behaviour').disabled = false;
+					document.getElementById('Basic_service_type').disabled = false;
+					document.getElementById('Repetition_rate').disabled = false;
+				}
+				else
+				{
+					document.getElementById('LE_used_over_ISI').disabled = true;
+					document.getElementById('Call_behaviour').disabled = true;
+					document.getElementById('Basic_service_type').disabled = true;
+					document.getElementById('Repetition_rate').disabled = true;
+				}
+			}
+			function OnChange_Interrogated_group_address_type(form)
+			{
+				Interrogated_group_address_type = document.getElementById('Interrogated_group_address_type').value;
+				if (Interrogated_group_address_type == "00") 
+				{
+					document.getElementById('Interrogated_group_SNA').disabled = false;
+					document.getElementById('Interrogated_group_SSI').disabled = true;
+					document.getElementById('Interrogated_group_extension_MCC').disabled = true;
+					document.getElementById('Interrogated_group_extension_MNC').disabled = true;
+				}
+				if (Interrogated_group_address_type == "01") 
+				{
+					document.getElementById('Interrogated_group_SNA').disabled = true;
+					document.getElementById('Interrogated_group_SSI').disabled = false;
+					document.getElementById('Interrogated_group_extension_MCC').disabled = true;
+					document.getElementById('Interrogated_group_extension_MNC').disabled = true;
+				}
+				else
+				if (Interrogated_group_address_type == "10") 
+				{
+					document.getElementById('Interrogated_group_SNA').disabled = true;
+					document.getElementById('Interrogated_group_SSI').disabled = false;
+					document.getElementById('Interrogated_group_extension_MCC').disabled = false;
+					document.getElementById('Interrogated_group_extension_MNC').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

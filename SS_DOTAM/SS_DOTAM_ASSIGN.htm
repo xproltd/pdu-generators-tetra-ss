@@ -1,0 +1,361 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-DOTAM-ASSIGN</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_DOTAM_01_Table">
+				<tr>
+					<th align="left">Number of assignments:</th>
+					<td>
+						<select id="Number_of_assignments" onChange="OnChange_Number_of_assignments(this.form)">
+							<option value="0000">No assignment
+							<option value="0001">1 assignment
+							<option selected value="0010">2 assignments
+							<option value="0011">3 assignments
+							<option value="0100">3 assignments
+							<option value="0101">4 assignments
+							<option value="0110">5 assignments
+							<option value="0111">6 assignments
+							<option value="1000">7 assignments
+							<option value="1001">9 assignments
+							<option value="1010">10 assignments
+							<option value="1011">11 assignments
+							<option value="1100">12 assignments
+							<option value="1101">13 assignments
+							<option value="1110">14 assignments
+							<option value="1111">15 assignments
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Group SSI:
+					</th>
+					<td>
+						<input id="Group_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">MNI extension indicator:</th>
+					<td>
+						<select id="MNI_extension_indicator" onChange="OnChange_MNI_extension_indicator(this.form)">
+							<option selected value="0">Not present
+							<option value="1">Present
+						</select>
+						MCC: <input disabled id="Extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Additional DMO group identifier:</th>
+					<td>
+						<select id="Additional_DMO_group_identifier">
+							<option selected value="0">0
+							<option value="1">1
+							<option value="2">2
+							<option value="3">3
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">DMO carrier (0-4095):</th>
+					<td>
+						<input id="DMO_carrier" value="842" size="4" maxlength="4">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Frequency band:</th>
+					<td>
+						<select id="Frequency_band">
+							<option value="0001">100,000 MHz
+							<option value="0010">200,000 MHz
+							<option selected value="0011">300,000 MHz
+							<option value="0100">400,000 MHz
+							<option value="0101">500,000 MHz
+							<option value="0110">600,000 MHz
+							<option value="0111">700,000 MHz
+							<option value="1000">800,000 MHz
+							<option value="1001">900,000 MHz
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Offset:</th>
+					<td>
+						<select id="Offset">
+							<option selected value="00">0 kHz offset
+							<option value="01">+6,25 kHz offset
+							<option value="10">-6,25 kHz offset
+							<option value="11">+12,5 kHz offset
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Acknowledgement request:</th>
+					<td>
+						<select id="Acknowledgement_request">
+							<option value="0">No acknowledgement requested
+							<option value="1">Acknowledgement requested
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">DMO group status:</th>
+					<td>
+						<select id="DMO_group_status">
+							<option value="0">Assigned DMO group
+							<option value="1">Default DMO group
+							<option value="2">Preferred DMO group
+							<option value="3">Selected DMO group
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Air interface encryption state:</th>
+					<td>
+						<select id="Air_interface_encryption_state" onChange="OnChange_Air_interface_encryption_state(this.form)">
+							<option selected value="00">DM-1
+							<option value="01">DM-2-A
+							<option value="10">DM-2-B
+							<option value="11">DM-2-C
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Encryption key number:</th>
+					<td>
+						<select disabled id="Encryption_key_number">
+							<option value="0">SCKN = 1
+							<option value="1">SCKN = 2
+							<option value="2">SCKN = 3
+							<option value="3">SCKN = 4
+							<option value="4">SCKN = 5
+							<option value="5">SCKN = 6
+							<option value="6">SCKN = 7
+							<option value="7">SCKN = 8
+							<option value="8">SCKN = 9
+							<option value="9">SCKN = 10
+							<option value="10">SCKN = 11
+							<option value="11">SCKN = 12
+							<option value="12">SCKN = 13
+							<option value="13">SCKN = 14
+							<option value="14">SCKN = 15
+							<option value="15">SCKN = 16
+							<option value="16">SCKN = 17
+							<option value="17">SCKN = 18
+							<option value="18">SCKN = 19
+							<option value="19">SCKN = 20
+							<option value="20">SCKN = 21
+							<option value="21">SCKN = 22
+							<option value="22">SCKN = 23
+							<option value="23">SCKN = 24
+							<option value="24">SCKN = 25
+							<option value="25">SCKN = 26
+							<option value="26">SCKN = 27
+							<option value="27">SCKN = 28
+							<option value="28">SCKN = 29
+							<option value="29">SCKN = 30
+							<option value="30">SCKN = 31
+							<option value="31">SCKN = 32
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">DMO group mnemonic name:</th>
+					<td>
+						<select id="DMO_group_mnemonic_name_present" onChange="OnChange_DMO_group_mnemonic_name_present(this.form)">
+							<option value="0">Not present
+							<option selected value="1">Present
+						</select>
+						<input id="DMO_group_mnemonic_name" value="DMO group mnemonic" size=25>
+				</tr>
+				<tr>
+					<th align="left">DMO channel mnemonic name:</th>
+					<td>
+						<select id="DMO_channel_mnemonic_name_present" onChange="OnChange_DMO_channel_mnemonic_name_present(this.form)">
+							<option value="0">Not present
+							<option selected value="1">Present
+						</select>
+						<input id="DMO_channel_mnemonic_name" value="DMO channel mnemonic" size=25>
+				</tr>
+				<tr>
+					<th align="left">Reserved IE present:</th>
+					<td>
+						<select disabled id="Reserved_IE_present">
+							<option selected value="0">Not present
+							<option value="1">Present
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Information Element values
+				Number_of_assignments = document.getElementById('Number_of_assignments').value;
+				
+				Group_SSI = document.getElementById('Group_SSI').value;
+				MNI_extension_indicator = document.getElementById('MNI_extension_indicator').value;
+				Extension_MCC = document.getElementById('Extension_MCC').value;
+				Extension_MNC = document.getElementById('Extension_MNC').value;
+				Additional_DMO_group_identifier = document.getElementById('Additional_DMO_group_identifier').value;
+				DMO_carrier = document.getElementById('DMO_carrier').value;
+				Frequency_band = document.getElementById('Frequency_band').value;
+				Offset = document.getElementById('Offset').value;
+				
+				Acknowledgement_request = document.getElementById('Acknowledgement_request').value;
+				DMO_group_status = document.getElementById('DMO_group_status').value;
+				Air_interface_encryption_state = document.getElementById('Air_interface_encryption_state').value;
+				Encryption_key_number = document.getElementById('Encryption_key_number').value;
+				DMO_group_mnemonic_name_present = document.getElementById('DMO_group_mnemonic_name_present').value;
+				DMO_group_mnemonic_name = document.getElementById('DMO_group_mnemonic_name').value;
+				DMO_channel_mnemonic_name_present = document.getElementById('DMO_channel_mnemonic_name_present').value;
+				DMO_channel_mnemonic_name = document.getElementById('DMO_channel_mnemonic_name').value;
+				
+				Reserved_IE_present = document.getElementById('Reserved_IE_present').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Number_of_assignments;
+				
+				Unique_DMO_group_identifier = dec2bin(Group_SSI,24);
+				Unique_DMO_group_identifier += dec2bin(MNI_extension_indicator,1);
+				if (MNI_extension_indicator == "1")
+				{
+					Unique_DMO_group_identifier += dec2bin(Extension_MCC,10);
+					Unique_DMO_group_identifier += dec2bin(Extension_MNC,14);
+				}
+				
+				Unique_DMO_group_identifier += dec2bin(Additional_DMO_group_identifier,2);
+				Unique_DMO_group_identifier += "000"; // Reserved
+				Unique_DMO_group_identifier += dec2bin(DMO_carrier,12);
+				Unique_DMO_group_identifier += Frequency_band;
+				Unique_DMO_group_identifier += Offset;
+				
+				DMO_group_definition = Unique_DMO_group_identifier;
+				DMO_group_definition += dec2bin(Acknowledgement_request,1);
+				DMO_group_definition += dec2bin(DMO_group_status,3);
+				DMO_group_definition += Air_interface_encryption_state;
+				DMO_group_definition += dec2bin(Encryption_key_number,5);
+				DMO_group_definition += dec2bin(DMO_group_mnemonic_name_present,1);
+				if (DMO_group_mnemonic_name_present = "1")
+				{
+					DMO_group_definition += dec2bin(8,7);
+					DMO_group_definition += dec2bin(DMO_group_mnemonic_name.length*8,8);
+					DMO_group_definition += text2bin(DMO_group_mnemonic_name);
+				}
+				DMO_group_definition += dec2bin(DMO_channel_mnemonic_name_present,1);
+				if (DMO_channel_mnemonic_name_present = "1")
+				{
+					DMO_group_definition += dec2bin(8,7);
+					DMO_group_definition += dec2bin(DMO_channel_mnemonic_name.length*8,8);
+					DMO_group_definition += text2bin(DMO_channel_mnemonic_name);
+				}
+				
+				for (i=0; i<parseInt(Number_of_assignments,2); i+=1)
+				{
+					pdu_bin_value += DMO_group_definition;
+				}
+				
+				pdu_bin_value += dec2bin(Reserved_IE_present,1);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Number_of_assignments_present(form)
+			{
+				Number_of_assignments_present = document.getElementById('Number_of_assignments_present').value;
+				if (Number_of_assignments_present == "0")
+				{
+					document.getElementById('Number_of_assignments').disabled = true;
+					for(i=3;i<12;i++)
+					{
+						form.elements[i].disabled = true;
+					}
+				}
+				else
+				{
+					document.getElementById('Number_of_assignments').disabled = false;
+					OnChange_Number_of_assignments(form);
+				}
+			}
+			function OnChange_Number_of_assignments(form)
+			{
+				Number_of_assignments = document.getElementById('Number_of_assignments').value;
+				if (Number_of_assignments == "0000")
+				{
+					for(i=3;i<12;i++)
+					{
+						form.elements[i].disabled = true;
+					}
+				}
+				else
+				{
+					for(i=3;i<12;i++)
+					{
+						form.elements[i].disabled = false;
+					}
+					OnChange_MNI_extension_indicator(form);
+				}
+			}
+			function OnChange_MNI_extension_indicator(form)
+			{
+				MNI_extension_indicator = document.getElementById('MNI_extension_indicator').value;
+				if (MNI_extension_indicator == "0")
+				{
+					document.getElementById('Extension_MCC').disabled = true;
+					document.getElementById('Extension_MNC').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Extension_MCC').disabled = false;
+					document.getElementById('Extension_MNC').disabled = false;
+				}
+			}
+			function OnChange_Air_interface_encryption_state(form)
+			{
+				Air_interface_encryption_state = document.getElementById('Air_interface_encryption_state').value;
+				if (Air_interface_encryption_state == "00")
+				{
+					document.getElementById('Encryption_key_number').value = "0";
+					document.getElementById('Encryption_key_number').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Encryption_key_number').disabled = false;
+				}
+			}
+			function OnChange_DMO_group_mnemonic_name_present(form)
+			{
+				DMO_group_mnemonic_name_present = document.getElementById('DMO_group_mnemonic_name_present').value;
+				if (DMO_group_mnemonic_name_present == "0")
+				{
+					document.getElementById('DMO_group_mnemonic_name').disabled = true;
+				}
+				else
+				{
+					document.getElementById('DMO_group_mnemonic_name').disabled = false;
+				}
+			}
+			function OnChange_DMO_channel_mnemonic_name_present(form)
+			{
+				DMO_channel_mnemonic_name_present = document.getElementById('DMO_channel_mnemonic_name_present').value;
+				if (DMO_channel_mnemonic_name_present == "0")
+				{
+					document.getElementById('DMO_channel_mnemonic_name').disabled = true;
+				}
+				else
+				{
+					document.getElementById('DMO_channel_mnemonic_name').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

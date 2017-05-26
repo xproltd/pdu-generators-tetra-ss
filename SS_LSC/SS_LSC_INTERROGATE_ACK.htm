@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-LSC-INTERROGATE_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_LSC_08_Table">
+				<tr>
+					<th align="left">Identity:</th>
+					<td>
+						SSI: <input id="SSI" value="62033" size=15 >
+						<br>
+						MCC: <input id="MCC" value="234" size=5 >
+						<br>
+						MNC: <input id="MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+					Interrogation result:
+					</th>
+					<td>
+						<select id="Interrogation_result" onChange="OnChange_Interrogation_result(this.form)">
+							<option selected value="0">Accepted
+							<option value="1">Rejected
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Activation state:
+					</th>
+					<td>
+						<select id="Activation_state">
+							<option selected value="0"> SS-LSC active
+							<option value="1">SS-LSC non-active
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Number of attendants:
+					</th>
+					<td>
+						<select id="Number_of_attendants">
+							<option value="000010">2 attendants
+							<option value="000011">3 attendants
+							<option value="000100">4 attendants
+							<option value="000101">5 attendants
+							<option value="000110">6 attendants
+							<option value="000111">7 attendants
+							<option value="001000">8 attendants
+							<option value="001001">9 attendants
+							<option value="001010">10 attendants
+							<option value="001011">11 attendants
+							<option value="001100">12 attendants
+							<option value="001101">13 attendants
+							<option value="001110">14 attendants
+							<option value="001111">15 attendants
+							<option value="010000">16 attendants
+							<option value="010001">17 attendants
+							<option value="010010">18 attendants
+							<option value="010011">19 attendants
+							<option value="010100">20 attendants
+							<option value="010101">21 attendants
+							<option value="010110">22 attendants
+							<option value="010111">23 attendants
+							<option value="011000">24 attendants
+							<option value="011001">25 attendants
+							<option value="011010">26 attendants
+							<option value="011011">27 attendants
+							<option value="011100">28 attendants
+							<option value="011101">29 attendants
+							<option value="011110">30 attendants
+							<option value="011111">31 attendants
+							<option value="100000">32 attendants
+							<option value="100001">33 attendants
+							<option value="100010">34 attendants
+							<option value="100011">35 attendants
+							<option value="100100">36 attendants
+							<option value="100101">37 attendants
+							<option value="100110">38 attendants
+							<option value="100111">39 attendants
+							<option value="101000">40 attendants
+							<option value="101001">41 attendants
+							<option value="101010">42 attendants
+							<option value="101011">43 attendants
+							<option value="101100">44 attendants
+							<option value="101101">45 attendants
+							<option value="101110">46 attendants
+							<option value="101111">47 attendants
+							<option value="110000">48 attendants
+							<option value="110001">49 attendants
+							<option value="110010">50 attendants
+							<option value="110011">51 attendants
+							<option value="110100">52 attendants
+							<option value="110101">53 attendants
+							<option value="110110">54 attendants
+							<option value="110111">55 attendants
+							<option value="111000">56 attendants
+							<option value="111001">57 attendants
+							<option value="111010">58 attendants
+							<option value="111011">59 attendants
+							<option value="111100">60 attendants
+							<option value="111101">61 attendants
+							<option value="111110">62 attendants
+							<option value="111111">63 attendants
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Attendant identity:</th>
+					<td>
+						SSI: <input id="Attendant_SSI" value="62034" size=15 >
+						<br>
+						MCC: <input id="Attendant_MCC" value="234" size=5 >
+						<br>
+						MNC: <input id="Attendant_MNC" value="73" size=5 >
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				SSI = document.getElementById('SSI').value;
+				MCC = document.getElementById('MCC').value;
+				MNC = document.getElementById('MNC').value;
+
+				Interrogation_result = document.getElementById('Interrogation_result').value;
+				Activation_state = document.getElementById('Activation_state').value;
+				
+				Number_of_attendants = document.getElementById('Number_of_attendants').value;
+				Attendant_SSI = document.getElementById('Attendant_SSI').value;
+				Attendant_MCC = document.getElementById('Attendant_MCC').value;
+				Attendant_MNC = document.getElementById('Attendant_MNC').value;
+								
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(MCC,10);
+				pdu_bin_value += dec2bin(MNC,14);
+				pdu_bin_value += dec2bin(SSI,24);
+
+				pdu_bin_value += dec2bin(Interrogation_result,1);
+				
+				if (Interrogation_result == "0")
+				{
+					pdu_bin_value += dec2bin(Activation_state,1);
+					
+					pdu_bin_value += Number_of_attendants;
+					
+					for (i=0; i<parseInt(Number_of_attendants,2); i+=1)
+					{
+						pdu_bin_value += dec2bin(Attendant_MCC,10);
+						pdu_bin_value += dec2bin(Attendant_MNC,14);
+						pdu_bin_value += dec2bin(Attendant_SSI,24);
+					}
+				}
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Interrogation_result(form)
+			{
+				Interrogation_result = document.getElementById('Interrogation_result').value;
+				if (Interrogation_result == "1") 
+				{
+					document.getElementById('Activation_state').disabled = true;
+					document.getElementById('Number_of_attendants').disabled = true;
+					document.getElementById('Attendant_SSI').disabled = true;
+					document.getElementById('Attendant_MCC').disabled = true;
+					document.getElementById('Attendant_MNC').disabled = true;
+				}
+ 				else
+				{
+					document.getElementById('Activation_state').disabled = false;
+					document.getElementById('Number_of_attendants').disabled = false;
+					document.getElementById('Attendant_SSI').disabled = false;
+					document.getElementById('Attendant_MCC').disabled = false;
+					document.getElementById('Attendant_MNC').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

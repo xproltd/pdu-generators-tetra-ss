@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-HOLD-LOCATION_CHANGE</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_HOLD_05_Table">
+				<tr>
+					<th align="left">
+						Call on hold change:
+					</th>
+					<td>
+						<select id="Call_on_hold_change" onChange="OnChange_Call_on_hold_change(this.form)">
+							<option value="00">No change occurred
+							<option value="01">One or more identifiers of calls on hold changed
+							<option value="10">One or more calls on hold lost
+							<option selected value="11">One or more identifiers of calls on hold changed and one or more calls on hold lost
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Number of call identifiers changed:
+					</th>
+					<td>
+						<select id="Number_of_call_identifiers_changed">
+							<option selected value="01">1
+							<option value="010">2
+							<option value="011">3
+							<option value="100">4
+							<option value="101">5
+							<option value="110">6
+							<option value="111">7
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Old call identifier:
+					</th>
+					<td>
+						<input id="Changed_old_call_identifier" value="2012" size="5" maxlength="5">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						New call identifier:
+					</th>
+					<td>
+						<input id="Changed_new_call_identifier" value="3210" size="5" maxlength="5">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Number of calls on hold lost:
+					</th>
+					<td>
+						<select id="Number_of_calls_on_hold_lost">
+							<option selected value="01">1
+							<option value="010">2
+							<option value="011">3
+							<option value="100">4
+							<option value="101">5
+							<option value="110">6
+							<option value="111">7
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Old call identifier:
+					</th>
+					<td>
+						<input id="Lost_old_call_identifier" value="2012" size="5" maxlength="5">
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Call_on_hold_change = document.getElementById('Call_on_hold_change').value;
+				Number_of_call_identifiers_changed = document.getElementById('Number_of_call_identifiers_changed').value;
+				Changed_old_call_identifier = document.getElementById('Changed_old_call_identifier').value;
+				Changed_new_call_identifier = document.getElementById('Changed_new_call_identifier').value;
+				Number_of_calls_on_hold_lost = document.getElementById('Number_of_calls_on_hold_lost').value;
+				Lost_old_call_identifier = document.getElementById('Lost_old_call_identifier').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+								
+				pdu_bin_value += Call_on_hold_change;
+				
+				if (Call_on_hold_change.substr(1,1) == "1")
+				{
+					pdu_bin_value += dec2bin(Number_of_call_identifiers_changed,3);
+					for (i=0; i<Number_of_call_identifiers_changed; i+=1)
+					{
+						pdu_bin_value += dec2bin(Changed_old_call_identifier,14);
+						pdu_bin_value += dec2bin(Changed_new_call_identifier,14);
+					}
+				}
+				if (Call_on_hold_change.substr(0,1) == "1")
+				{
+					pdu_bin_value += dec2bin(Number_of_calls_on_hold_lost,3);
+					for (i=0; i<Number_of_calls_on_hold_lost; i+=1)
+					{
+						pdu_bin_value += dec2bin(Lost_old_call_identifier,14);
+					}
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Call_on_hold_change(form)
+			{
+				Call_on_hold_change = document.getElementById('Call_on_hold_change').value;
+				if (Call_on_hold_change == "00")
+				{
+					document.getElementById('Number_of_call_identifiers_changed').disabled = true;
+					document.getElementById('Changed_old_call_identifier').disabled = true;
+					document.getElementById('Changed_new_call_identifier').disabled = true;
+					document.getElementById('Number_of_calls_on_hold_lost').disabled = true;
+					document.getElementById('Lost_old_call_identifier').disabled = true;
+				}
+				if (Call_on_hold_change == "01")
+				{
+					document.getElementById('Number_of_call_identifiers_changed').disabled = false;
+					document.getElementById('Changed_old_call_identifier').disabled = false;
+					document.getElementById('Changed_new_call_identifier').disabled = false;
+					document.getElementById('Number_of_calls_on_hold_lost').disabled = true;
+					document.getElementById('Lost_old_call_identifier').disabled = true;
+				}
+				if (Call_on_hold_change == "10")
+				{
+					document.getElementById('Number_of_call_identifiers_changed').disabled = true;
+					document.getElementById('Changed_old_call_identifier').disabled = true;
+					document.getElementById('Changed_new_call_identifier').disabled = true;
+					document.getElementById('Number_of_calls_on_hold_lost').disabled = false;
+					document.getElementById('Lost_old_call_identifier').disabled = false;
+				}
+				if (Call_on_hold_change == "11")
+				{
+					document.getElementById('Number_of_call_identifiers_changed').disabled = false;
+					document.getElementById('Changed_old_call_identifier').disabled = false;
+					document.getElementById('Changed_new_call_identifier').disabled = false;
+					document.getElementById('Number_of_calls_on_hold_lost').disabled = false;
+					document.getElementById('Lost_old_call_identifier').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

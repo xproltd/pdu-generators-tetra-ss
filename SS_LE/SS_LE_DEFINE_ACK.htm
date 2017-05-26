@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-LE-DEFINE-ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_LE_02_Table">
+				<tr>
+					<th align="left">
+						Range type for defined groups:
+					</th>
+					<td>
+                        <select id="Range_type_for_defined_groups">
+							<option value="0000">No element
+							<option selected value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Defined group address type:
+					</th>
+					<td>
+						<select id="Defined_group_address_type" onChange="OnChange_Defined_group_address_type(this.form)">
+							<option value="00">SNA
+							<option value="01">SSI
+							<option value="10">SSI+Extension
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Defined group SNA:
+					</th>
+					<td>
+						<input id="Defined_group_SNA" value="123" size=5>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Defined group SSI:
+					</th>
+					<td>
+						<input disabled id="Defined_group_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Defined group extension:</th>
+					<td>
+						MCC: <input disabled id="Defined_group_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Defined_group_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Result for definition:</th>
+					<td>
+						<select id="Result_for_definition">
+							<option value="000">Rejected for any reason
+							<option selected value="001">Accepted
+							<option value="011">User not authorized
+							<option value="100">Unknown TETRA identity
+							<option value="101">SS-LE not supported for the basic service
+							<option value="110">Parameters not valid
+							<option value="111">Insufficient information
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Range_type_for_defined_groups = document.getElementById('Range_type_for_defined_groups').value;
+				Defined_group_address_type = document.getElementById('Defined_group_address_type').value;
+				Defined_group_SNA = document.getElementById('Defined_group_SNA').value;
+				Defined_group_SSI = document.getElementById('Defined_group_SSI').value;
+				Defined_group_extension_MCC = document.getElementById('Defined_group_extension_MCC').value;
+				Defined_group_extension_MNC = document.getElementById('Defined_group_extension_MNC').value;
+				Result_for_definition = document.getElementById('Result_for_definition').value;
+				
+				Range_type_for_defined_groups_dec = parseInt(Range_type_for_defined_groups,2);
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Range_type_for_defined_groups;
+
+				Group_address_value = Defined_group_address_type;
+				
+				if (Defined_group_address_type == "00")
+				{
+					Group_address_value += dec2bin(Defined_group_SNA,8);
+				}
+				if (Defined_group_address_type == "01")
+				{
+					Group_address_value += dec2bin(Defined_group_SSI,24);
+				}
+				if (Defined_group_address_type == "10")
+				{
+					Group_address_value += dec2bin(Defined_group_SSI,24);
+					Group_address_value += dec2bin(Defined_group_extension_MCC,10);
+					Group_address_value += dec2bin(Defined_group_extension_MNC,14);
+				}
+				
+				if (Range_type_for_defined_groups == "1111")
+				{
+					pdu_bin_value += Group_address_value;
+					pdu_bin_value += Group_address_value;
+				}
+				else
+				{
+					for (i=0; i<Range_type_for_defined_groups_dec; i+=1)
+					{
+						pdu_bin_value += Group_address_value;
+					}
+				}
+				
+				pdu_bin_value += Result_for_definition;
+					
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Defined_group_address_type(form)
+			{
+				Defined_group_address_type = document.getElementById('Defined_group_address_type').value;
+				if (Defined_group_address_type == "00") 
+				{
+					document.getElementById('Defined_group_SNA').disabled = false;
+					document.getElementById('Defined_group_SSI').disabled = true;
+					document.getElementById('Defined_group_extension_MCC').disabled = true;
+					document.getElementById('Defined_group_extension_MNC').disabled = true;
+				}
+				if (Defined_group_address_type == "01") 
+				{
+					document.getElementById('Defined_group_SNA').disabled = true;
+					document.getElementById('Defined_group_SSI').disabled = false;
+					document.getElementById('Defined_group_extension_MCC').disabled = true;
+					document.getElementById('Defined_group_extension_MNC').disabled = true;
+				}
+				else
+				if (Defined_group_address_type == "10") 
+				{
+					document.getElementById('Defined_group_SNA').disabled = true;
+					document.getElementById('Defined_group_SSI').disabled = false;
+					document.getElementById('Defined_group_extension_MCC').disabled = false;
+					document.getElementById('Defined_group_extension_MNC').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

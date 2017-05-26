@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-DOTAM-INTERROGATE</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_DOTAM_08_Table">
+				<tr>
+					<th align="left">Interrogate type:</th>
+					<td>
+						<select id="Interrogate_type">
+							<option value="0">Range of DMO groups
+							<option value="1">Default DMO group
+							<option value="2">Preferred DMO groups
+							<option value="3">Default DMO group and preferred DMO groups
+							<option value="4">Default DMO group and preferred DMO groups
+							<option value="5">Assigned DMO groups
+							<option value="6">Default DMO group and assigned DMO groups
+							<option value="7">Preferred DMO groups and assigned DMO groups
+							<option value="8">All DMO groups, see note
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Interrogation range included:</th>
+					<td>
+						<select id="Interrogation_range_included" onChange="OnChange_Interrogation_range_included(this.form)">
+							<option selected value="0">Interrogation range is included
+							<option value="1">Interrogation range is not included
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Interrogation range start number (1-1023):</th>
+					<td>
+						<input id="Interrogation_range_start_number" value="34" size="4" maxlength="4">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Interrogation range end number (1-1023):</th>
+					<td>
+						<input id="Interrogation_range_end_number" value="215" size="4" maxlength="4">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Reserved IE present:</th>
+					<td>
+						<select disabled id="Reserved_IE_present">
+							<option selected value="0">Not present
+							<option value="1">Present
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Information Element values
+				Interrogate_type = document.getElementById('Interrogate_type').value;
+				Interrogation_range_included = document.getElementById('Interrogation_range_included').value;
+				Interrogation_range_start_number = document.getElementById('Interrogation_range_start_number').value;
+				Interrogation_range_end_number = document.getElementById('Interrogation_range_end_number').value;
+				
+				Reserved_IE_present = document.getElementById('Reserved_IE_present').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(Interrogate_type,4);
+				
+				pdu_bin_value += dec2bin(Interrogation_range_included,1);
+				if (Interrogation_range_included == "0")
+				{
+					pdu_bin_value += dec2bin(Interrogation_range_start_number,10);
+					pdu_bin_value += dec2bin(Interrogation_range_end_number,10);
+				}
+				
+				pdu_bin_value += dec2bin(Reserved_IE_present,1);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Interrogation_range_included(form)
+			{
+				Interrogation_range_included = document.getElementById('Interrogation_range_included').value;
+				if (Interrogation_range_included == "0")
+				{
+					document.getElementById('Interrogation_range_start_number').disabled = false;
+					document.getElementById('Interrogation_range_end_number').disabled = false;
+				}
+				else
+				{
+					document.getElementById('Interrogation_range_start_number').disabled = true;
+					document.getElementById('Interrogation_range_end_number').disabled = true;
+				}
+			}
+		</script>
+	</body>
+</html>

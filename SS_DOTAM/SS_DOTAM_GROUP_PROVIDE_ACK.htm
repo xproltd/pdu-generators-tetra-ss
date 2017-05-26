@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-DOTAM-GROUP_PROVIDE_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_DOTAM_08_Table">
+				<tr>
+					<th align="left">Result code:</th>
+					<td>
+						<select id="Result_code">
+							<option value="0">Success, action completed
+							<option value="1">Success, more information to follow
+							<option value="2">Failure, memory full
+							<option value="3">Failure, unknown DMO group
+							<option value="4">Failure, unknown DMO group
+							<option value="5">Failure, MS prevented assignment, deassignment or status change
+							<option value="6">Failure, status "preferred group" not allowed for that group
+							<option value="7">Failure, status "default group" not allowed for that group
+							<option value="8">Failure, syntax error
+							<option value="9">Failure, more information to follow
+							<option value="10">Failure, range interrogation not supported
+							<option value="11">Failure, range outside DMO group assignments in the MS
+							<option value="12">Warning, encryption key not present and/or air interface encryption setting not supported
+							<option value="13">Assignment successful, but status is set to assigned
+							<option value="14">Not supported action
+							<option value="15">Not supported information element value
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Group SSI:
+					</th>
+					<td>
+						<input id="Group_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">MNI:</th>
+					<td>
+						MCC: <input id="Extension_MCC" value="234" size=5 >
+						MNC: <input id="Extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Reserved IE present:</th>
+					<td>
+						<select disabled id="Reserved_IE_present">
+							<option selected value="0">Not present
+							<option value="1">Present
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Information Element values
+				Result_code = document.getElementById('Result_code').value;
+				Group_SSI = document.getElementById('Group_SSI').value;
+				Extension_MCC = document.getElementById('Extension_MCC').value;
+				Extension_MNC = document.getElementById('Extension_MNC').value;
+				
+				Reserved_IE_present = document.getElementById('Reserved_IE_present').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(Result_code,5);
+				
+				pdu_bin_value += dec2bin(Group_SSI,24);
+				pdu_bin_value += dec2bin(Extension_MCC,10);
+				pdu_bin_value += dec2bin(Extension_MNC,14);
+					
+				pdu_bin_value += dec2bin(Reserved_IE_present,1);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+		</script>
+	</body>
+</html>

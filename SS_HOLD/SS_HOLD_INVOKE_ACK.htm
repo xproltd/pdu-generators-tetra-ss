@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-HOLD-INVOKE_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_HOLD_04_Table">
+				<tr>
+					<th align="left">
+						Invocation result:
+					</th>
+					<td>
+						<select id="Invocation_result" onChange="OnChange_Invocation_result(this.form)">
+							<option selected value="0">Invocation unsuccessful
+							<option value="1">Invocation successful
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Invocation failure cause:
+					</th>
+					<td>
+						<select id="Invocation_failure_cause">
+							<option selected value="00">Rejected for any reason
+							<option value="01">Supplementary service not subscribed for user
+							<option value="11">Maximum number of calls on hold already reached
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Invocation_result = document.getElementById('Invocation_result').value;
+				Invocation_failure_cause = document.getElementById('Invocation_failure_cause').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(Invocation_result,1);
+				
+				if (Invocation_result == "0")
+				{
+					pdu_bin_value += Invocation_failure_cause;
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Invocation_result(form)
+			{
+				Invocation_result = document.getElementById('Invocation_result').value;
+				if (Invocation_result == "0")
+				{
+					document.getElementById('Invocation_failure_cause').disabled = false;
+				}
+				else
+				{
+					document.getElementById('Invocation_failure_cause').disabled = true;
+				}
+			}
+		</script>
+	</body>
+</html>

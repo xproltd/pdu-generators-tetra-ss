@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-HOLD-MIGRATION</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_HOLD_06_Table">
+				<tr>
+					<th align="left">
+						Number of calls on hold:
+					</th>
+					<td>
+						<select id="Number_of_calls_on_hold">
+							<option selected value="000">No calls still on hold
+							<option value="001">One call still on hold
+							<option value="010">2 calls on hold
+							<option value="011">3 calls on hold
+							<option value="100">4 calls on hold
+							<option value="101">5 calls on hold
+							<option value="110">6 calls on hold
+							<option value="111">7 calls on hold
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Number_of_calls_on_hold = document.getElementById('Number_of_calls_on_hold').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Number_of_calls_on_hold;
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+		</script>
+	</body>
+</html>

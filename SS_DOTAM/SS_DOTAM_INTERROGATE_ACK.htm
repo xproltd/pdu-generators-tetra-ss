@@ -1,0 +1,614 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-DOTAM-INTERROGATE_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_DOTAM_10_Table">
+				<tr>
+					<th align="left">Result code:</th>
+					<td>
+						<select id="Result_code">
+							<option value="0">Success, action completed
+							<option value="1">Success, more information to follow
+							<option value="2">Failure, memory full
+							<option value="3">Failure, unknown DMO group
+							<option value="4">Failure, unknown DMO group
+							<option value="5">Failure, MS prevented assignment, deassignment or status change
+							<option value="6">Failure, status "preferred group" not allowed for that group
+							<option value="7">Failure, status "default group" not allowed for that group
+							<option value="8">Failure, syntax error
+							<option value="9">Failure, more information to follow
+							<option value="10">Failure, range interrogation not supported
+							<option value="11">Failure, range outside DMO group assignments in the MS
+							<option value="12">Warning, encryption key not present and/or air interface encryption setting not supported
+							<option value="13">Assignment successful, but status is set to assigned
+							<option value="14">Not supported action
+							<option value="15">Not supported information element value
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left"><u><b>Default DMO group</b></u></th>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Unique DMO group ID present:</th>
+					<td>
+						<select id="Unique_DMO_group_ID_present_default" onChange="OnChange_Unique_DMO_group_ID_present_default(this.form)">
+							<option value="0">Not present
+							<option selected value="1">Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Group SSI:
+					</th>
+					<td>
+						<input id="Group_SSI_default" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">MNI extension indicator:</th>
+					<td>
+						<select id="MNI_extension_indicator_default" onChange="OnChange_MNI_extension_indicator_default(this.form)">
+							<option selected value="0">Not present
+							<option value="1">Present
+						</select>
+						MCC: <input disabled id="Extension_MCC_default" value="234" size=5 >
+						MNC: <input disabled id="Extension_MNC_default" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Additional DMO group identifier:</th>
+					<td>
+						<select id="Additional_DMO_group_identifier_default">
+							<option selected value="0">0
+							<option value="1">1
+							<option value="2">2
+							<option value="3">3
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">DMO carrier (0-4095):</th>
+					<td>
+						<input id="DMO_carrier_default" value="842" size="4" maxlength="4">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Frequency band:</th>
+					<td>
+						<select id="Frequency_band_default">
+							<option value="0001">100,000 MHz
+							<option value="0010">200,000 MHz
+							<option selected value="0011">300,000 MHz
+							<option value="0100">400,000 MHz
+							<option value="0101">500,000 MHz
+							<option value="0110">600,000 MHz
+							<option value="0111">700,000 MHz
+							<option value="1000">800,000 MHz
+							<option value="1001">900,000 MHz
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Offset:</th>
+					<td>
+						<select id="Offset_default">
+							<option selected value="00">0 kHz offset
+							<option value="01">+6,25 kHz offset
+							<option value="10">-6,25 kHz offset
+							<option value="11">+12,5 kHz offset
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left"><u><b>Preferred DMO group</b></u></th>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Number of preferred DMO groups present:</th>
+					<td>
+						<select id="Number_of_preferred_DMO_groups_present" onChange="OnChange_Number_of_preferred_DMO_groups_present(this.form)">
+							<option value="0">Not present
+							<option selected value="1">Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Number of preferred DMO groups:</th>
+					<td>
+						<select id="Number_of_preferred_DMO_groups" onChange="OnChange_Number_of_preferred_DMO_groups(this.form)">
+							<option value="0000">No DMO groups
+							<option value="0001">1 group
+							<option selected value="0010">2 groups
+							<option value="0011">3 groups
+							<option value="0100">3 groups
+							<option value="0101">4 groups
+							<option value="0110">5 groups
+							<option value="0111">6 groups
+							<option value="1000">7 groups
+							<option value="1001">9 groups
+							<option value="1010">10 groups
+							<option value="1011">11 groups
+							<option value="1100">12 groups
+							<option value="1101">13 groups
+							<option value="1110">14 groups
+							<option value="1111">15 groups
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Group SSI:
+					</th>
+					<td>
+						<input id="Group_SSI_preferred" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">MNI extension indicator:</th>
+					<td>
+						<select id="MNI_extension_indicator_preferred" onChange="OnChange_MNI_extension_indicator_preferred(this.form)">
+							<option selected value="0">Not present
+							<option value="1">Present
+						</select>
+						MCC: <input disabled id="Extension_MCC_preferred" value="234" size=5 >
+						MNC: <input disabled id="Extension_MNC_preferred" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Additional DMO group identifier:</th>
+					<td>
+						<select id="Additional_DMO_group_identifier_preferred">
+							<option selected value="0">0
+							<option value="1">1
+							<option value="2">2
+							<option value="3">3
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">DMO carrier (0-4095):</th>
+					<td>
+						<input id="DMO_carrier_preferred" value="842" size="4" maxlength="4">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Frequency band:</th>
+					<td>
+						<select id="Frequency_band_preferred">
+							<option value="0001">100,000 MHz
+							<option value="0010">200,000 MHz
+							<option selected value="0011">300,000 MHz
+							<option value="0100">400,000 MHz
+							<option value="0101">500,000 MHz
+							<option value="0110">600,000 MHz
+							<option value="0111">700,000 MHz
+							<option value="1000">800,000 MHz
+							<option value="1001">900,000 MHz
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Offset:</th>
+					<td>
+						<select id="Offset_preferred">
+							<option selected value="00">0 kHz offset
+							<option value="01">+6,25 kHz offset
+							<option value="10">-6,25 kHz offset
+							<option value="11">+12,5 kHz offset
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left"><u><b>Assigned DMO group</b></u></th>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Number of assigned DMO groups present:</th>
+					<td>
+						<select id="Number_of_assigned_DMO_groups_present" onChange="OnChange_Number_of_assigned_DMO_groups_present(this.form)">
+							<option value="0">Not present
+							<option selected value="1">Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Number of assigned DMO groups:</th>
+					<td>
+						<select id="Number_of_assigned_DMO_groups" onChange="OnChange_Number_of_assigned_DMO_groups(this.form)">
+							<option value="0000">No DMO groups
+							<option value="0001">1 group
+							<option selected value="0010">2 groups
+							<option value="0011">3 groups
+							<option value="0100">3 groups
+							<option value="0101">4 groups
+							<option value="0110">5 groups
+							<option value="0111">6 groups
+							<option value="1000">7 groups
+							<option value="1001">9 groups
+							<option value="1010">10 groups
+							<option value="1011">11 groups
+							<option value="1100">12 groups
+							<option value="1101">13 groups
+							<option value="1110">14 groups
+							<option value="1111">15 groups
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Group SSI:
+					</th>
+					<td>
+						<input id="Group_SSI_assigned" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">MNI extension indicator:</th>
+					<td>
+						<select id="MNI_extension_indicator_assigned" onChange="OnChange_MNI_extension_indicator_assigned(this.form)">
+							<option selected value="0">Not present
+							<option value="1">Present
+						</select>
+						MCC: <input disabled id="Extension_MCC_assigned" value="234" size=5 >
+						MNC: <input disabled id="Extension_MNC_assigned" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Additional DMO group identifier:</th>
+					<td>
+						<select id="Additional_DMO_group_identifier_assigned">
+							<option selected value="0">0
+							<option value="1">1
+							<option value="2">2
+							<option value="3">3
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">DMO carrier (0-4095):</th>
+					<td>
+						<input id="DMO_carrier_assigned" value="842" size="4" maxlength="4">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Frequency band:</th>
+					<td>
+						<select id="Frequency_band_assigned">
+							<option value="0001">100,000 MHz
+							<option value="0010">200,000 MHz
+							<option selected value="0011">300,000 MHz
+							<option value="0100">400,000 MHz
+							<option value="0101">500,000 MHz
+							<option value="0110">600,000 MHz
+							<option value="0111">700,000 MHz
+							<option value="1000">800,000 MHz
+							<option value="1001">900,000 MHz
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Offset:</th>
+					<td>
+						<select id="Offset_assigned">
+							<option selected value="00">0 kHz offset
+							<option value="01">+6,25 kHz offset
+							<option value="10">-6,25 kHz offset
+							<option value="11">+12,5 kHz offset
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Number of remaining DMO group definitions present:</th>
+					<td>
+						<select id="Number_of_remaining_DMO_group_definitions_present" onChange="OnChange_Number_of_remaining_DMO_group_definitions_present(this.form)">
+							<option value="0">Not present
+							<option selected value="1">Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Number of remaining DMO group definitions (1-1023):</th>
+					<td>
+						<input id="Number_of_remaining_DMO_group_definitions" value="34" size="4" maxlength="4">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Reserved IE present:</th>
+					<td>
+						<select disabled id="Reserved_IE_present">
+							<option selected value="0">Not present
+							<option value="1">Present
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Information Element values
+				Result_code = document.getElementById('Result_code').value;
+				
+				Unique_DMO_group_ID_present_default = document.getElementById('Unique_DMO_group_ID_present_default').value;
+				Group_SSI_default = document.getElementById('Group_SSI_default').value;
+				MNI_extension_indicator_default = document.getElementById('MNI_extension_indicator_default').value;
+				Extension_MCC_default = document.getElementById('Extension_MCC_default').value;
+				Extension_MNC_default = document.getElementById('Extension_MNC_default').value;
+				Additional_DMO_group_identifier_default = document.getElementById('Additional_DMO_group_identifier_default').value;
+				DMO_carrier_default = document.getElementById('DMO_carrier_default').value;
+				Frequency_band_default = document.getElementById('Frequency_band_default').value;
+				Offset_default = document.getElementById('Offset_default').value;
+				
+				Number_of_preferred_DMO_groups_present = document.getElementById('Number_of_preferred_DMO_groups_present').value;
+				Number_of_preferred_DMO_groups = document.getElementById('Number_of_preferred_DMO_groups').value;
+				Group_SSI_preferred = document.getElementById('Group_SSI_preferred').value;
+				MNI_extension_indicator_preferred = document.getElementById('MNI_extension_indicator_preferred').value;
+				Extension_MCC_preferred = document.getElementById('Extension_MCC_preferred').value;
+				Extension_MNC_preferred = document.getElementById('Extension_MNC_preferred').value;
+				Additional_DMO_group_identifier_preferred = document.getElementById('Additional_DMO_group_identifier_preferred').value;
+				DMO_carrier_preferred = document.getElementById('DMO_carrier_preferred').value;
+				Frequency_band_preferred = document.getElementById('Frequency_band_preferred').value;
+				Offset_preferred = document.getElementById('Offset_preferred').value;
+				
+				Number_of_assigned_DMO_groups_present = document.getElementById('Number_of_assigned_DMO_groups_present').value;
+				Number_of_assigned_DMO_groups = document.getElementById('Number_of_assigned_DMO_groups').value;
+				Group_SSI_assigned = document.getElementById('Group_SSI_assigned').value;
+				MNI_extension_indicator_assigned = document.getElementById('MNI_extension_indicator_assigned').value;
+				Extension_MCC_assigned = document.getElementById('Extension_MCC_assigned').value;
+				Extension_MNC_assigned = document.getElementById('Extension_MNC_assigned').value;
+				Additional_DMO_group_identifier_assigned = document.getElementById('Additional_DMO_group_identifier_assigned').value;
+				DMO_carrier_assigned = document.getElementById('DMO_carrier_assigned').value;
+				Frequency_band_assigned = document.getElementById('Frequency_band_assigned').value;
+				Offset_assigned = document.getElementById('Offset_assigned').value;
+				
+				Number_of_remaining_DMO_group_definitions_present = document.getElementById('Number_of_remaining_DMO_group_definitions_present').value;
+				Number_of_remaining_DMO_group_definitions = document.getElementById('Number_of_remaining_DMO_group_definitions').value;
+				
+				Reserved_IE_present = document.getElementById('Reserved_IE_present').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(Result_code,5);
+				
+				pdu_bin_value += dec2bin(Unique_DMO_group_ID_present_default,1);
+				if (Unique_DMO_group_ID_present_default == "1")
+				{
+					pdu_bin_value = dec2bin(Group_SSI_default,24);
+					pdu_bin_value += dec2bin(MNI_extension_indicator_default,1);
+					if (MNI_extension_indicator_default == "1")
+					{
+						pdu_bin_value += dec2bin(Extension_MCC_default,10);
+						pdu_bin_value += dec2bin(Extension_MNC_default,14);
+					}
+					
+					pdu_bin_value += dec2bin(Additional_DMO_group_identifier_default,2);
+					pdu_bin_value += "000"; // Reserved
+					pdu_bin_value += dec2bin(DMO_carrier_default,12);
+					pdu_bin_value += Frequency_band_default;
+					pdu_bin_value += Offset_default;
+				}
+				
+				// Preferred DMO groups
+				pdu_bin_value += dec2bin(Number_of_preferred_DMO_groups_present,1);
+				if (Number_of_preferred_DMO_groups_present == "1")
+				{
+					pdu_bin_value += Number_of_preferred_DMO_groups;
+					
+					Unique_DMO_group_identifier = dec2bin(Group_SSI_preferred,24);
+					Unique_DMO_group_identifier += dec2bin(MNI_extension_indicator_preferred,1);
+					if (MNI_extension_indicator_preferred == "1")
+					{
+						Unique_DMO_group_identifier += dec2bin(Extension_MCC_preferred,10);
+						Unique_DMO_group_identifier += dec2bin(Extension_MNC_preferred,14);
+					}
+					
+					Unique_DMO_group_identifier += dec2bin(Additional_DMO_group_identifier_preferred,2);
+					Unique_DMO_group_identifier += "000"; // Reserved
+					Unique_DMO_group_identifier += dec2bin(DMO_carrier_preferred,12);
+					Unique_DMO_group_identifier += Frequency_band_preferred;
+					Unique_DMO_group_identifier += Offset_preferred;
+					
+					for (i=0; i<parseInt(Number_of_preferred_DMO_groups,2); i+=1)
+					{
+						pdu_bin_value += Unique_DMO_group_identifier;
+					}
+				}
+				
+				// Assigned DMO groups
+				pdu_bin_value += dec2bin(Number_of_assigned_DMO_groups_present,1);
+				if (Number_of_assigned_DMO_groups_present == "1")
+				{
+					pdu_bin_value += Number_of_assigned_DMO_groups;
+					
+					Unique_DMO_group_identifier = dec2bin(Group_SSI_assigned,24);
+					Unique_DMO_group_identifier += dec2bin(MNI_extension_indicator_assigned,1);
+					if (MNI_extension_indicator_assigned == "1")
+					{
+						Unique_DMO_group_identifier += dec2bin(Extension_MCC_assigned,10);
+						Unique_DMO_group_identifier += dec2bin(Extension_MNC_assigned,14);
+					}
+					
+					Unique_DMO_group_identifier += dec2bin(Additional_DMO_group_identifier_assigned,2);
+					Unique_DMO_group_identifier += "000"; // Reserved
+					Unique_DMO_group_identifier += dec2bin(DMO_carrier_assigned,12);
+					Unique_DMO_group_identifier += Frequency_band_assigned;
+					Unique_DMO_group_identifier += Offset_assigned;
+					
+					for (i=0; i<parseInt(Number_of_assigned_DMO_groups,2); i+=1)
+					{
+						pdu_bin_value += Unique_DMO_group_identifier;
+					}
+				}
+				
+				pdu_bin_value += dec2bin(Number_of_remaining_DMO_group_definitions_present,1);
+				if (Number_of_remaining_DMO_group_definitions_present == "1")
+				{
+					pdu_bin_value += dec2bin(Number_of_remaining_DMO_group_definitions,10);
+				}
+				
+				pdu_bin_value += dec2bin(Reserved_IE_present,1);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Unique_DMO_group_ID_present_default(form)
+			{
+				Unique_DMO_group_ID_present_default = document.getElementById('Unique_DMO_group_ID_present_default').value;
+				if (Unique_DMO_group_ID_present_default == "0")
+				{
+					for(i=2;i<10;i++)
+					{
+						form.elements[i].disabled = true;
+					}
+				}
+				else
+				{
+					for(i=2;i<10;i++)
+					{
+						form.elements[i].disabled = false;
+						OnChange_MNI_extension_indicator_default(form);
+					}
+				}
+			}
+			function OnChange_MNI_extension_indicator_default(form)
+			{
+				MNI_extension_indicator_default = document.getElementById('MNI_extension_indicator_default').value;
+				if (MNI_extension_indicator_default == "0")
+				{
+					document.getElementById('Extension_MCC_default').disabled = true;
+					document.getElementById('Extension_MNC_default').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Extension_MCC_default').disabled = false;
+					document.getElementById('Extension_MNC_default').disabled = false;
+				}
+			}
+			function OnChange_Number_of_preferred_DMO_groups_present(form)
+			{
+				Number_of_preferred_DMO_groups_present = document.getElementById('Number_of_preferred_DMO_groups_present').value;
+				if (Number_of_preferred_DMO_groups_present == "0")
+				{
+					document.getElementById('Number_of_preferred_DMO_groups').disabled = true;
+					for(i=12;i<20;i++)
+					{
+						form.elements[i].disabled = true;
+					}
+				}
+				else
+				{
+					document.getElementById('Number_of_preferred_DMO_groups').disabled = false;
+					OnChange_Number_of_preferred_DMO_groups(form);
+				}
+			}
+			function OnChange_Number_of_preferred_DMO_groups(form)
+			{
+				Number_of_preferred_DMO_groups = document.getElementById('Number_of_preferred_DMO_groups').value;
+				if (Number_of_preferred_DMO_groups == "0000")
+				{
+					for(i=12;i<20;i++)
+					{
+						form.elements[i].disabled = true;
+					}
+				}
+				else
+				{
+					for(i=12;i<20;i++)
+					{
+						form.elements[i].disabled = false;
+					}
+					OnChange_MNI_extension_indicator_preferred(form);
+				}
+			}
+			function OnChange_MNI_extension_indicator_preferred(form)
+			{
+				MNI_extension_indicator_preferred = document.getElementById('MNI_extension_indicator_preferred').value;
+				if (MNI_extension_indicator_preferred == "0")
+				{
+					document.getElementById('Extension_MCC_preferred').disabled = true;
+					document.getElementById('Extension_MNC_preferred').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Extension_MCC_preferred').disabled = false;
+					document.getElementById('Extension_MNC_preferred').disabled = false;
+				}
+			}
+			function OnChange_Number_of_assigned_DMO_groups_present(form)
+			{
+				Number_of_assigned_DMO_groups_present = document.getElementById('Number_of_assigned_DMO_groups_present').value;
+				if (Number_of_assigned_DMO_groups_present == "0")
+				{
+					document.getElementById('Number_of_assigned_DMO_groups').disabled = true;
+					for(i=22;i<30;i++)
+					{
+						form.elements[i].disabled = true;
+					}
+				}
+				else
+				{
+					document.getElementById('Number_of_assigned_DMO_groups').disabled = false;
+					OnChange_Number_of_assigned_DMO_groups(form);
+				}
+			}
+			function OnChange_Number_of_assigned_DMO_groups(form)
+			{
+				Number_of_assigned_DMO_groups = document.getElementById('Number_of_assigned_DMO_groups').value;
+				if (Number_of_assigned_DMO_groups == "0000")
+				{
+					for(i=22;i<30;i++)
+					{
+						form.elements[i].disabled = true;
+					}
+				}
+				else
+				{
+					for(i=22;i<30;i++)
+					{
+						form.elements[i].disabled = false;
+					}
+					OnChange_MNI_extension_indicator_assigned(form);
+				}
+			}
+			function OnChange_MNI_extension_indicator_assigned(form)
+			{
+				MNI_extension_indicator_assigned = document.getElementById('MNI_extension_indicator_assigned').value;
+				if (MNI_extension_indicator_assigned == "0")
+				{
+					document.getElementById('Extension_MCC_assigned').disabled = true;
+					document.getElementById('Extension_MNC_assigned').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Extension_MCC_assigned').disabled = false;
+					document.getElementById('Extension_MNC_assigned').disabled = false;
+				}
+			}
+			function OnChange_Number_of_remaining_DMO_group_definitions_present(form)
+			{
+				Number_of_remaining_DMO_group_definitions_present = document.getElementById('Number_of_remaining_DMO_group_definitions_present').value;
+				if (Number_of_remaining_DMO_group_definitions_present == "0")
+				{
+					document.getElementById('Number_of_remaining_DMO_group_definitions').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Number_of_remaining_DMO_group_definitions').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

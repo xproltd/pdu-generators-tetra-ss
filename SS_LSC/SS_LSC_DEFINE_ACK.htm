@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-LSC-DEFINE_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_LSC_06_Table">
+				<tr>
+					<th align="left">Identity:</th>
+					<td>
+						SSI: <input id="SSI" value="62033" size=15 >
+						<br>
+						MCC: <input id="MCC" value="234" size=5 >
+						<br>
+						MNC: <input id="MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Definition result:
+					</th>
+					<td>
+						<select id="Definition_result" onChange="OnChange_Definition_result(this.form)">
+							<option selected value="0">Accepted
+							<option value="1">Rejected
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Reject cause:
+					</th>
+					<td>
+						<select disabled id="Reject_cause">
+							<option selected value="0">Rejected for any reason
+							<option value="1">Service not subscribed to
+							<option value="2">Service withdrawn
+							<option value="3">Completion failure
+							<option value="4">Inter-working with a network that does not support SS-
+							<option value="5">Invalid PDU contents
+							<option value="6">Maximum/minimum number of attendants exceeded
+							<option value="7">SLN ITSI not recognized (e.g. GTSI/ESN for example)
+							<option value="8">Supplementary service interaction not allowed
+							<option value="9">Wrong number of attendants
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				SSI = document.getElementById('SSI').value;
+				MCC = document.getElementById('MCC').value;
+				MNC = document.getElementById('MNC').value;
+				Definition_result = document.getElementById('Definition_result').value;
+				Reject_cause = document.getElementById('Reject_cause').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(MCC,10);
+				pdu_bin_value += dec2bin(MNC,14);
+				pdu_bin_value += dec2bin(SSI,24);
+
+				pdu_bin_value += dec2bin(Definition_result,1);
+				
+				if (Definition_result == "1")
+				{
+					pdu_bin_value += dec2bin(Reject_cause,4);
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Definition_result(form)
+			{
+				Definition_result = document.getElementById('Definition_result').value;
+				if (Definition_result == "0") 
+				{
+					document.getElementById('Reject_cause').disabled = true;
+				}
+ 				else
+				{
+					document.getElementById('Reject_cause').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>
