@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CF-DISABLE</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CF_05_Table">
+				<tr>
+					<th align="left">
+						Forwarding Type for voice calls:
+					</th>
+					<td>
+						<select id="Forwarding_type_for_voice_calls">
+							<option value="0">None
+							<option value="1">CFU
+							<option selected value="2">CFB
+							<option value="4">CFNRy
+							<option value="8">CFNRc
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Forwarding Type for circuit mode data:
+					</th>
+					<td>
+						<select id="Forwarding_type_for_circuit_mode_data">
+							<option value="0">None
+							<option value="1">CFU
+							<option value="2">CFB
+							<option selected value="4">CFNRy
+							<option value="8">CFNRc
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Forwarding Type for SDS:
+					</th>
+					<td>
+						<select id="Forwarding_type_for_SDS">
+							<option value="0">None
+							<option selected value="1">CFU
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Address type of the authorized user</th>
+					<td>
+						<select onChange="OnEnableDisable_Address_type_of_the_authorized_user(this.form)" ID="T2_Address_type_of_the_authorized_user">                          
+							<option selected value="0">T2 Not Present
+							<option value="1">T2 Present
+						</select>
+						<select disabled id="Address_type_of_the_authorized_user" onChange="OnChange_Address_type_of_the_authorized_user(this.form)">
+							<option value="1" >SSI
+							<option value="2" >TSI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Authorized user SSI</th>
+					<td>
+						SSI: <input disabled id="Authorized_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Authorized user extension</th>
+					<td>
+						MCC: <input disabled id="Authorized_user_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Authorized_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Forwarding_type_for_voice_calls = document.getElementById('Forwarding_type_for_voice_calls').value;
+				Forwarding_type_for_circuit_mode_data = document.getElementById('Forwarding_type_for_circuit_mode_data').value;
+				Forwarding_type_for_SDS = document.getElementById('Forwarding_type_for_SDS').value;
+				
+				T2_Address_type_of_the_authorized_user    = document.getElementById('T2_Address_type_of_the_authorized_user').value;
+				Address_type_of_the_authorized_user       = document.getElementById('Address_type_of_the_authorized_user').value;
+				Authorized_user_SSI                       = document.getElementById('Authorized_user_SSI').value;
+				Authorized_user_extension_MCC             = document.getElementById('Authorized_user_extension_MCC').value;
+				Authorized_user_extension_MNC             = document.getElementById('Authorized_user_extension_MNC').value;
+				
+				//Initialize using the PDU Header and add the mandatory FWD type info for the 3 service types
+				pdu_bin_value = pdu_header;
+				pdu_bin_value += dec2bin(Forwarding_type_for_voice_calls,4);
+				pdu_bin_value += dec2bin(Forwarding_type_for_circuit_mode_data,4);
+				pdu_bin_value += dec2bin(Forwarding_type_for_SDS,4);
+							
+				T2_pdu_bin_value = "";
+				
+				T2_pdu_bin_value += T2_Address_type_of_the_authorized_user; // Add Presence Bit for T2 Address_type_of...
+				if (T2_Address_type_of_the_authorized_user != "0") // If present, add this T2 group of IEs
+				{
+					T2_pdu_bin_value += dec2bin(Address_type_of_the_authorized_user,2);
+					if (Address_type_of_the_authorized_user == "1")
+					{
+						T2_pdu_bin_value += dec2bin(Authorized_user_SSI,24);
+					}
+					else
+					if (Address_type_of_the_authorized_user == "2")
+					{
+						T2_pdu_bin_value += dec2bin(Authorized_user_SSI,24);
+						T2_pdu_bin_value += dec2bin(Authorized_user_extension_MCC,10);
+						T2_pdu_bin_value += dec2bin(Authorized_user_extension_MNC,14);
+					}
+				}
+			
+				//See if any T2 is present
+				T2_str = T2_Address_type_of_the_authorized_user;
+				T2 = parseInt(T2_str,2);
+				if (T2 > 0)
+					T2_pdu_bin_value = "1" + T2_pdu_bin_value; //T2 is present, Option bit is 1 + T2 IEs
+				else
+					T2_pdu_bin_value = "0"; //No T2 is present, Option bit is 0
+				pdu_bin_value += T2_pdu_bin_value;
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			
+			function OnEnableDisable_Address_type_of_the_authorized_user(form)
+			{
+				T2_Address_type_of_the_authorized_user = document.getElementById('T2_Address_type_of_the_authorized_user').value;
+				if (T2_Address_type_of_the_authorized_user == "1")
+					document.getElementById('Address_type_of_the_authorized_user').disabled = false;
+				else
+					document.getElementById('Address_type_of_the_authorized_user').disabled = true;            
+				OnChange_Address_type_of_the_authorized_user(form);
+			}
+					
+			function OnChange_Address_type_of_the_authorized_user(form)
+			{
+				T2_Address_type_of_the_authorized_user = document.getElementById('T2_Address_type_of_the_authorized_user').value;
+				Address_type_of_the_authorized_user = document.getElementById('Address_type_of_the_authorized_user').value;
+
+				document.getElementById('Authorized_user_SSI').disabled = true;
+				document.getElementById('Authorized_user_extension_MCC').disabled = true;
+				document.getElementById('Authorized_user_extension_MNC').disabled = true;
+				
+				if (T2_Address_type_of_the_authorized_user == "0") 
+					return;
+					
+				if (Address_type_of_the_authorized_user == "1")            
+				{
+					document.getElementById('Authorized_user_SSI').disabled = false;
+				}
+				else
+				if (Address_type_of_the_authorized_user == "2")            
+				{
+					document.getElementById('Authorized_user_SSI').disabled = false;
+					document.getElementById('Authorized_user_extension_MCC').disabled = false;
+					document.getElementById('Authorized_user_extension_MNC').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

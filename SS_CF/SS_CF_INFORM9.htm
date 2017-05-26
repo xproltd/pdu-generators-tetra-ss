@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CF-INFORM9</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CF_13_Table">
+				<tr>
+					<th align="left">
+						Forwarding Type for voice calls:
+					</th>
+					<td>
+						<select id="Forwarding_type_for_voice_calls">
+							<option value="0">None
+							<option value="1">CFU
+							<option selected value="2">CFB
+							<option value="4">CFNRy
+							<option value="8">CFNRc
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Forwarding Type for circuit mode data:
+					</th>
+					<td>
+						<select id="Forwarding_type_for_circuit_mode_data">
+							<option value="0">None
+							<option value="1">CFU
+							<option value="2">CFB
+							<option selected value="4">CFNRy
+							<option value="8">CFNRc
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Forwarding Type for SDS:
+					</th>
+					<td>
+						<select id="Forwarding_type_for_SDS">
+							<option value="0">None
+							<option selected value="1">CFU
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Address type of the forwarded-to user</th>
+					<td>
+						<select onChange="OnEnableDisable_Address_type_of_the_forwarded_to_user(this.form)" ID="T2_Address_type_of_the_forwarded_to_user">                          
+							<option selected value="0">T2 Not Present
+							<option value="1">T2 Present
+						</select>
+						<select disabled id="Address_type_of_the_forwarded_to_user" onChange="OnChange_Address_type_of_the_forwarded_to_user(this.form)">
+							<option value="1" >SSI
+							<option value="2" >TSI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Forwarded-to user SSI</th>
+					<td>
+						SSI: <input disabled id="Forwarded_to_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Forwarded-to user extension</th>
+					<td>
+						MCC: <input disabled id="Forwarded_to_user_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Forwarded_to_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">External subscriber digits of forwarded-to user</th>
+					<td>
+						<select onChange="OnEnableDisable_T2_external_subscriber_digits(this.form)" ID="T2_external_subscriber_digits">                          
+							<option selected value="0">T2 Not Present
+							<option value="1">T2 Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Number of external subscriber digits</th>
+					<td>
+						<input disabled onChange="OnChange_Number_of_external_subscriber_digits(this.form)" id="Number_of_external_subscriber_digits" value="13" size=2>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">External subscriber digits</th>
+					<td>
+						<input disabled id="External_subscriber_digits" value="" size=20>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Forwarding_type_for_voice_calls = document.getElementById('Forwarding_type_for_voice_calls').value;
+				Forwarding_type_for_circuit_mode_data = document.getElementById('Forwarding_type_for_circuit_mode_data').value;
+				Forwarding_type_for_SDS = document.getElementById('Forwarding_type_for_SDS').value;
+				
+				T2_Address_type_of_the_forwarded_to_user    = document.getElementById('T2_Address_type_of_the_forwarded_to_user').value;
+				Address_type_of_the_forwarded_to_user       = document.getElementById('Address_type_of_the_forwarded_to_user').value;
+				Forwarded_to_user_SSI                       = document.getElementById('Forwarded_to_user_SSI').value;
+				Forwarded_to_user_extension_MCC             = document.getElementById('Forwarded_to_user_extension_MCC').value;
+				Forwarded_to_user_extension_MNC             = document.getElementById('Forwarded_to_user_extension_MNC').value;
+				
+				T2_external_subscriber_digits               = document.getElementById('T2_external_subscriber_digits').value;
+				Number_of_external_subscriber_digits            = document.getElementById('Number_of_external_subscriber_digits').value;
+				External_subscriber_digits                  = document.getElementById('External_subscriber_digits').value;
+							
+
+				//Initialize using the PDU Header and add the mandatory FWD type info for the 3 service types
+				pdu_bin_value = pdu_header;
+				pdu_bin_value += dec2bin(Forwarding_type_for_voice_calls,4);
+				pdu_bin_value += dec2bin(Forwarding_type_for_circuit_mode_data,4);
+				pdu_bin_value += dec2bin(Forwarding_type_for_SDS,4);
+							
+				T2_bin_value = "";
+				T2_option_bit = "0";
+				
+				T2_bin_value += T2_Address_type_of_the_forwarded_to_user;
+				
+				if (T2_Address_type_of_the_forwarded_to_user == "1")
+				{
+					T2_option_bit = "1";
+					
+					T2_bin_value += dec2bin(Address_type_of_the_forwarded_to_user,2);
+					if (Address_type_of_the_forwarded_to_user == "1")
+					{
+						T2_bin_value += dec2bin(Forwarded_to_user_SSI,24);
+					}
+					else
+					if (Address_type_of_the_forwarded_to_user == "2")
+					{
+						T2_bin_value += dec2bin(Forwarded_to_user_SSI,24);
+						T2_bin_value += dec2bin(Forwarded_to_user_extension_MCC,10);
+						T2_bin_value += dec2bin(Forwarded_to_user_extension_MNC,14);
+					}
+				}
+
+				T2_bin_value += T2_external_subscriber_digits;
+				
+				if (T2_external_subscriber_digits == "1")
+				{
+					T2_option_bit = "1";
+					T2_bin_value += dec2bin(Number_of_external_subscriber_digits,5);
+					
+					var Number_of_digits = parseInt(Number_of_external_subscriber_digits,10);
+					var digits = External_subscriber_digits.substring(0,Number_of_digits);
+					T2_bin_value += digit2bin(digits);
+				}
+				
+				pdu_bin_value += T2_option_bit;
+				
+				if (T2_option_bit == "1")
+				{
+					pdu_bin_value += T2_bin_value;
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			
+			function On_Load()
+			{
+				//We need to execute the digit count
+				OnEnableDisable_T2_external_subscriber_digits(this.form);
+			}
+
+			function OnEnableDisable_Address_type_of_the_forwarded_to_user(form)
+			{
+				T2_Address_type_of_the_forwarded_to_user = document.getElementById('T2_Address_type_of_the_forwarded_to_user').value;
+				if (T2_Address_type_of_the_forwarded_to_user == "1")
+					document.getElementById('Address_type_of_the_forwarded_to_user').disabled = false;
+				else
+					document.getElementById('Address_type_of_the_forwarded_to_user').disabled = true;            
+				OnChange_Address_type_of_the_forwarded_to_user(form);
+			}
+					
+			function OnChange_Address_type_of_the_forwarded_to_user(form)
+			{
+				T2_Address_type_of_the_forwarded_to_user = document.getElementById('T2_Address_type_of_the_forwarded_to_user').value;
+				Address_type_of_the_forwarded_to_user = document.getElementById('Address_type_of_the_forwarded_to_user').value;
+
+				document.getElementById('Forwarded_to_user_SSI').disabled = true;
+				document.getElementById('Forwarded_to_user_extension_MCC').disabled = true;
+				document.getElementById('Forwarded_to_user_extension_MNC').disabled = true;
+				
+				if (T2_Address_type_of_the_forwarded_to_user == "0") 
+					return;
+					
+				if (Address_type_of_the_forwarded_to_user == "1")            
+				{
+					document.getElementById('Forwarded_to_user_SSI').disabled = false;
+				}
+				else
+				if (Address_type_of_the_forwarded_to_user == "2")            
+				{
+					document.getElementById('Forwarded_to_user_SSI').disabled = false;
+					document.getElementById('Forwarded_to_user_extension_MCC').disabled = false;
+					document.getElementById('Forwarded_to_user_extension_MNC').disabled = false;
+				}
+			}
+					
+			function OnEnableDisable_T2_external_subscriber_digits(form)
+			{
+				T2_external_subscriber_digits = document.getElementById('T2_external_subscriber_digits').value;
+				
+				document.getElementById('Number_of_external_subscriber_digits').disabled = true;
+				document.getElementById('External_subscriber_digits').disabled = true;
+				
+				if (T2_external_subscriber_digits == "1")
+				{
+					document.getElementById('Number_of_external_subscriber_digits').disabled = false;
+					document.getElementById('External_subscriber_digits').disabled = false;
+				}
+				OnChange_Number_of_external_subscriber_digits(form);
+			}
+			
+			function OnChange_Number_of_external_subscriber_digits(form)
+			{
+				Number_of_external_subscriber_digits = document.getElementById('Number_of_external_subscriber_digits').value;
+				var var_external_subscriber_digits = "+#*12345678901234567890123456789";
+				
+				Number_of_digits = parseInt(Number_of_external_subscriber_digits,10);
+				if (Number_of_digits >= 32)
+				{
+					alert("Number of Digits between 0...31");
+					return;
+				}
+				External_subscriber_digits = var_external_subscriber_digits.substring(0,Number_of_digits);
+				document.getElementById('External_subscriber_digits').value = External_subscriber_digits;
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CF-INTERROGATE2</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CF_16_Table">
+				<tr>
+					<th align="left">
+						Call forwarding type:
+					</th>
+					<td>
+						<select id="Call_forwarding_type">
+							<option value="0">None
+							<option value="1">CFU
+							<option selected value="2">CFB
+							<option value="4">CFNRy
+							<option value="8">CFNRc
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Basic service information:
+					</th>
+					<td>
+						<select id="Basic_service_information">
+							<option value="0">None
+							<option value="1">Speech
+							<option value="2">Circuit mode data (CMD)
+							<option value="3">Speech and CMD
+							<option selected value="4">SDS
+							<option value="5">SDS and speech
+							<option value="6">SDS and CMD
+							<option value="7">SDS, speech and CMD
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Call_forwarding_type = document.getElementById('Call_forwarding_type').value;
+				Basic_service_information = document.getElementById('Basic_service_information').value;
+				
+				//Initialize using the PDU Header and add the mandatory FWD type info for the 3 service types
+				pdu_bin_value = pdu_header;
+				pdu_bin_value += dec2bin(Call_forwarding_type,4);
+				pdu_bin_value += dec2bin(Basic_service_information,3);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+		
+		</script>
+	</body>
+</html>

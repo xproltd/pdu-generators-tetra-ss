@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CF-REPORT</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CF_18_Table">
+				<tr>
+					<th align="left">
+						Invoked call forwarding type:
+					</th>
+					<td>
+						<select id="Invoked_call_forwarding_type">
+							<option value="00">CFU
+							<option value="01">CFB
+							<option value="10">CFNRy
+							<option value="11">CFNRc
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Served user SSI</th>
+					<td>
+						SSI: <input id="Served_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Served user extension</th>
+					<td>
+						MCC: <input id="Served_user_extension_MCC" value="234" size=5 >
+						MNC: <input id="Served_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Basic service information:
+					</th>
+					<td>
+						<select id="Basic_service_information">
+							<option value="000">None
+							<option value="001">Speech
+							<option value="010">Circuit mode data
+							<option value="011">Speech and circuit mode data
+							<option value="100">Speech and circuit mode data
+							<option value="101">SDS
+							<option value="110">SDS and speech
+							<option value="111">SDS and circuit mode data
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Forwarded-to user SSI</th>
+					<td>
+						SSI: <input id="Forwarded_to_user_SSI" value="62034" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Forwarded-to user extension</th>
+					<td>
+						MCC: <input id="Forwarded_to_user_extension_MCC" value="234" size=5 >
+						MNC: <input id="Forwarded_to_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Number of external subscriber number digits</th>
+					<td>
+						<input id="Number_of_external_subscriber_digits" value="13" size=2 onChange="OnChange_Number_of_external_subscriber_digits(this.form)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">External subscriber number digits</th>
+					<td>
+						<input id="External_subscriber_digits" value="+#*1234567890" size=20>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">External subscriber number parameters !!!!!</th>
+					<td>
+						<select id="T2_External_subscriber_number_parameters" onChange="OnChange_T2_External_subscriber_number_parameters(this.form)" >
+							<option value="0">T2 Not Present
+							<option selected value="1">T2 Present
+						</select>
+						<input disabled id="External_subscriber_number_parameters" value="000000000" size=9>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Information Element values
+				Invoked_call_forwarding_type = document.getElementById('Invoked_call_forwarding_type').value;
+				
+				Served_user_SSI = document.getElementById('Served_user_SSI').value;
+				Served_user_extension_MCC = document.getElementById('Served_user_extension_MCC').value;
+				Served_user_extension_MNC = document.getElementById('Served_user_extension_MNC').value;
+				
+				Basic_service_information = document.getElementById('Basic_service_information').value;
+				
+				Forwarded_to_user_SSI = document.getElementById('Forwarded_to_user_SSI').value;
+				Forwarded_to_user_extension_MCC = document.getElementById('Forwarded_to_user_extension_MCC').value;
+				Forwarded_to_user_extension_MNC = document.getElementById('Forwarded_to_user_extension_MNC').value;
+				
+				Number_of_external_subscriber_digits = document.getElementById('Number_of_external_subscriber_digits').value;
+				External_subscriber_digits = document.getElementById('External_subscriber_digits').value;
+				
+				T2_External_subscriber_number_parameters = document.getElementById('T2_External_subscriber_number_parameters').value;
+				External_subscriber_number_parameters = document.getElementById('External_subscriber_number_parameters').value;
+
+				//Initialize using the PDU Header and add the mandatory FWD type info for the 3 service types
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Invoked_call_forwarding_type;
+				
+				pdu_bin_value += dec2bin(Served_user_extension_MCC,10);
+				pdu_bin_value += dec2bin(Served_user_extension_MNC,14);
+				pdu_bin_value += dec2bin(Served_user_SSI,24);
+				
+				pdu_bin_value += Basic_service_information;
+				
+				pdu_bin_value += dec2bin(Forwarded_to_user_extension_MCC,10);
+				pdu_bin_value += dec2bin(Forwarded_to_user_extension_MNC,14);
+				pdu_bin_value += dec2bin(Forwarded_to_user_SSI,24);
+				
+				pdu_bin_value += dec2bin(Number_of_external_subscriber_digits,5);
+				var Number_of_digits = parseInt(Number_of_external_subscriber_digits,10);
+				var digits = External_subscriber_digits.substring(0,Number_of_digits);
+				pdu_bin_value += digit2bin(digits);
+				
+				pdu_bin_value += T2_External_subscriber_number_parameters;
+				
+				if (T2_External_subscriber_number_parameters == "1")
+				{
+					pdu_bin_value += "1" + External_subscriber_number_parameters;
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			
+			function OnChange_T2_External_subscriber_number_parameters(form)
+			{
+				T2_External_subscriber_number_parameters = document.getElementById('T2_External_subscriber_number_parameters').value;
+//				if (T2_External_subscriber_number_parameters == "1")
+//				{
+//					Some document elements will be enabled here
+//				}
+//				else
+//				{
+//					Some document elements will be disabled here
+//				}
+			}
+		</script>
+	</body>
+</html>

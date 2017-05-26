@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CF-INTERROGATE2-ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CF_17_Table">
+				<tr>
+					<th align="left">Accept/reject</th>
+					<td>
+						<select id="Accept_reject" onChange="OnChange_Accept_reject(this.form)">
+							<option selected value="0" >Accepted
+							<option value="1" >Rejected
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Reject cause</th>
+					<td>
+						<select disabled id="Reject_cause">
+							<option selected value="0" >Rejected for any cause (unspecified)
+							<option value="1" >User not subscribed to any CFx service
+							<option value="2" >User not subscribed to the specified CFx service
+							<option value="3" >No SS-CFx available
+							<option value="4" >Specified SS-CFx not available
+							<option value="5" >Invalid served user number
+							<option value="6" >CFx not provided for speech service
+							<option value="7" >CFx not provided for data service
+							<option value="8" >Invalid forwarded-to user number
+							<option value="9" >Temporarily unavailable
+							<option value="10" >Not served
+							<option value="11" >Invalid served user number
+							<option value="12" >Special service number not allowed
+							<option value="13" >CFx not provided for SDS
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Number of served user definitions</th>
+					<td>
+						<input id="Number_of_served_user_definitions" value="1" size=2>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Address type of the served user</th>
+					<td>
+						<select id="Address_type_of_the_served_user" onChange="OnChange_Address_type_of_the_served_user(this.form)">
+							<option value="1" >SSI
+							<option value="2" >TSI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Served user SSI</th>
+					<td>
+						SSI: <input id="Served_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Served user extension</th>
+					<td>
+						MCC: <input disabled id="Served_user_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Served_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+
+				//Get Information Element values
+				Accept_reject = document.getElementById('Accept_reject').value;
+				Reject_cause = document.getElementById('Reject_cause').value;
+				Number_of_served_user_definitions = document.getElementById('Number_of_served_user_definitions').value;
+				Address_type_of_the_served_user = document.getElementById('Address_type_of_the_served_user').value;
+				Served_user_SSI = document.getElementById('Served_user_SSI').value;
+				Served_user_extension_MCC = document.getElementById('Served_user_extension_MCC').value;
+				Served_user_extension_MNC = document.getElementById('Served_user_extension_MNC').value;
+				
+				pdu_bin_value += dec2bin(Accept_reject,1);
+
+				if (Accept_reject == "0")
+				{
+					pdu_bin_value += dec2bin(Number_of_served_user_definitions,4);
+					for (i=0; i<Number_of_served_user_definitions; i+=1)
+					{
+						pdu_bin_value += dec2bin(Address_type_of_the_served_user,2);
+						pdu_bin_value += dec2bin(Served_user_SSI,24);
+						if (Address_type_of_the_served_user == "2")
+						{
+							pdu_bin_value += dec2bin(Served_user_extension_MCC,10);
+							pdu_bin_value += dec2bin(Served_user_extension_MNC,14);
+						}
+					}
+				}
+				if (Accept_reject == "1")
+				{
+					pdu_bin_value += dec2bin(Reject_cause,4);
+				}
+
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			
+			function OnChange_Accept_reject(form)
+			{
+				Accept_reject = document.getElementById('Accept_reject').value;
+				Address_type_of_the_served_user = document.getElementById('Address_type_of_the_served_user').value;
+				if (Accept_reject == "0") 
+				{
+					document.getElementById('Reject_cause').disabled = true;
+					document.getElementById('Number_of_served_user_definitions').disabled=false;
+					document.getElementById('Address_type_of_the_served_user').disabled=false;
+					document.getElementById('Served_user_SSI').disabled=false;
+					if (Address_type_of_the_served_user == "2")
+					{
+						document.getElementById('Served_user_extension_MCC').disabled = false;
+						document.getElementById('Served_user_extension_MNC').disabled = false;
+					}
+					
+				}
+				if (Accept_reject == "1")
+				{
+					document.getElementById('Reject_cause').disabled = false;
+					document.getElementById('Number_of_served_user_definitions').disabled=true;
+					document.getElementById('Address_type_of_the_served_user').disabled=true;
+					document.getElementById('Served_user_SSI').disabled=true;
+					document.getElementById('Served_user_extension_MCC').disabled = true;
+					document.getElementById('Served_user_extension_MNC').disabled = true;
+				}
+			}
+			function OnChange_Address_type_of_the_served_user(form)
+			{
+				Accept_reject = document.getElementById('Accept_reject').value;
+				Address_type_of_the_served_user = document.getElementById('Address_type_of_the_served_user').value;
+
+				document.getElementById('Served_user_SSI').disabled = true;
+				document.getElementById('Served_user_extension_MCC').disabled = true;
+				document.getElementById('Served_user_extension_MNC').disabled = true;
+				
+				if (Accept_reject == "1") 
+					return;
+					
+				if (Address_type_of_the_served_user == "1")
+				{
+					document.getElementById('Served_user_SSI').disabled = false;
+				}
+				else
+				if (Address_type_of_the_served_user == "2")
+				{
+					document.getElementById('Served_user_SSI').disabled = false;
+					document.getElementById('Served_user_extension_MCC').disabled = false;
+					document.getElementById('Served_user_extension_MNC').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

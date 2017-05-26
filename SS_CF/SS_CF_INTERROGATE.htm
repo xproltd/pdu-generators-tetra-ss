@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CF-INTERROGATE</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CF_14_Table">
+				<tr>
+					<th align="left">Interrogating user type</th>
+					<td>
+						<select id="Interrogating_user_type" onChange="OnEnableDisable_Address_type_of_the_served_user(this.form)">
+							<option selected value="0" >Served user
+							<option value="1" >Authorized user
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Address type of the served user</th>
+					<td>
+						<select disabled id="Address_type_of_the_served_user" onChange="OnChange_Address_type_of_the_served_user(this.form)">
+							<option selected value="1" >SSI
+							<option value="2" >TSI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Served user SSI</th>
+					<td>
+						SSI: <input disabled id="Served_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Served user extension</th>
+					<td>
+						MCC: <input disabled id="Served_user_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Served_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Interrogating_user_type = document.getElementById('Interrogating_user_type').value;
+				Address_type_of_the_served_user = document.getElementById('Address_type_of_the_served_user').value;
+				Served_user_SSI = document.getElementById('Served_user_SSI').value;
+				Served_user_extension_MCC = document.getElementById('Served_user_extension_MCC').value;
+				Served_user_extension_MNC = document.getElementById('Served_user_extension_MNC').value;
+
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				//Forwarded-to IE
+				
+				pdu_bin_value += dec2bin(Interrogating_user_type,1);
+				
+				if (Interrogating_user_type == "1")
+				{
+					pdu_bin_value += dec2bin(Address_type_of_the_served_user,2);
+					pdu_bin_value += dec2bin(Served_user_SSI,24);
+					if (Address_type_of_the_served_user == "2")
+					{
+						pdu_bin_value += dec2bin(Served_user_extension_MCC,10);
+						pdu_bin_value += dec2bin(Served_user_extension_MCC,14);
+					}
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnEnableDisable_Address_type_of_the_served_user(form)
+			{
+				Interrogating_user_type = document.getElementById('Interrogating_user_type').value;
+				if (Interrogating_user_type == "1")
+					document.getElementById('Address_type_of_the_served_user').disabled = false;
+				else
+					document.getElementById('Address_type_of_the_served_user').disabled = true;
+					OnChange_Address_type_of_the_served_user(form);
+			}
+			function OnChange_Address_type_of_the_served_user(form)
+			{
+				Interrogating_user_type = document.getElementById('Interrogating_user_type').value;
+				Address_type_of_the_served_user = document.getElementById('Address_type_of_the_served_user').value;
+				document.getElementById('Served_user_SSI').disabled = true;
+				document.getElementById('Served_user_extension_MCC').disabled = true;
+				document.getElementById('Served_user_extension_MNC').disabled = true;
+				
+				if (Interrogating_user_type == "0") 
+					return;
+				if (Address_type_of_the_served_user== "1") 
+				{
+					document.getElementById('Served_user_SSI').disabled = false;
+				}
+				else
+				if (Address_type_of_the_served_user== "2") 
+				{
+					document.getElementById('Served_user_SSI').disabled = false;
+					document.getElementById('Served_user_extension_MCC').disabled = false;
+					document.getElementById('Served_user_extension_MNC').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CF-INFORM2</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CF_09_Table">
+				<tr>
+					<th align="left">
+						Invoked call forwarding type:
+					</th>
+					<td>
+						<select id="Invoked_call_forwarding_type">
+							<option value="0">CFU
+							<option selected value="1">CFB
+							<option value="2">CFNRy
+							<option value="3">CFNRc
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Invoked_call_forwarding_type = document.getElementById('Invoked_call_forwarding_type').value;
+
+				//Initialize using the PDU Header and add the mandatory FWD type info for the 3 service types
+				pdu_bin_value = pdu_header;
+				pdu_bin_value += dec2bin(Invoked_call_forwarding_type,2);
+						
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+		</script>
+	</body>
+</html>

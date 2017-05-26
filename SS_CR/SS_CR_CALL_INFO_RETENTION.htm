@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CR-CALL-INFO-RETENTION</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CR_01_Table">
+				<tr>
+					<th align="left">
+						Circuit mode type:
+					</th>
+					<td>
+						<select id="Circuit_mode_type" onChange="OnChange_Circuit_mode_type(this.form)">
+							<option selected value="000">Speech: TCH/S
+							<option value="001">Unprotected: TCH/7,2
+							<option value="010">Low Protection: TCH/4,8, N = 1
+							<option value="011">Low Protection: TCH/4,8, N = 4
+							<option value="100">Low Protection: TCH/4,8, N = 8
+							<option value="101">High Protection: TCH/2,4, N = 1
+							<option value="110">High Protection: TCH/2,4, N = 4
+							<option value="111">High Protection: TCH/2,4, N = 8
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Encryption flag:
+					</th>
+					<td>
+						<select id="Encryption_flag">
+							<option selected value="0">Clear Mode
+							<option value="1">TETRA end-to-end encryption
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Communication type:
+					</th>
+					<td>
+						<select id="Communication_type">
+							<option selected value="00">Point-to-point
+							<option value="01">Point-to-multipoint
+							<option value="10">Point-to-multipoint Acknowledged
+							<option value="11">Broadcast
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Slots per frame:
+					</th>
+					<td>
+						<select disabled id="Slots_per_frame">
+							<option selected value="00">One slot
+							<option value="01">Two slots
+							<option value="10">Three slots
+							<option value="11">Four slots
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Speech service:
+					</th>
+					<td>
+						<select id="Speech_service">
+							<option selected value="00">TETRA encoded speech
+							<option value="11">Proprietary encoded speech
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						SSI:
+					</th>
+					<td>
+						<input id="SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Extension:</th>
+					<td>
+						MCC: <input id="Extension_MCC" value="234" size=5 >
+						MNC: <input id="Extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				Circuit_mode_type = document.getElementById('Circuit_mode_type').value;
+				Encryption_flag = document.getElementById('Encryption_flag').value;
+				Communication_type = document.getElementById('Communication_type').value;
+				Slots_per_frame = document.getElementById('Slots_per_frame').value;
+				Speech_service = document.getElementById('Speech_service').value;
+				SSI = document.getElementById('SSI').value;
+				Extension_MCC = document.getElementById('Extension_MCC').value;
+				Extension_MNC = document.getElementById('Extension_MNC').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Circuit_mode_type;
+				pdu_bin_value += dec2bin(Encryption_flag,1);
+				pdu_bin_value += Communication_type;
+				
+				if (Circuit_mode_type == "000")
+				{
+					pdu_bin_value += Speech_service;
+				}
+				else
+				{
+					pdu_bin_value += Slots_per_frame;
+				}
+				
+				pdu_bin_value += dec2bin(SSI,24);
+				pdu_bin_value += dec2bin(Extension_MCC,10);
+				pdu_bin_value += dec2bin(Extension_MNC,14);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Circuit_mode_type(form)
+			{
+				Circuit_mode_type = document.getElementById('Circuit_mode_type').value;
+				if (Circuit_mode_type == "000") 
+				{
+					document.getElementById('Speech_service').disabled = false;
+					document.getElementById('Slots_per_frame').disabled = true;
+				}
+ 				else
+				{
+					document.getElementById('Speech_service').disabled = true;
+					document.getElementById('Slots_per_frame').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

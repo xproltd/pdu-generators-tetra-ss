@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CI-EXTERNAL_NUMBER_PARAMETERS_CLIP</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CI_01_Table">
+				<tr>
+					<th align="left">Numbering plan identifier</th>
+					<td>
+						<select id="Numbering_plan_identifier">
+							<option value="0">unknown
+							<option selected value="1">TETRA
+							<option value="2">E.164 [11](PSTN/ISDN/GSM)
+							<option value="3">X.121 [13](PDN)
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Type of number</th>
+					<td>
+						<select id="Type_of_number">
+							<option value="0">Unknown
+							<option value="1">Local
+							<option value="2">National
+							<option value="3">International
+							<option selected value="4">TETRA
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Screening Indicator</th>
+					<td>
+						<select id="Screening_indicator">
+							<option value="0">None, not implemented, or unknown
+							<option selected value="1">Network provided number
+							<option value="2">User provided, verified and passed
+							<option value="3">User provided, not screened
+							<option value="4">Number not available due to interworking
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Information Element values
+				Numbering_plan_identifier = document.getElementById('Numbering_plan_identifier').value;
+				Type_of_number = document.getElementById('Type_of_number').value;
+				Screening_indicator = document.getElementById('Screening_indicator').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				// O-bit, hardcoded "1", as T3 elements of this PDU are mandatory
+				pdu_bin_value += "1";
+				
+				//T3 M-bit, hardcoded "1", as T3 elements of this PDU are mandatory
+				pdu_bin_value += "1";
+				// !!!!! Type 3 element identifier is not defined by the document.
+				// I use "Facility", see 14.8.48@ETSI EN 300 392-2.
+				pdu_bin_value += "0011"
+				pdu_bin_value += "00000000100" // Length is fixed 4 bit (1 BCD number)
+				pdu_bin_value += digit2bin(Numbering_plan_identifier);
+				
+				//T3 M-bit, hardcoded "1" again, as T3 elements of this PDU are mandatory
+				pdu_bin_value += "1";
+				// !!!!! Type 3 element identifier is not defined by the document.
+				pdu_bin_value += "0011"
+				pdu_bin_value += "00000000100" // Length is fixed 4 bit (1 BCD number)
+				pdu_bin_value += digit2bin(Type_of_number);
+				
+				//T3 M-bit, hardcoded "1" again, as T3 elements of this PDU are mandatory
+				pdu_bin_value += "1";
+				// !!!!! Type 3 element identifier is not defined by the document.
+				pdu_bin_value += "0011"
+				pdu_bin_value += "00000000100" // Length is fixed 4 bit (1 BCD number)
+				pdu_bin_value += digit2bin(Type_of_number);
+				
+				pdu_bin_value += "0"; // No more T3 elements, so here comes the LSB
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+		</script>
+	</body>
+</html>

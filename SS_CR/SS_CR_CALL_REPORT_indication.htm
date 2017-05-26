@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CR-CALL_REPORT_indication</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CR_03_Table">
+				<tr>
+					<th align="left">
+						Call Report Identifier (CRI):
+					</th>
+					<td>
+						<select id="CRI">
+							<option value="000">Dummy CRI
+							<option selected value="001">001
+							<option value="010">010
+							<option value="011">011
+							<option value="100">100
+							<option value="101">101
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Accepted/Rejected:</th>
+					<td>
+						<select id="Accepted_Rejected" onChange="OnChange_Accepted_Rejected(this.form)">
+							<option selected value="0">Accepted
+							<option value="1">Rejected
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Reject cause:</th>
+					<td>
+						<select disabled id="Reject_cause">
+							<option value="00000">Rejected for any reason
+							<option value="00001">Service not subscribed to
+							<option value="00010">Service withdrawn
+							<option value="00011">Completion failure
+							<option value="00100">Interworking with a network that does not support SS-CR
+							<option value="00101">Invalid PDU contents (Note)
+							<option value="00110">Maximum number of invocations exceeded (locally or remotely)
+							<option value="00111">The CC-SS retention timer has expired
+							<option value="01000">Network congestion
+							<option value="01001">Call reporting failed due to expiration of message validity timer
+							<option value="01010">Supplementary service interaction not allowed
+							<option value="01011">Call parameters cannot be matched
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				CRI = document.getElementById('CRI').value;
+				Accepted_Rejected = document.getElementById('Accepted_Rejected').value;
+				Reject_cause = document.getElementById('Reject_cause').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += CRI;
+				
+				pdu_bin_value += Accepted_Rejected;
+				
+				if (Accepted_Rejected == "1")
+				{
+					pdu_bin_value += Reject_cause;
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Accepted_Rejected(form)
+			{
+				Accepted_Rejected = document.getElementById('Accepted_Rejected').value;
+				if (Accepted_Rejected == "0")
+				{
+					document.getElementById('Reject_cause').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Reject_cause').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

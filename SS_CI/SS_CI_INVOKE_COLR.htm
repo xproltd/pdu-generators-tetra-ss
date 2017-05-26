@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CI-INVOKE_COLR</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_CI_08_Table">
+				<tr>
+					<th align="left">
+						SS-COLR requested by connected user:
+					</th>
+					<td>
+						<select id="SS_COLR_requested_by_connected_user">
+							<option selected value="00">Use default value
+							<option value="10">SS-COLR invoked; no restriction
+							<option value="11">SS-COLR invoked; restriction
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				SS_COLR_requested_by_connected_user = document.getElementById('SS_COLR_requested_by_connected_user').value;
+
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += SS_COLR_requested_by_connected_user;
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+		</script>
+	</body>
+</html>

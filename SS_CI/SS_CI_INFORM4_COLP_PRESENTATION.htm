@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CI-INFORM4_COLP_PRESENTATION</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_CI_04_Table">
+				<tr>
+					<th align="left">Address type of the connected user</th>
+					<td>
+						<select onChange="OnEnableDisable_T2_Address_type_of_the_connected_user(this.form)" ID="T2_Address_type_of_the_connected_user">
+							<option value="0">T2 Not Present
+							<option selected value="1">T2 Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Address type of the connected user</th>
+					<td>
+						<select id="Address_type_of_the_connected_user" onChange="OnChange_Address_type_of_the_connected_user(this.form)">
+							<option selected value="1" >SSI
+							<option value="2" >TSI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Connected user SSI</th>
+					<td>
+						SSI: <input id="Connected_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Connected user extension</th>
+					<td>
+						MCC: <input disabled id="Connected_user_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Connected_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">External subscriber digits of forwarded-to user</th>
+					<td>
+						<select onChange="OnEnableDisable_T2_external_subscriber_digits(this.form)" ID="T2_external_subscriber_digits">
+							<option value="0">T2 Not Present
+							<option selected value="1">T2 Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Number of external subscriber digits</th>
+					<td>
+						<input onChange="OnChange_Number_of_external_subscriber_digits(this.form)" id="Number_of_external_subscriber_digits" value="13" size=2>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">External subscriber digits</th>
+					<td>
+						<input id="External_subscriber_digits" value="+#*1234567890" size=20>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				T2_Address_type_of_the_connected_user = document.getElementById('T2_Address_type_of_the_connected_user').value;
+				Address_type_of_the_connected_user = document.getElementById('Address_type_of_the_connected_user').value;
+				Connected_user_SSI = document.getElementById('Connected_user_SSI').value;
+				Connected_user_extension_MCC = document.getElementById('Connected_user_extension_MCC').value;
+				Connected_user_extension_MNC = document.getElementById('Connected_user_extension_MNC').value;
+				
+				T2_external_subscriber_digits = document.getElementById('T2_external_subscriber_digits').value;
+				Number_of_external_subscriber_digits = document.getElementById('Number_of_external_subscriber_digits').value;
+				External_subscriber_digits = document.getElementById('External_subscriber_digits').value;
+
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				T2_option = "0";
+				T2_bin_value = "";
+				
+				//Address type + SSI, then the Extension parts only in case TSI was selected as type
+				
+				if (T2_Address_type_of_the_connected_user == "1")
+				{
+					T2_option = "1";
+					T2_bin_value += "1" + dec2bin(Address_type_of_the_connected_user,2);
+				
+					if (Address_type_of_the_connected_user == "1")
+					{
+						T2_bin_value += dec2bin(Connected_user_SSI,24);
+					}
+					else if (Address_type_of_the_connected_user == "2")
+					{
+						T2_bin_value += dec2bin(Connected_user_SSI,24);
+						T2_bin_value += dec2bin(Connected_user_extension_MCC,10);
+						T2_bin_value += dec2bin(Connected_user_extension_MNC,14);
+					}
+				}
+				else
+				{
+					T2_bin_value += "0";
+				}
+				
+				if (T2_external_subscriber_digits == "1") // If present, add this T2 group of IEs
+				{
+					T2_option = "1";
+					T2_bin_value += "1" + dec2bin(Number_of_external_subscriber_digits,5);
+					var Number_of_digits = parseInt(Number_of_external_subscriber_digits,10);
+					var digits = External_subscriber_digits.substring(0,Number_of_digits);
+					T2_bin_value += digit2bin(digits);
+				}
+				else
+				{
+					T2_bin_value += "0";
+				}
+				
+				//Add the T2_option bit;
+				pdu_bin_value += T2_option;
+				
+				//if T2 option bit 1, add T2 IEs
+				if (T2_option == "1")
+				{
+					pdu_bin_value += T2_bin_value;
+				}
+				
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnEnableDisable_T2_Address_type_of_the_connected_user(form)
+			{
+				T2_Address_type_of_the_connected_user = document.getElementById('T2_Address_type_of_the_connected_user').value;
+				if (T2_Address_type_of_the_connected_user == "1")
+				{
+					document.getElementById('Address_type_of_the_connected_user').disabled = false;
+					document.getElementById('Connected_user_SSI').disabled = false;
+					document.getElementById('Connected_user_extension_MCC').disabled = false;
+					document.getElementById('Connected_user_extension_MNC').disabled = false;
+					OnChange_Address_type_of_the_connected_user(form);
+				}
+				else
+				{
+					document.getElementById('Address_type_of_the_connected_user').disabled = true;
+					document.getElementById('Connected_user_SSI').disabled = true;
+					document.getElementById('Connected_user_extension_MCC').disabled = true;
+					document.getElementById('Connected_user_extension_MNC').disabled = true;
+				}
+			}
+			function OnChange_Address_type_of_the_connected_user(form)
+			{
+				Address_type_of_the_connected_user = document.getElementById('Address_type_of_the_connected_user').value;
+				if (Address_type_of_the_connected_user == "1") 
+				{
+					document.getElementById('Connected_user_extension_MCC').disabled = true;
+					document.getElementById('Connected_user_extension_MNC').disabled = true;
+				}
+				if (Address_type_of_the_connected_user == "2")
+				{
+					document.getElementById('Connected_user_extension_MCC').disabled = false;
+					document.getElementById('Connected_user_extension_MNC').disabled = false;
+				}
+			}
+			function OnEnableDisable_T2_external_subscriber_digits(form)
+			{
+				T2_external_subscriber_digits = document.getElementById('T2_external_subscriber_digits').value;
+				document.getElementById('Number_of_external_subscriber_digits').disabled = true;
+				document.getElementById('External_subscriber_digits').disabled = true;
+				
+				if (T2_external_subscriber_digits == "1")
+				{
+					document.getElementById('Number_of_external_subscriber_digits').disabled = false;
+					document.getElementById('External_subscriber_digits').disabled = false;
+				}
+				OnChange_Number_of_external_subscriber_digits(form);
+			}
+			function OnChange_Number_of_external_subscriber_digits(form)
+			{
+				Number_of_external_subscriber_digits = document.getElementById('Number_of_external_subscriber_digits').value;
+				var var_external_subscriber_digits = "+#*12345678901234567890123456789";
+				
+				Number_of_digits = parseInt(Number_of_external_subscriber_digits,10);
+				if (Number_of_digits >= 32)
+				{
+					alert("Number of Digits between 0...31");
+					return;
+				}
+				External_subscriber_digits = var_external_subscriber_digits.substring(0,Number_of_digits);
+				document.getElementById('External_subscriber_digits').value = External_subscriber_digits;
+			}
+		</script>
+	</body>
+</html>
