@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CAD-REJECT</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_CAD_16_Table">
+				<tr>
+					<th align="left">SS-CAD intercepting SwMI call identifier:</th>
+					<td>
+						<input id="Call_identifier" value="1234" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Rejection cause:
+					</th>
+					<td>
+						<select id="Rejection_cause">
+							<option selected value="0">Reason not defined
+							<option value="1">Restricted basic service
+							<option value="2">Restricted destination address
+							<option value="4">Restricted source address
+							<option value="8">Restricted area
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Call_identifier = document.getElementById('Call_identifier').value;
+				Rejection_cause = document.getElementById('Rejection_cause').value;
+
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(Call_identifier,14);
+				pdu_bin_value += dec2bin(Rejection_cause,5);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+		</script>
+	</body>
+</html>

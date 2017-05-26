@@ -1,0 +1,289 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <HEAD>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>SS-AL-INTEROGATE ACK</TITLE>
+        <SCRIPT SRC="../SS_Util.js" language="JavaScript" type="text/JavaScript"></SCRIPT>
+        <LINK href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+    </HEAD>
+    <body class="PDU_page">        
+        <form id="Form1" action="">
+            <table ID="Table1">
+                    <tr>                    
+                        <th align="left">Range type for interogated parties</th>
+                        <td>
+                            <select onChange="OnChange_InterogatedPartiesRangeType(this.form)" ID="InterogatedPartiesRangeType" NAME="InterogatedPartiesRangeType">                          
+	                            <option selected value="0" >No Element
+	                            <option value="1" >1 Element
+	                            <option value="2" >2 Elements
+	                            <option value="3" >3 Elements
+	                            <option value="4" >4 Elements
+	                            <option value="5" >5 Elements
+	                            <option value="6" >6 Elements
+	                            <option value="7" >7 Elements
+	                            <option value="8" >8 Elements
+	                            <option value="9" >9 Elements
+	                            <option value="10">10 Elements
+	                            <option value="11">11 Elements
+	                            <option value="12">12 Elements
+	                            <option value="13">13 Elements
+	                            <option value="14">14 Elements
+	                            <option value="15">Range of Elements
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Interogated Party Address Type</th>
+                        <td>
+                            <select disabled onChange="OnChange_InterogatedPartiesAddressType(this.form)" ID="InterogatedPartiesAddressType">                          
+	                            <option value="0" >SNA
+	                            <option selected value="1" >SSI
+	                            <option value="2" >TSI
+	                        </select>
+                            SNA <input disabled id="InterogatedParties_SNA" value="148" size=1>
+                            SSI <input disabled id="InterogatedParties_SSI" value="62033" size=3>                    
+                            TSI SSI <input disabled id="InterogatedParties_TSI_SSI" value="61044" size=3>
+	                        MCC <input value="234" size=1 disabled ID="InterogatedParties_TSI_MCC">
+	                        MNC <input value="73" size=1 disabled ID="InterogatedParties_TSI_MNC">
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Interrogation result</th>
+                        <td>
+                            <select disabled ID="InterrogationResult">                          
+	                            <option value="0" >SS-AL invoked for TETRA identity
+	                            <option value="1" >SS-AL not invoked for TETRA identity
+	                            <option value="2" >User not authorized
+	                            <option value="3" >Unknown TETRA identity
+	                            <option value="4" >Parameters not valid
+	                            <option value="5" >Insufficient information
+	                            <option value="6" >Rejected for undefined reason
+	                            <option value="7" >Affected user does not support SS-AL
+	                        </select>
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Listening party type identifier</th>
+                        <td>
+                            <select disabled onChange="OnEnableDisable_ListeningPartiesAddress(this.form)" ID="T2_ListeningPartiesAddress">                          
+	                            <option selected value="0">T2 Not Present
+	                            <option value="1">T2 Present
+	                        </select>
+	                        <br>
+                            <select disabled onChange="OnChange_ListeningPartiesAddressType(this.form)" ID="ListeningPartiesAddressType">                          
+	                            <option value="0" >SNA
+	                            <option selected value="1" >SSI
+	                            <option value="2" >TSI
+	                        </select>
+	                        SNA <input disabled id="ListeningParties_SNA" value="119" size=1>
+                            SSI <input disabled id="ListeningParties_SSI" value="61044" size=3>                    
+                            TSI SSI <input disabled id="ListeningParties_TSI_SSI" value="61255" size=3>
+	                        MCC <input value="234" size=1 disabled ID="ListeningParties_TSI_MCC">
+	                        MNC <input value="73" size=1 disabled ID="ListeningParties_TSI_MNC">
+                        </td>
+                    </tr>
+            </table>
+        </form>
+        <script language="JavaScript" type="text/JavaScript">
+    
+            function GetPDUValue(pdu_header)
+            {
+                //Get Information Element values
+                InterogatedPartiesRangeType     = document.getElementById('InterogatedPartiesRangeType').value;
+
+                InterogatedPartiesAddressType   = document.getElementById('InterogatedPartiesAddressType').value;                
+                InterogatedParties_SNA          = document.getElementById('InterogatedParties_SNA').value;                
+                InterogatedParties_SSI          = document.getElementById('InterogatedParties_SSI').value;
+                InterogatedParties_TSI_SSI      = document.getElementById('InterogatedParties_TSI_SSI').value;
+                InterogatedParties_TSI_MCC      = document.getElementById('InterogatedParties_TSI_MCC').value;
+                InterogatedParties_TSI_MNC      = document.getElementById('InterogatedParties_TSI_MNC').value;
+                                
+                InterrogationResult             = document.getElementById('InterrogationResult').value;                
+                
+                T2_ListeningPartiesAddress      = document.getElementById('T2_ListeningPartiesAddress').value;                
+                
+                ListeningPartiesAddressType     = document.getElementById('ListeningPartiesAddressType').value;                
+                ListeningParties_SNA            = document.getElementById('ListeningParties_SNA').value;                
+                ListeningParties_SSI            = document.getElementById('ListeningParties_SSI').value;
+                ListeningParties_TSI_SSI        = document.getElementById('ListeningParties_TSI_SSI').value;
+                ListeningParties_TSI_MCC        = document.getElementById('ListeningParties_TSI_MCC').value;
+                ListeningParties_TSI_MNC        = document.getElementById('ListeningParties_TSI_MNC').value;
+
+                //Build PDU
+                
+                pdu_bin_value = pdu_header;
+                pdu_bin_party_value = "";
+                pdu_bin_addr_value = "";
+
+                pdu_bin_value += dec2bin(InterogatedPartiesRangeType,4);
+                
+                pdu_bin_addr_value = dec2bin(InterogatedPartiesAddressType,2);
+                if (InterogatedPartiesAddressType == "0")
+                {
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_SNA,8);
+                }   
+                else
+                if (InterogatedPartiesAddressType == "1")
+                {
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_SSI,24);
+                }   
+                else
+                if (InterogatedPartiesAddressType == "2")
+                {
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_TSI_SSI,24);
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_TSI_MCC,10);
+                    pdu_bin_addr_value += dec2bin(InterogatedParties_TSI_MNC,14);
+                }   
+                
+                pdu_bin_addr_value += dec2bin(InterrogationResult,3);
+                
+                T2_pdu_bin_addr_value = "";
+                T2_pdu_bin_addr_value += T2_ListeningPartiesAddress;
+                if (T2_ListeningPartiesAddress != "0")
+                {                    
+                    T2_pdu_bin_addr_value += dec2bin(ListeningPartiesAddressType,2);
+                    if (ListeningPartiesAddressType == "0")
+                    {
+                        T2_pdu_bin_addr_value += dec2bin(ListeningParties_SNA,8);
+                    }   
+                    else
+                    if (ListeningPartiesAddressType == "1")
+                    {
+                        T2_pdu_bin_addr_value += dec2bin(ListeningParties_SSI,24);
+                    }   
+                    else
+                    if (ListeningPartiesAddressType == "2")
+                    {
+                        T2_pdu_bin_addr_value += dec2bin(ListeningParties_TSI_SSI,24);
+                        T2_pdu_bin_addr_value += dec2bin(ListeningParties_TSI_MCC,10);
+                        T2_pdu_bin_addr_value += dec2bin(ListeningParties_TSI_MNC,14);
+                    }   
+                }
+                
+                T2_str = T2_ListeningPartiesAddress;
+                T2 = parseInt(T2_str,2);                
+                if (T2 > 0)
+                    T2_pdu_bin_addr_value = "1" + T2_pdu_bin_addr_value;
+                else
+                    T2_pdu_bin_addr_value = "0";
+                                    
+                pdu_bin_addr_value += T2_pdu_bin_addr_value;
+                
+                if (InterogatedPartiesRangeType == "15")
+                {
+                    pdu_bin_value += pdu_bin_addr_value;
+                    pdu_bin_value += pdu_bin_addr_value;
+                }
+                else
+                {
+                    Nr_of_Addr = parseInt(InterogatedPartiesRangeType,10);
+                    for (i=0; i<Nr_of_Addr; i+=1)
+                    {
+                        pdu_bin_value += pdu_bin_addr_value;
+                    }
+                }       
+                                
+                return pdu_bin_value;
+            }                        
+                                    
+            function OnChange_InterogatedPartiesRangeType(form)
+            {
+                InterogatedPartiesRangeType = document.getElementById('InterogatedPartiesRangeType').value;
+
+                if (InterogatedPartiesRangeType != "0")
+                {
+                    document.getElementById('InterogatedPartiesAddressType').disabled = false;
+                    document.getElementById('T2_ListeningPartiesAddress').disabled = false;
+                    document.getElementById('InterrogationResult').disabled = false;
+                }
+                else
+                {
+                    document.getElementById('InterogatedPartiesAddressType').disabled = true;
+                    document.getElementById('InterogatedPartiesAddressType').value = 1;
+                    document.getElementById('InterrogationResult').disabled = true;
+                    document.getElementById('T2_ListeningPartiesAddress').disabled = true;
+                    document.getElementById('T2_ListeningPartiesAddress').value = 1;
+                }
+                
+                OnChange_InterogatedPartiesAddressType(form);
+                OnChange_ListeningPartiesAddressType(form);
+            }    
+            
+            function OnChange_InterogatedPartiesAddressType(form)
+            {
+                InterogatedPartiesRangeType = document.getElementById('InterogatedPartiesRangeType').value;
+                InterogatedPartiesAddressType = document.getElementById('InterogatedPartiesAddressType').value;
+                
+                document.getElementById('InterogatedParties_SNA').disabled = true;
+                document.getElementById('InterogatedParties_SSI').disabled = true;
+                document.getElementById('InterogatedParties_TSI_SSI').disabled = true;
+                document.getElementById('InterogatedParties_TSI_MCC').disabled = true;
+                document.getElementById('InterogatedParties_TSI_MNC').disabled = true;
+                
+                if (InterogatedPartiesRangeType == "0")
+                    return;
+                
+                if (InterogatedPartiesAddressType == "0")
+                {
+                    document.getElementById('InterogatedParties_SNA').disabled = false;
+                }
+                else if (InterogatedPartiesAddressType == "1")
+                {
+                    document.getElementById('InterogatedParties_SSI').disabled = false;
+                }
+                else if (InterogatedPartiesAddressType == "2")
+                {
+                    document.getElementById('InterogatedParties_TSI_SSI').disabled = false;
+                    document.getElementById('InterogatedParties_TSI_MCC').disabled = false;
+                    document.getElementById('InterogatedParties_TSI_MNC').disabled = false;
+                }
+            }
+
+            function OnEnableDisable_ListeningPartiesAddress(form)
+            {
+                T2_ListeningPartiesAddress = document.getElementById('T2_ListeningPartiesAddress').value;
+                if (T2_ListeningPartiesAddress == "0")
+                    document.getElementById('ListeningPartiesAddressType').disabled = true;
+                else
+                    document.getElementById('ListeningPartiesAddressType').disabled = false;
+                
+                OnChange_ListeningPartiesAddressType(form);
+            }
+            
+            function OnChange_ListeningPartiesAddressType(form)
+            {
+                InterogatedPartiesRangeType = document.getElementById('InterogatedPartiesRangeType').value;
+                T2_ListeningPartiesAddress = document.getElementById('T2_ListeningPartiesAddress').value;
+
+                ListeningPartiesAddressType = document.getElementById('ListeningPartiesAddressType').value;
+                
+                document.getElementById('ListeningParties_SNA').disabled = true;
+                document.getElementById('ListeningParties_SSI').disabled = true;
+                document.getElementById('ListeningParties_TSI_SSI').disabled = true;
+                document.getElementById('ListeningParties_TSI_MCC').disabled = true;
+                document.getElementById('ListeningParties_TSI_MNC').disabled = true;
+
+                if (InterogatedPartiesRangeType == "0")
+                    return;
+                if (T2_ListeningPartiesAddress == "0")
+                    return;
+                            
+                if (ListeningPartiesAddressType == "0")
+                {
+                    document.getElementById('ListeningParties_SNA').disabled = false;
+                }
+                else if (ListeningPartiesAddressType == "1")
+                {
+                    document.getElementById('ListeningParties_SSI').disabled = false;
+                }
+                else if (ListeningPartiesAddressType == "2")
+                {
+                    document.getElementById('ListeningParties_TSI_SSI').disabled = false;
+                    document.getElementById('ListeningParties_TSI_MCC').disabled = false;
+                    document.getElementById('ListeningParties_TSI_MNC').disabled = false;
+                }
+            }
+
+        </script>
+    </body>
+</HTML>

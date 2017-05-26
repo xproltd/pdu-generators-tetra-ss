@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CAD-CANCEL</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_CAD_05_Table">
+				<tr>
+					<th align="left">SS-CAD intercepting SwMI call identifier:</th>
+					<td>
+						<input id="Call_identifier" value="1234" size=5 >
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Call_identifier = document.getElementById('Call_identifier').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(Call_identifier,14);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+		<meta name="keywords" content="Tetra, TETRA SS, Tetra Supplementary Services, PDU Genrator, Tetra stack, Tetra protocol, Ambience Listening, AL, INTERROGATE, INTERROGATE ACK, INVOKE1, INVOKE2, INVOKE, INVOKE ACK, INVOKE1 ACK, INVOKE2 ACK, INFORMATION, AL-TX DEMAND, AL-TX GRANTED, AL-TX INFORM, AL-TX INTERRUPT, AL-TX REJECT">
+		<meta name="description" content="TETRA SS Ambience Listening (AL) PDU generator">
+		<title>TETRA SS - Ambience Listening (AL) PDU generator</title>
+		<script src="SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-34349720-4']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	</head>
+	<body class="darkblue">
+		<a href="http://www.xpro.co" target="_parent"><img alt="XPro Ltd logo" border="0" src="xpro.png" align="right" width="120"></a>
+		<form action="">
+			<p>
+				<span class="header">TETRA SS - Ambience Listening (AL) PDU generator</span>
+				<br>Copyright @ <a href="http://www.xpro.co/" target="_parent">XPro Ltd</a> 2012
+			</p>
+			<table>
+				<colgroup><col width="160"/>
+				</colgroup><tbody><tr>
+					<th class="h" align="right"> Information element</th><th class="h" align="left">Value</th>
+				</tr>
+				<tr>
+					<th align="left">SS Type</th><th align="left">SS-AL</th>
+				</tr>
+				<tr>
+					<th align="right" nowrap="nowrap">SS-AL PDU type</th>
+					<td><select id="AL_PDU_type" onchange="document.getElementById('SS_Proto_IFrame').src = GetValue(this.form.AL_PDU_type.value,0)">
+								<option selected="selected" value="SS_AL/SS_AL_INTERROGATE.htm,         00101">INTERROGATE
+								</option><option value="SS_AL/SS_AL_INTERROGATE_ACK.htm,     00110">INTERROGATE ACK
+								</option><option value="SS_AL/SS_AL_INVOKE1.htm,             00111">INVOKE1
+								</option><option value="SS_AL/SS_AL_INVOKE2.htm,             01000">INVOKE2
+								</option><option value="SS_AL/SS_AL_INVOKE.htm,              01001">INVOKE
+								</option><option value="SS_AL/SS_AL_INVOKE_ACK.htm,          01010">INVOKE ACK
+								</option><option value="SS_AL/SS_AL_INVOKE1_ACK.htm,         01011">INVOKE1 ACK
+								</option><option value="SS_AL/SS_AL_INVOKE2_ACK.htm,         01100">INVOKE2 ACK
+								</option><option value="SS_AL/SS_AL_INFORMATION.htm,         01101">INFORMATION
+								</option><option value="SS_AL/SS_AL_AL_TX_DEMAND.htm,        01110">AL-TX DEMAND
+								</option><option value="SS_AL/SS_AL_AL_TX_GRANTED.htm,       01111">AL-TX GRANTED
+								</option><option value="SS_AL/SS_AL_AL_TX_INFORM.htm,        10000">AL-TX INFORM
+								</option><option value="SS_AL/SS_AL_AL_TX_INTERRUPT.htm,     10001">AL-TX INTERRUPT
+								</option><option value="SS_AL/SS_AL_AL_TX_REJECT.htm,        10010">AL-TX REJECT
+						</option></select></td>                                                                         
+				</tr>
+			</tbody></table>
+			<iframe name="SS_Proto_IFrame" id="SS_Proto_IFrame" onload="Autosize_IFrame(this)" src="SS_AL/SS_AL_INTERROGATE.htm" frameborder="0" height="160" width="650"></iframe>
+			<table>
+			<tbody><tr><th>
+			<p>
+				<input value="Generate" onclick="WritePDUToCtrl(this.form.PDU_Hex_Value)" type="button">                
+				<input value="Write To File" onclick="WritePDUToFile(this.form.FileName.value)" type="button">
+				<input id="FileName" value="C:\Temp\SS_AL_PDUs" size="32">
+				<br>
+				User Header:  <input id="UserHeader" size="51">
+				Protocol: <select id="Protocol">
+								<option selected="selected" value="0">SS Only
+								</option><option value="1">LLC/D-FACILITY
+						</option></select>
+				<br>
+				<textarea id="PDU_Hex_Value" rows="4" cols="60"></textarea>
+			</p>
+			<p><a href="SS_PDU_Generator.htm">SS Home</a></p>
+			</th></tr>
+			</tbody></table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+	
+			function GetPDU_Hex()
+			{
+				Protocol   = document.getElementById('Protocol').value;
+
+				pdu_bin_value = "";                
+				ss_pdu_header = "";
+				ss_pdu_value = "";
+				
+				if (Protocol == "1") // LLC
+				{
+					pdu_bin_value += "0010"; // BL-UDATA
+					pdu_bin_value += "010"; // CMCE
+					pdu_bin_value += "10000"; // D-FACILITY
+					pdu_bin_value += "0001"; // 1 SS PDU
+				}
+				
+				ss_pdu_header += "010101";
+				ss_pdu_header += GetValue(document.getElementById('AL_PDU_type').value,1); 
+				
+				if (Protocol == "1") // LLC
+				{
+					ss_pdu_value = document.getElementById("SS_Proto_IFrame").contentWindow.GetPDUValue(ss_pdu_header);
+					pdu_bin_value += dec2bin(ss_pdu_value.length,11);
+					pdu_bin_value += ss_pdu_value;
+					pdu_bin_value += "0"; //No Type 2 Elements
+				}
+				else
+				{
+					pdu_bin_value = document.getElementById("SS_Proto_IFrame").contentWindow.GetPDUValue(ss_pdu_header);
+				}
+								
+				return document.getElementById('UserHeader').value + bin2hex(pdu_bin_value);
+			}        
+
+			function WritePDUToCtrl(ctrl)
+			{
+				pdu_hex_value = GetPDU_Hex();
+				ctrl.value = pdu_hex_value;
+			}
+
+			function WritePDUToFile(filename)
+			{
+				Protocol   = document.getElementById('Protocol').value;
+				if (Protocol == "1") // LLC
+				{
+					filename += ".ds1";
+				}
+				else
+					filename += ".ss";
+								
+				pdu_hex_value = GetPDU_Hex();
+				document.getElementById('PDU_Hex_Value').value = pdu_hex_value;
+				WriteToFile(filename,pdu_hex_value);
+			}
+		
+		</script>
+	</body>
+</html>

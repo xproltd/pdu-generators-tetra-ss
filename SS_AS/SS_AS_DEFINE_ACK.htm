@@ -1,0 +1,359 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-AS-DEFINE_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_AS_04_Table">
+				<tr>
+					<th align="left">
+						Range type for served user(s)/group(s):
+					</th>
+					<td>
+                        <select id="Range_type_for_served_users" onChange="Update_Multiple_served_user_mask(this.form)">
+							<option value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Address type of served user/group:
+					</th>
+					<td>
+						<select id="Address_type_of_served_user" onChange="OnChange_Address_type_of_served_user(this.form)">
+							<option value="01">Short Subscriber Identity (SSI)
+							<option value="10">TETRA Subscriber Identity (TSI)
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Served user/group SSI:
+					</th>
+					<td>
+						<input disabled id="Served_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Served user/group extension:</th>
+					<td>
+						MCC: <input disabled id="Served_user_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Served_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Multiple served user/group mask present:
+					</th>
+					<td>
+						<select id="Multiple_served_user_mask_present" onChange="OnChange_Multiple_served_user_mask_present(this.form)">
+							<option value="0">Not Present
+							<option selected value="1">Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Multiple served user/group mask:
+					</th>
+					<td>
+						<input id="Multiple_served_user_mask" value="1" size="15" onkeypress="return AllowDigitOnly(event)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Definition result:
+					</th>
+					<td>
+						<select id="Definition_result" onChange="OnChange_Definition_result(this.form)">
+							<option value="0">Definition unsuccessful
+							<option value="1">Definition successful
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Range type for selected area numbers:
+					</th>
+					<td>
+						<select id="Range_type_for_selected_area_numbers"  onChange="Update_Multiple_selected_area_number_mask(this.form)">
+							<option selected value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Selected area number (0-255):
+					</th>
+					<td>
+						<input id="Selected_area_number" value="133" size=4>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Multiple selected area number mask present:
+					</th>
+					<td>
+						<select id="Multiple_selected_area_number_mask_present" onChange="OnChange_Multiple_selected_area_number_mask_present(this.form)">
+							<option value="0">Not Present
+							<option selected value="1">Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Multiple selected area number mask:
+					</th>
+					<td>
+						<input id="Multiple_selected_area_number_mask" value="1" size="15" onkeypress="return AllowDigitOnly(event)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Definition failure cause:
+					</th>
+					<td>
+						<select id="Definition_failure_cause">
+							<option value="000">Rejected for any reason
+							<option value="001">User not authorized
+							<option value="010">Unknown TETRA identity
+							<option value="011">Range not supported
+							<option value="100">Invalid PDU contents
+							<option value="101">SS not subscribed for user addressed
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Range_type_for_served_users = document.getElementById('Range_type_for_served_users').value;
+				Address_type_of_served_user = document.getElementById('Address_type_of_served_user').value;
+				Served_user_SSI = document.getElementById('Served_user_SSI').value;
+				Served_user_extension_MCC = document.getElementById('Served_user_extension_MCC').value;
+				Served_user_extension_MNC = document.getElementById('Served_user_extension_MNC').value;
+				
+				Multiple_served_user_mask_present = document.getElementById('Multiple_served_user_mask_present').value;
+				Multiple_served_user_mask = document.getElementById('Multiple_served_user_mask').value;
+				Definition_result = document.getElementById('Definition_result').value;
+				Range_type_for_selected_area_numbers = document.getElementById('Range_type_for_selected_area_numbers').value;
+				Selected_area_number = document.getElementById('Selected_area_number').value;
+				Multiple_selected_area_number_mask_present = document.getElementById('Multiple_selected_area_number_mask_present').value;
+				Multiple_selected_area_number_mask = document.getElementById('Multiple_selected_area_number_mask').value;
+				Definition_failure_cause = document.getElementById('Definition_failure_cause').value;
+				
+				Range_type_for_served_users_dec = parseInt(Range_type_for_served_users,2);
+				Range_type_for_selected_area_numbers_dec = parseInt(Range_type_for_selected_area_numbers,2);
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Range_type_for_served_users;
+				Served_user_address = Address_type_of_served_user;
+				
+				if (Address_type_of_served_user == "01")
+				{
+					Served_user_address += dec2bin(Served_user_SSI,24);
+				}
+				if (Address_type_of_served_user == "10")
+				{
+					Served_user_address += dec2bin(Served_user_SSI,24);
+					Served_user_address += dec2bin(Served_user_extension_MCC,10);
+					Served_user_address += dec2bin(Served_user_extension_MNC,14);
+				}
+				
+				if (Range_type_for_served_users == "1111")
+				{
+					pdu_bin_value += Served_user_address;
+					pdu_bin_value += Served_user_address;
+				}
+				else
+				{
+					for (i=0; i<parseInt(Range_type_for_served_users,2); i+=1)
+					{
+						pdu_bin_value += Served_user_address;
+					}
+				}
+				
+				pdu_bin_value += Multiple_served_user_mask_present;
+				
+				if ( Multiple_served_user_mask_present == "1")
+				{
+					//To validate the Multiple_served_user_mask first we calculate how many elements there are in the range
+					
+					Number_of_range_elements = 1;
+					if (Range_type_for_served_users_dec < 15)
+					{
+						Number_of_range_elements = Range_type_for_served_users_dec;
+					}
+					//The length of Multiple_served_user_mask is the Number_of_range_elements
+					//Let's trim it, and then pad with "0"s if it is shorter than it should be.
+					
+					Multiple_served_user_mask = Multiple_served_user_mask.substring(0,Number_of_range_elements);
+					while (Multiple_served_user_mask.length < Number_of_range_elements)
+					{
+						Multiple_served_user_mask = "0" + Multiple_served_user_mask; 
+					}
+					
+					pdu_bin_value += Multiple_served_user_mask;
+				}
+				
+				pdu_bin_value += dec2bin(Definition_result,1);
+				
+				pdu_bin_value += Range_type_for_selected_area_numbers;
+				
+				if (Range_type_for_selected_area_numbers == "1111")
+				{
+					pdu_bin_value += dec2bin(Selected_area_number,8);
+					pdu_bin_value += dec2bin(Selected_area_number,8);
+				}
+				else
+				{
+					for (i=0; i<Range_type_for_selected_area_numbers_dec; i+=1)
+					{
+						pdu_bin_value += dec2bin(Selected_area_number,8);
+					}
+				}
+				
+				pdu_bin_value += Multiple_selected_area_number_mask_present;
+				
+				if ( Multiple_selected_area_number_mask_present == "1")
+				{
+					//To validate the Multiple_selected_area_number_mask first we calculate how many elements there are in the range
+					
+					Number_of_range_elements = 1;
+					if (Range_type_for_selected_area_numbers_dec < 15)
+					{
+						Number_of_range_elements = Range_type_for_selected_area_numbers_dec;
+					}
+					//The length of Multiple_selected_area_number_mask is the Number_of_range_elements
+					//Let's trim it, and then pad with "0"s if it is shorter than it should be.
+					
+					Multiple_selected_area_number_mask = Multiple_selected_area_number_mask.substring(0,Number_of_range_elements);
+					while (Multiple_selected_area_number_mask.length < Number_of_range_elements)
+					{
+						Multiple_selected_area_number_mask = "0" + Multiple_selected_area_number_mask; 
+					}
+					
+					pdu_bin_value += Multiple_selected_area_number_mask;
+				}
+				
+				if (Definition_result == "0")
+				{
+					pdu_bin_value += Definition_failure_cause;
+				}
+				
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Address_type_of_served_user(form)
+			{
+				Address_type_of_served_user = document.getElementById('Address_type_of_served_user').value;
+				if (Address_type_of_served_user == "01") 
+				{
+					document.getElementById('Served_user_SSI').disabled = false;
+					document.getElementById('Served_user_extension_MCC').disabled = true;
+					document.getElementById('Served_user_extension_MNC').disabled = true;
+				}
+				else
+				if (Address_type_of_served_user == "10") 
+				{
+					document.getElementById('Served_user_SSI').disabled = false;
+					document.getElementById('Served_user_extension_MCC').disabled = false;
+					document.getElementById('Served_user_extension_MNC').disabled = false;
+				}
+			}
+			function OnChange_Multiple_served_user_mask_present(form)
+			{
+				Multiple_served_user_mask_present = document.getElementById('Multiple_served_user_mask_present').value;
+				if (Multiple_served_user_mask_present == "0") 
+				{
+					document.getElementById('Multiple_served_user_mask').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Multiple_served_user_mask').disabled = false;
+				}
+			}
+			function Update_Multiple_served_user_mask(form)
+			{
+				Range_type_for_served_users = document.getElementById('Range_type_for_served_users').value;
+				Number_of_range_elements = 1;
+				if (parseInt(Range_type_for_served_users,2) > 1 && parseInt(Range_type_for_served_users,2) < 15)
+				{
+					Number_of_range_elements = parseInt(Range_type_for_served_users,2);
+				}
+				document.getElementById('Multiple_served_user_mask').value = "101010101010101010".substring(0,Number_of_range_elements);
+			}
+			function OnChange_Definition_result(form)
+			{
+				Definition_result = document.getElementById('Definition_result').value;
+				if (Definition_result == "0") 
+				{
+					document.getElementById('Definition_failure_cause').disabled = false;
+				}
+				else
+				{
+					document.getElementById('Definition_failure_cause').disabled = true;
+				}
+			}
+			function OnChange_Multiple_selected_area_number_mask_present(form)
+			{
+				Multiple_selected_area_number_mask_present = document.getElementById('Multiple_selected_area_number_mask_present').value;
+				if (Multiple_selected_area_number_mask_present == "0") 
+				{
+					document.getElementById('Multiple_selected_area_number_mask').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Multiple_selected_area_number_mask').disabled = false;
+				}
+			}
+			function Update_Multiple_selected_area_number_mask(form)
+			{
+				Range_type_for_selected_area_numbers = document.getElementById('Range_type_for_selected_area_numbers').value;
+				Number_of_range_elements = 1;
+				if (parseInt(Range_type_for_selected_area_numbers,2) > 1 && parseInt(Range_type_for_selected_area_numbers,2) < 15)
+				{
+					Number_of_range_elements = parseInt(Range_type_for_selected_area_numbers,2);
+				}
+				document.getElementById('Multiple_selected_area_number_mask').value = "101010101010101010".substring(0,Number_of_range_elements);
+			}
+		</script>
+	</body>
+</html>

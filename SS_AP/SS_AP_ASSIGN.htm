@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-AP-ASSIGN</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_AP_01_Table">
+				<tr>
+					<th align="left">
+						Services:
+					</th>
+					<td>
+						<select id="Services">
+							<option value="00001">Circuit mode speech
+							<option value="00010">Circuit mode data
+							<option value="00100">Packet mode data
+							<option value="01000">SDS
+							<option value="10000">Supplementary services management
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						APL for low priority:
+					</th>
+					<td>
+						<select id="APL_for_low_priority">
+							<option value="000">0
+							<option selected value="001">1
+							<option value="010">2
+							<option value="011">3
+							<option value="100">4
+							<option value="101">5
+							<option value="110">6
+							<option value="111">Reserved for emergency
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						APL for high priority:
+					</th>
+					<td>
+						<select id="APL_for_high_priority">
+							<option value="000">0
+							<option selected value="001">1
+							<option value="010">2
+							<option value="011">3
+							<option value="100">4
+							<option value="101">5
+							<option value="110">6
+							<option value="111">Reserved for emergency
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Acknowledgement requested:
+					</th>
+					<td>
+						<select id="Acknowledgement_requested">
+							<option value="0">No acknowledgement shall be returned
+							<option selected value="1">Acknowledgement requested
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Services = document.getElementById('Services').value;
+				APL_for_low_priority = document.getElementById('APL_for_low_priority').value;
+				APL_for_high_priority = document.getElementById('APL_for_high_priority').value;
+
+				Acknowledgement_requested = document.getElementById('Acknowledgement_requested').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Services;
+				pdu_bin_value += APL_for_low_priority;
+				pdu_bin_value += APL_for_high_priority;
+				
+				pdu_bin_value += dec2bin(Acknowledgement_requested,1);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+		</script>
+	</body>
+</html>

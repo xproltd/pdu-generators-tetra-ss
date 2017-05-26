@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <HEAD>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>SS-AL-AL-TX GRANTED</TITLE>
+        <SCRIPT SRC="../SS_Util.js" language="JavaScript" type="text/JavaScript"></SCRIPT>
+        <LINK href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+    </HEAD>
+    <body class="PDU_page">        
+        <form id="Form1" action="">
+            <table ID="Table1">
+                    <tr>                    
+                        <th align="left">Transmission grant</th>
+                        <td>
+                            <select ID="TxGrant">                          
+	                            <option value="0" >Transmission granted
+	                            <option value="1" >Transmission not granted
+	                            <option value="2" >Transmission request queued
+	                            <option value="3" >Transmission granted to another user
+	                        </select>              
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Encryption control</th>
+                        <td>
+                            <select ID="EncryptionControl">                          
+	                            <option value="0" >Clear Mode
+	                            <option value="1" >TETRA end-to-end encryption
+	                        </select>
+                        </td>
+                    </tr>
+            </table>
+        </form>
+        <script language="JavaScript" type="text/JavaScript">
+    
+            function GetPDUValue(pdu_header)
+            {
+                //Get Information Element values
+
+                TxGrant                      = document.getElementById('TxGrant').value;                
+                EncryptionControl            = document.getElementById('EncryptionControl').value;
+
+                //Build PDU
+                
+                pdu_bin_value = pdu_header;
+
+                pdu_bin_value += dec2bin(TxGrant,2);;
+                pdu_bin_value += dec2bin(EncryptionControl,1);;
+                                                                       
+                return pdu_bin_value;
+            }                        
+                                                
+        </script>
+    </body>
+</HTML>

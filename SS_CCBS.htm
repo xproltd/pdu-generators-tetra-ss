@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<meta name="keywords" content="Tetra, TETRA SS, Tetra Supplementary Services, PDU Genrator, Tetra stack, Tetra protocol, Call Completion to Busy Subscriber, CCBS, CALL-INFORMATION-RETENTION, CANCEL, LIST, MONITOR, RECALL, RECALL-ACCEPTED, REQUEST, RESUME-COMPLETION, CANCEL ACK, LIST ACK, MONITOR ACK, REQUEST ACK, CANCELLED, FAILED, FREE-NOTIFICATION, SUSPEND-COMPLETION, USER-B-FREE, CANCELLATION, CCBSI, CALL-INFORMATION-RELEASE">
+		<meta name="description" content="TETRA SS Call Completion to Busy Subscriber (CCBS) PDU generator">
+		<title>TETRA SS - Call Completion to Busy Subscriber (CCBS) PDU generator</title>
+		<script SRC="SS_Util.js" LANGUAGE="JavaScript" type="text/JavaScript"></script>
+		<link href="SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-34349720-4']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	</head>
+	<body class="darkblue">
+		<a href="http://www.xpro.co" target="_parent"><img alt="XPro Ltd logo" border="0" src="xpro.png" align="right" width="120"></a>
+		<form action="">
+			<p>
+				<span class="header">TETRA SS - Call Completion to Busy Subscriber (CCBS) PDU generator</span>
+				<br>Copyright &#64; <a href="http://www.xpro.co" target="_parent">XPro Ltd</a> 2012
+			</p>
+			<table>
+				<col width="160">
+				<tr>
+					<th class="h" align="right"> Information element</th><th class="h" align="left">Value</th>
+				</tr>
+				<tr>
+					<th align="left">SS Type</th><th align="left">SS-CCBS</th>
+				</tr>
+				<tr>
+					<th nowrap align="right">SS-CCBS PDU type</th>
+					<td>
+						<select id="CCBS_PDU_type" onchange="this.form.PDU_Hex_Value.value = ''; document.getElementById('SS_Proto_IFrame').src = GetValue(this.form.CCBS_PDU_type.value,0)">
+							<option value="SS_CCBS/SS_CCBS_CALL_INFORMATION_RETENTION.htm, 00101">CALL_INFORMATION_RETENTION
+							<option value="SS_CCBS/SS_CCBS_CANCEL.htm,                     00110">CANCEL
+							<option value="SS_CCBS/SS_CCBS_LIST.htm,                       00111">LIST
+							<option value="SS_CCBS/SS_CCBS_MONITOR.htm,                    01000">MONITOR
+							<option value="SS_CCBS/SS_CCBS_RECALL.htm,                     01001">RECALL
+							<option value="SS_CCBS/SS_CCBS_RECALL_ACCEPTED.htm,            01010">RECALL_ACCEPTED
+							<option value="SS_CCBS/SS_CCBS_REQUEST.htm,                    01011">REQUEST
+							<option value="SS_CCBS/SS_CCBS_RESUME_COMPLETION.htm,          01100">RESUME_COMPLETION
+							<option value="SS_CCBS/SS_CCBS_CANCEL_ACK.htm,                 01101">CANCEL ACK
+							<option value="SS_CCBS/SS_CCBS_LIST_ACK.htm,                   01110">LIST ACK
+							<option value="SS_CCBS/SS_CCBS_MONITOR_ACK.htm,                01111">MONITOR ACK
+							<option value="SS_CCBS/SS_CCBS_REQUEST_ACK.htm,                10000">REQUEST ACK
+							<option value="SS_CCBS/SS_CCBS_CANCELLED.htm,                  10001">CANCELLED
+							<option value="SS_CCBS/SS_CCBS_FAILED.htm,                     10010">FAILED
+							<option value="SS_CCBS/SS_CCBS_FREE_NOTIFICATION.htm,          10011">FREE_NOTIFICATION
+							<option value="SS_CCBS/SS_CCBS_SUSPEND_COMPLETION.htm,         10100">SUSPEND_COMPLETION
+							<option value="SS_CCBS/SS_CCBS_USER_B_FREE.htm,                10101">USER_B_FREE
+							<option value="SS_CCBS/SS_CCBS_CANCELLATION.htm,               10110">CANCELLATION
+							<option value="SS_CCBS/SS_CCBS_CCBSI.htm,                      10111">CCBSI
+							<option value="SS_CCBS/SS_CCBS_CALL_INFORMATION_RELEASE.htm,   11000">CALL_INFORMATION_RELEASE
+						</select>
+					</td>
+				</tr>
+			</table>
+			<iframe name="SS_Proto_IFrame" id="SS_Proto_IFrame" onLoad="Autosize_IFrame(this)" frameborder="0" height="308" width="600" src="SS_CCBS/SS_CCBS_CALL_INFORMATION_RETENTION.htm"></iframe>
+			<table>
+				<tr>
+					<th>
+						<p>
+							<input type="button" value="Generate" onClick="WritePDUToCtrl(this.form.PDU_Hex_Value)">                
+							<input type="button" value="Write To File" onClick="WritePDUToFile(this.form.FileName.value)">
+							<input id="FileName" value="C:\Temp\SS_CCBS_PDUs.ss" size=32 >
+							<br>
+							User Header:  <input id="UserHeader" value="" size=51 NAME="UserHeader">
+							<br>
+							<textarea id="PDU_Hex_Value" rows="4" cols="60"></textarea>
+						</p>
+						<p>
+							<a HREF="SS_PDU_Generator.htm">SS Home</a>
+						</p>
+					</th>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetPDU_Hex()
+			{
+				pdu_bin_value = dec2bin(13,6);
+				pdu_bin_value += GetValue(document.getElementById('CCBS_PDU_type').value,1); 
+				
+				return document.getElementById('UserHeader').value + document.getElementById("SS_Proto_IFrame").contentWindow.GetHexValue(pdu_bin_value);
+			}
+
+			function WritePDUToCtrl(ctrl)
+			{
+				pdu_hex_value = GetPDU_Hex();
+				ctrl.value = pdu_hex_value;
+			}
+
+			function WritePDUToFile(filename)
+			{
+				pdu_hex_value = GetPDU_Hex();
+				document.getElementById('PDU_Hex_Value').value = pdu_hex_value;
+				WriteToFile(filename,pdu_hex_value);
+			}
+		</script>
+	</body>
+</html>

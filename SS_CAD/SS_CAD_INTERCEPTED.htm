@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CAD-INTERCEPTED</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_CAD_12_Table">
+				<tr>
+					<th align="left">
+						Interception cause:
+					</th>
+					<td>
+						<select id="Interception_cause">
+							<option value="00000" >Reason not defined
+							<option value="00001" >Restricted basic service
+							<option selected value="00010" >Restricted destination address
+							<option value="00100" >Restricted source address
+							<option value="01000" >Restricted area
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Dispatcher address type:
+					</th>
+					<td>
+						<select id="T2_Dispatcher_address_type" onChange="OnChange_T2_Dispatcher_address_type(this.form)">
+							<option selected value="0">T2 Not Present
+							<option value="1">T2 Present
+						</select>
+						<select disabled id="Dispatcher_address_type" onChange="OnChange_Dispatcher_address_type(this.form)">
+							<option value="1">SSI
+							<option value="2">TSI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Dispatcher SSI:
+					</th>
+					<td>
+						<input disabled id="Dispatcher_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Dispatcher extension:</th>
+					<td>
+						MCC: <input disabled id="Dispatcher_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Dispatcher_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Interception_cause = document.getElementById('Interception_cause').value;
+				T2_Dispatcher_address_type = document.getElementById('T2_Dispatcher_address_type').value;
+				Dispatcher_address_type = document.getElementById('Dispatcher_address_type').value;
+				Dispatcher_SSI = document.getElementById('Dispatcher_SSI').value;
+				Dispatcher_extension_MCC = document.getElementById('Dispatcher_extension_MCC').value;
+				Dispatcher_extension_MNC = document.getElementById('Dispatcher_extension_MNC').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Interception_cause;
+				
+				// T2 presence bit. There is only one optional T2 element.
+				// Its presence defines the T2 option bit as well.
+					
+				if (T2_Dispatcher_address_type == "1")
+				{
+					//Add the option and presence bits
+					pdu_bin_value += "11";
+					
+					pdu_bin_value += dec2bin(Dispatcher_address_type,2);
+					
+					if (Dispatcher_address_type == "1")
+					{
+						pdu_bin_value += dec2bin(Dispatcher_SSI,24);
+					}
+					else if (Dispatcher_address_type == "2")
+					{
+						pdu_bin_value += dec2bin(Dispatcher_SSI,24);
+						pdu_bin_value += dec2bin(Dispatcher_extension_MCC,10);
+						pdu_bin_value += dec2bin(Dispatcher_extension_MNC,14);
+					}
+				}
+				else
+				{
+					pdu_bin_value += "0";  //Add "0" for the T2 option bit
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_T2_Dispatcher_address_type(form)
+			{
+				T2_Dispatcher_address_type = document.getElementById('T2_Dispatcher_address_type').value;
+				if (T2_Dispatcher_address_type == "1")
+				{
+					document.getElementById('Dispatcher_address_type').disabled = false;
+					document.getElementById('Dispatcher_SSI').disabled = false;
+					document.getElementById('Dispatcher_extension_MCC').disabled = false;
+					document.getElementById('Dispatcher_extension_MNC').disabled = false;
+					OnChange_Dispatcher_address_type(form);
+				}
+				else
+				{
+					document.getElementById('Dispatcher_address_type').disabled = true;
+					document.getElementById('Dispatcher_SSI').disabled = true;
+					document.getElementById('Dispatcher_extension_MCC').disabled = true;
+					document.getElementById('Dispatcher_extension_MNC').disabled = true;
+				}
+			}
+			function OnChange_Dispatcher_address_type(form)
+			{
+				Dispatcher_address_type = document.getElementById('Dispatcher_address_type').value;
+				if (Dispatcher_address_type == "1") 
+				{
+					document.getElementById('Dispatcher_SSI').disabled = false;
+					document.getElementById('Dispatcher_extension_MCC').disabled = true;
+					document.getElementById('Dispatcher_extension_MNC').disabled = true;
+				}
+				else
+				if (Dispatcher_address_type == "2") 
+				{
+					document.getElementById('Dispatcher_SSI').disabled = false;
+					document.getElementById('Dispatcher_extension_MCC').disabled = false;
+					document.getElementById('Dispatcher_extension_MNC').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

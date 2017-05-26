@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-BOC-DEFINE_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_BOC_02_Table">
+				<tr>
+					<th align="left">
+						Range type for affected user identities:
+					</th>
+					<td>
+                        <select id="Range_type_for_affected_user_identities" onChange="OnChange_Range_type_for_affected_user_identities(this.form)">
+							<option value="0000">No element
+							<option selected value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Affected user SSI:
+					</th>
+					<td>
+						<input id="Affected_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Affected user extension:</th>
+					<td>
+						<select id="Affected_user_extension_present" onChange="OnChange_Affected_user_extension_present(this.form)">
+							<option value="0">Not present
+							<option selected value="1">Present
+						</select>
+						MCC: <input id="Affected_user_extension_MCC" value="234" size=5 >
+						MNC: <input id="Affected_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Definition result:
+					</th>
+					<td>
+						<select id="Definition_result">
+							<option value="000">Request failed for any reason
+							<option value="001">Accepted by SwMI
+							<option value="010">Accepted, but definition values changed by SwMI
+							<option value="011">User not authorized
+							<option value="100">User not authorized
+							<option value="101">Unknown TETRA identity
+							<option value="111">Parameters not valid
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Range_type_for_affected_user_identities = document.getElementById('Range_type_for_affected_user_identities').value;
+				Affected_user_SSI = document.getElementById('Affected_user_SSI').value;
+				Affected_user_extension_present = document.getElementById('Affected_user_extension_present').value;
+				Affected_user_extension_MCC = document.getElementById('Affected_user_extension_MCC').value;
+				Affected_user_extension_MNC = document.getElementById('Affected_user_extension_MNC').value;
+
+				Definition_result = document.getElementById('Definition_result').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				// Affected user identity block
+				
+				pdu_bin_value += Range_type_for_affected_user_identities;
+				
+				if (Range_type_for_affected_user_identities != "0000")
+				{
+					Affected_user_identity = dec2bin(Affected_user_SSI,24);
+					Affected_user_identity += Affected_user_extension_present;
+					if (Affected_user_extension_present == "1")
+					{
+						Affected_user_identity += dec2bin(Affected_user_extension_MCC,10);
+						Affected_user_identity += dec2bin(Affected_user_extension_MNC,14);
+					}
+					if (Range_type_for_affected_user_identities == "1111")
+					{
+						pdu_bin_value += Affected_user_identity;
+						pdu_bin_value += Affected_user_identity;
+					}
+					else
+					{
+						for (i=0; i<parseInt(Range_type_for_affected_user_identities,2); i+=1)
+						{
+							pdu_bin_value += Affected_user_identity;
+						}
+					}
+				}
+				
+				pdu_bin_value += Definition_result;
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Range_type_for_affected_user_identities(form)
+			{
+				Range_type_for_affected_user_identities = document.getElementById('Range_type_for_affected_user_identities').value;
+				if (Range_type_for_affected_user_identities == "0000")
+				{
+					document.getElementById('Affected_user_SSI').disabled = true;
+					document.getElementById('Affected_user_extension_present').disabled = true;
+					document.getElementById('Affected_user_extension_MCC').disabled = true;
+					document.getElementById('Affected_user_extension_MNC').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Affected_user_SSI').disabled = false;
+					document.getElementById('Affected_user_extension_present').disabled = false;
+					document.getElementById('Affected_user_extension_MCC').disabled = false;
+					document.getElementById('Affected_user_extension_MNC').disabled = false;
+					OnChange_Affected_user_extension_present(form);
+				}
+			}
+			function OnChange_Affected_user_extension_present(form)
+			{
+				Affected_user_extension_present = document.getElementById('Affected_user_extension_present').value;
+				if (Affected_user_extension_present == "0")
+				{
+					document.getElementById('Affected_user_extension_MCC').disabled = true;
+					document.getElementById('Affected_user_extension_MNC').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Affected_user_extension_MCC').disabled = false;
+					document.getElementById('Affected_user_extension_MNC').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

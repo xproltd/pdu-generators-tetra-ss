@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<meta name="keywords" content="Tetra, TETRA SS, Tetra Supplementary Services, PDU Genrator, Tetra stack, Tetra protocol, Pre-emptive Priority Call, PPC, DEFINE, DEFINE ACK, ASSIGN, ASSIGN ACK, WITHDRAW, WITHDRAW ACK, REMOVE, REMOVE ACK, INTERROGATE, INTERROGATE ACK, IMPENDING-PRE-EMPTION, USER-PRE-EMPTED">
+		<meta name="description" content="TETRA SS Pre-emptive Priority Call (PDC) PDU generator">
+		<title>TETRA SS - Pre-emptive Priority Call (PDC) PDU generator</title>
+		<script SRC="SS_Util.js" LANGUAGE="JavaScript" type="text/JavaScript"></script>
+		<link href="SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-34349720-4']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	</head>
+	<body class="darkblue">
+		<a href="http://www.xpro.co" target="_parent"><img alt="XPro Ltd logo" border="0" src="xpro.png" align="right" width="120"></a>
+		<form action="">
+			<p>
+				<span class="header">TETRA SS - Pre-emptive Priority Call (PDC) PDU generator</span>
+				<br>Copyright &#64; <a href="http://www.xpro.co" target="_parent">XPro Ltd</a> 2012
+			</p>
+			<table>
+				<col width="160">
+				<tr>
+					<th class="h" align="right"> Information element</th><th class="h" align="left">Value</th>
+				</tr>
+				<tr>
+					<th align="left">SS Type</th><th align="left">SS-PPC</th>
+				</tr>
+				<tr>
+					<th nowrap align="right">SS-PPC PDU type</th>
+					<td>
+						<select id="PPC_PDU_type" onchange="this.form.PDU_Hex_Value.value = ''; document.getElementById('SS_Proto_IFrame').src = GetValue(this.form.PPC_PDU_type.value,0)">
+							<option value="SS_PPC/SS_PPC_DEFINE.htm,          00101">DEFINE
+							<option value="SS_PPC/SS_PPC_DEFINE_ACK.htm,      00110">DEFINE ACK
+							<option value="SS_PPC/SS_PPC_ASSIGN.htm,          00111">ASSIGN
+							<option value="SS_PPC/SS_PPC_ASSIGN_ACK.htm,      01000">ASSIGN ACK
+							<option value="SS_PPC/SS_PPC_WITHDRAW.htm,        01001">WITHDRAW
+							<option value="SS_PPC/SS_PPC_WITHDRAW_ACK.htm,    01010">WITHDRAW ACK
+							<option value="SS_PPC/SS_PPC_REMOVE.htm,          01011">REMOVE
+							<option value="SS_PPC/SS_PPC_REMOVE_ACK.htm,      01100">REMOVE ACK
+							<option value="SS_PPC/SS_PPC_INTERROGATE.htm,     01101">INTERROGATE
+							<option value="SS_PPC/SS_PPC_INTERROGATE_ACK.htm, 01110">INTERROGATE ACK
+							<option value="SS_PPC/SS_PPC_IMPENDING_PRE_EMPTION.htm, 01111">IMPENDING-PRE-EMPTION
+							<option value="SS_PPC/SS_PPC_USER_PRE_EMPTED.htm, 10000">USER-PRE-EMPTED
+						</select>
+					</td>
+				</tr>
+			</table>
+			<iframe name="SS_Proto_IFrame" id="SS_Proto_IFrame" onLoad="Autosize_IFrame(this)" frameborder="0" height="308" width="600" src="SS_PPC/SS_PPC_DEFINE.htm"></iframe>
+			<table>
+				<tr>
+					<th>
+						<p>
+							<input type="button" value="Generate" onClick="WritePDUToCtrl(this.form.PDU_Hex_Value)">                
+							<input type="button" value="Write To File" onClick="WritePDUToFile(this.form.FileName.value)">
+							<input id="FileName" value="C:\Temp\SS_PPC_PDUs.ss" size=32 >
+							<br>
+							User Header:  <input id="UserHeader" value="" size=51 NAME="UserHeader">
+							<br>
+							<textarea id="PDU_Hex_Value" rows="4" cols="60"></textarea>
+						</p>
+						<p>
+							<a HREF="SS_PDU_Generator.htm">SS Home</a>
+						</p>
+					</th>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetPDU_Hex()
+			{
+				pdu_bin_value = dec2bin(16,6);
+				pdu_bin_value += GetValue(document.getElementById('PPC_PDU_type').value,1); 
+				
+				return document.getElementById('UserHeader').value + document.getElementById("SS_Proto_IFrame").contentWindow.GetHexValue(pdu_bin_value);
+			}
+
+			function WritePDUToCtrl(ctrl)
+			{
+				pdu_hex_value = GetPDU_Hex();
+				ctrl.value = pdu_hex_value;
+			}
+
+			function WritePDUToFile(filename)
+			{
+				pdu_hex_value = GetPDU_Hex();
+				document.getElementById('PDU_Hex_Value').value = pdu_hex_value;
+				WriteToFile(filename,pdu_hex_value);
+			}
+		</script>
+	</body>
+</html>

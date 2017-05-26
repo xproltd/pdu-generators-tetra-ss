@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+		<meta name="keywords" content="Tetra, TETRA SS, Tetra Supplementary Services, PDU Genrator, Tetra stack, Tetra protocol, Call waiting, CW, ACTIVATE, ACTIVATE ACK, DEACTIVATE, DEACTIVATE ACK, INVOCATION FAILURE, INVOKE, INVOKE ACK, LOCATION CHANGE, LOCATION CHANGE ACK, MIGRATION, MIGRATION ACK">
+		<meta name="description" content="TETRA SS Call waiting (CW) PDU generator">
+		<title>TETRA SS - Call waiting (CW) PDU generator</title>
+		<script src="SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-34349720-4']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	</head>
+	<body class="darkblue">
+		<a href="http://www.xpro.co" target="_parent"><img alt="XPro Ltd logo" border="0" src="xpro.png" align="right" width="120"></a>
+		<form action="">
+			<p>
+				<span class="header">TETRA SS - Call waiting (CW) PDU generator</span>
+				<br>Copyright @ <a href="http://www.xpro.co/" target="_parent">XPro Ltd</a> 2012
+			</p>
+			<table>
+				<colgroup><col width="160">
+				</colgroup><tbody><tr>
+					<th class="h" align="right"> Information element</th><th class="h" align="left">Value</th>
+				</tr>
+				<tr>
+					<th align="left">SS Type</th><th align="left">SS-CW</th>
+				</tr>
+				<tr>
+					<th align="right" nowrap="nowrap">SS-CW PDU type</th>
+					<td><select id="CW_PDU_type" onchange="document.getElementById('SS_Proto_IFrame').src = GetValue(this.form.CW_PDU_type.value,0)">
+								<option selected="selected" value="SS_CW/SS_CW_ACTIVATE.htm,            00101">ACTIVATE
+								</option><option value="SS_CW/SS_CW_ACTIVATE_ACK.htm,        00110">ACTIVATE ACK
+								</option><option value="SS_CW/SS_CW_DEACTIVATE.htm,          00111">DEACTIVATE
+								</option><option value="SS_CW/SS_CW_DEACTIVATE_ACK.htm,      01000">DEACTIVATE ACK
+								</option><option value="SS_CW/SS_CW_INVOCATION_FAILURE.htm,  01001">INVOCATION FAILURE
+								</option><option value="SS_CW/SS_CW_INVOKE.htm,              01010">INVOKE
+								</option><option value="SS_CW/SS_CW_INVOKE_ACK.htm,          01011">INVOKE ACK
+								</option><option value="SS_CW/SS_CW_LOCATION_CHANGE.htm,     01100">LOCATION CHANGE
+								</option><option value="SS_CW/SS_CW_LOCATION_CHANGE_ACK.htm, 01101">LOCATION CHANGE ACK
+								</option><option value="SS_CW/SS_CW_MIGRATION.htm,           01110">MIGRATION
+								</option><option value="SS_CW/SS_CW_MIGRATION_ACK.htm,       01111">MIGRATION ACK
+						</option></select></td>                                                                         
+				</tr>
+			</tbody></table>
+			<iframe name="SS_Proto_IFrame" id="SS_Proto_IFrame" onload="Autosize_IFrame(this)" src="SS_CW/SS_CW_ACTIVATE.htm" frameborder="0" height="100" width="500"></iframe>
+			<table>
+			<tbody><tr><th>
+			<p>
+				<input value="Generate" onclick="WritePDUToCtrl(this.form.PDU_Hex_Value)" type="button">                
+				<input value="Write To File" onclick="WritePDUToFile(this.form.FileName.value)" type="button">
+				<input id="FileName" value="C:\Temp\SS_CW_PDUs" size="32">
+				<br>
+				User Header:  <input id="UserHeader" size="51">
+				Protocol: <select id="Protocol" name="Protocol">
+								<option selected="selected" value="0">SS Only
+								</option><option value="1">LLC/D-FACILITY
+						</option></select>
+				<br>
+				<textarea id="PDU_Hex_Value" rows="4" cols="60"></textarea>
+			</p>
+			<p><a href="SS_PDU_Generator.htm">SS Home</a></p>            
+			</th></tr>
+			</tbody></table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+	
+			function GetPDU_Hex()
+			{
+				Protocol   = document.getElementById('Protocol').value;
+
+				pdu_bin_value = "";                
+				ss_pdu_header = "";
+				ss_pdu_value = "";
+				
+				if (Protocol == "1") // LLC
+				{
+					pdu_bin_value += "0010"; // BL-UDATA
+					pdu_bin_value += "010"; // CMCE
+					pdu_bin_value += "10000"; // D-FACILITY
+					pdu_bin_value += "0001"; // 1 SS PDU
+				}
+				
+				ss_pdu_header += "001011";
+				ss_pdu_header += GetValue(document.getElementById('CW_PDU_type').value,1); 
+				
+				if (Protocol == "1") // LLC
+				{
+					ss_pdu_value = document.getElementById("SS_Proto_IFrame").contentWindow.GetPDUValue(ss_pdu_header);
+					pdu_bin_value += dec2bin(ss_pdu_value.length,11);
+					pdu_bin_value += ss_pdu_value;
+					pdu_bin_value += "0"; //No Type 2 Elements
+				}
+				else
+				{
+					pdu_bin_value = document.getElementById("SS_Proto_IFrame").contentWindow.GetPDUValue(ss_pdu_header);
+				}
+								
+				return document.getElementById('UserHeader').value + bin2hex(pdu_bin_value);
+			}        
+
+			function WritePDUToCtrl(ctrl)
+			{
+				pdu_hex_value = GetPDU_Hex();
+				ctrl.value = pdu_hex_value;
+			}
+
+			function WritePDUToFile(filename)
+			{
+				Protocol   = document.getElementById('Protocol').value;
+				if (Protocol == "1") // LLC
+				{
+					filename += ".ds1";
+				}
+				else
+					filename += ".ss";
+								
+				pdu_hex_value = GetPDU_Hex();
+				document.getElementById('PDU_Hex_Value').value = pdu_hex_value;
+				WriteToFile(filename,pdu_hex_value);
+			}
+		</script>
+	</body>
+</html>

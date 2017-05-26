@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<HEAD>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<meta name="keywords" content="Tetra, TETRA SS, Tetra Supplementary Services, PDU Genrator, Tetra stack, Tetra protocol, Call Forwarding, CF, ACTIVATE, ACTIVATE ACK, DEACTIVATE, DEACTIVATE ACK, DISABLE, DISABLE ACK, ENABLE, ENABLE ACK, NTERROGATE2, NTERROGATE2 ACK, NFORM2, NFORM4, NFORM5, NFORM8, NFORM9, NTERROGATE, NTERROGATE ACK, REPORT">
+		<meta name="description" content="TETRA SS Call Forwarding (CF) PDU generator">
+		<title>TETRA SS - Call Forwarding (CF) PDU generator</TITLE>
+		<SCRIPT SRC="SS_Util.js" LANGUAGE="JavaScript"></SCRIPT>
+		<LINK href="SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-34349720-4']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	</head>
+	<body class="darkblue">
+		<a href="http://www.xpro.co" target="_parent"><img alt="XPro Ltd logo" border="0" src="xpro.png" align="right" width="120"></a>
+		<form action="">
+			<p>
+				<span class="header">TETRA SS - Call Forwarding (CF) PDU generator</span>
+				<br>Copyright &#64; <a href="http://www.xpro.co" target="_parent">XPro Ltd</a> 2012
+			</p>
+			<table>
+				<col width="160">
+				<tr>
+					<th class="h" align="right"> Information element</th><th class="h" align="left">Value</th>
+				</tr>
+				<tr>
+					<th align="left">SS Type</th><th align="left">SS-CF</th>
+				</tr>
+				<tr>
+					<th nowrap align="right">SS-CF PDU type</th>
+					<td><select id="CF_PDU_type" onchange="this.form.PDU_Hex_Value.value = ''; document.getElementById('SS_Proto_IFrame').src = GetValue(this.form.CF_PDU_type.value,0)">
+								<option value="SS_CF/SS_CF_ACTIVATE.htm,            00101">ACTIVATE
+								<option value="SS_CF/SS_CF_ACTIVATE_ACK.htm,        00110">ACTIVATE ACK
+								<option value="SS_CF/SS_CF_DEACTIVATE.htm,          00111">DEACTIVATE
+								<option value="SS_CF/SS_CF_DEACTIVATE_ACK.htm,      01000">DEACTIVATE ACK
+								<option value="SS_CF/SS_CF_DISABLE.htm,             01001">DISABLE
+								<option value="SS_CF/SS_CF_DISABLE_ACK.htm,         01010">DISABLE ACK
+								<option value="SS_CF/SS_CF_ENABLE.htm,              01011">ENABLE
+								<option value="SS_CF/SS_CF_ENABLE_ACK.htm,          01100">ENABLE ACK
+								<option value="SS_CF/SS_CF_INTERROGATE2.htm,        01101">INTERROGATE2
+								<option value="SS_CF/SS_CF_INTERROGATE2_ACK.htm,    01110">INTERROGATE2 ACK
+								<option value="SS_CF/SS_CF_INFORM2.htm,             10000">INFORM2
+								<option value="SS_CF/SS_CF_INFORM4.htm,             10001">INFORM4
+								<option value="SS_CF/SS_CF_INFORM5.htm,             10010">INFORM5
+								<option value="SS_CF/SS_CF_INFORM8.htm,             10101">INFORM8
+								<option value="SS_CF/SS_CF_INFORM9.htm,             10110">INFORM9
+								<option value="SS_CF/SS_CF_INTERROGATE.htm,         10111">INTERROGATE
+								<option value="SS_CF/SS_CF_INTERROGATE_ACK.htm,     11000">INTERROGATE ACK
+								<option value="SS_CF/SS_CF_REPORT.htm,              11001">REPORT
+						</select></td>                                                                         
+				</tr>
+			</table>
+			<iframe name="SS_Proto_IFrame" id="SS_Proto_IFrame" onLoad="Autosize_IFrame(this)" frameborder="0" height="308" width="500" src="SS_CF/SS_CF_ACTIVATE.htm"></iframe>
+			<table>
+			<tr><th>
+			<p>
+				<input type="button" value="Generate" onClick="WritePDUToCtrl(this.form.PDU_Hex_Value)">                
+				<input type="button" value="Write To File" onClick="WritePDUToFile(this.form.FileName.value)">
+				<input id="FileName" value="C:\Temp\SS_CF_PDUs.ss" size=32 >
+				<br>
+				User Header:  <input id="UserHeader" value="" size=51 NAME="UserHeader"><br>
+				<textarea id="PDU_Hex_Value" rows="4" cols="60"></textarea>
+			</p>
+			<p><A HREF="SS_PDU_Generator.htm">SS Home</A></p>            
+			</th></tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+	
+			function GetPDU_Hex()
+			{
+				pdu_bin_value = dec2bin(4,6);
+				pdu_bin_value += GetValue(document.getElementById('CF_PDU_type').value,1); 
+				
+				return document.getElementById('UserHeader').value + document.getElementById("SS_Proto_IFrame").contentWindow.GetHexValue(pdu_bin_value);
+			}        
+
+			function WritePDUToCtrl(ctrl)
+			{
+				pdu_hex_value = GetPDU_Hex();
+				ctrl.value = pdu_hex_value;
+			}
+
+			function WritePDUToFile(filename)
+			{
+				pdu_hex_value = GetPDU_Hex();
+				document.getElementById('PDU_Hex_Value').value = pdu_hex_value;
+				WriteToFile(filename,pdu_hex_value);
+			}
+		
+		</script>
+	</body>
+</HTML>

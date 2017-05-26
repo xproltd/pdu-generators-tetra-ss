@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-AS-INVOKE</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_AS_09_Table">
+				<tr>
+					<th align="left">
+						Selected area number:
+					</th>
+					<td>
+						<input id="Selected_area_number" value="00110110" size=8 maxlength=8 onkeypress="return AllowDigitOnly(event)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						SS-AS inhibition (requested/) supported:
+					</th>
+					<td>
+						<select id="SS_AS_inhibition_requested_supported">
+							<option value="0">SS-AS inhibition for calling/important participating user not requested/not supported
+							<option value="1">SS-AS inhibition for calling/important participating user requested/supported
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Selected_area_number = document.getElementById('Selected_area_number').value;
+				SS_AS_inhibition_requested_supported = document.getElementById('SS_AS_inhibition_requested_supported').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				while (Selected_area_number.length < 8)
+				{
+					Selected_area_number = "0" + Selected_area_number;
+				}
+				
+				pdu_bin_value += Selected_area_number;
+				pdu_bin_value += dec2bin(SS_AS_inhibition_requested_supported,1);
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+				
+			}
+			function AllowDigitOnly(char)
+			{
+					var charCode = (char.which) ? char.which : event.keyCode
+					if (charCode < 48 || charCode > 49)
+							return false;
+					return true;
+			}
+		</script>
+	</body>
+</html>

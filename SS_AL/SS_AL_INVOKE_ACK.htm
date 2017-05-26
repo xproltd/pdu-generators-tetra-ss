@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <HEAD>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>SS-AL-INVOKE ACK</TITLE>
+        <SCRIPT SRC="../SS_Util.js" language="JavaScript" type="text/JavaScript"></SCRIPT>
+        <LINK href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+    </HEAD>
+    <body class="PDU_page">        
+        <form id="Form1" action="">
+            <table ID="Table1">
+                    <tr>                    
+                        <th align="left">Result of invocation by user</th>
+                        <td>
+                            <select ID="ResultOfInvocation">                          
+	                            <option value="0" >Accepted
+	                            <option value="3" >Affected user busy
+	                            <option value="8" >Rejected for undefined reason
+	                        </select>              
+                        </td>
+                    </tr>
+            </table>
+        </form>
+        <script language="JavaScript" type="text/JavaScript">
+    
+            function GetPDUValue(pdu_header)
+            {
+                //Get Information Element values
+                ResultOfInvocation   = document.getElementById('ResultOfInvocation').value;                
+
+                //Build PDU
+                
+                pdu_bin_value = pdu_header;
+                
+                pdu_bin_value += dec2bin(ResultOfInvocation,4);
+                                                
+                return pdu_bin_value;
+            }                        
+                                                
+        </script>
+    </body>
+</HTML>

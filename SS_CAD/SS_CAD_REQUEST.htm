@@ -1,0 +1,866 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CAD-REQUEST</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_CAD_18_Table">
+				<tr>
+					<th align="left">
+						SS-CAD intercepting SwMI call identifier:
+					</th>
+					<td>
+						<input id="SS_CAD_intercepting_SwMI_call_identifier" value="" size=8>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interception cause:
+					</th>
+					<td>
+						<select id="Interception_cause">
+							<option value="00000" >Reason not defined
+							<option value="00001" >Restricted basic service
+							<option selected value="00010" >Restricted destination address
+							<option value="00100" >Restricted source address
+							<option value="01000" >Restricted area
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Range type for restricted users:
+					</th>
+					<td>
+						<select id="Range_type_for_restricted_users">
+							<== "15"="1" >1 Element
+							<option value="2" >2 Elements
+							<option value="3" >3 Elements
+							<option value="4" >4 Elements
+							<option value="5" >5 Elements
+							<option value="6" >6 Elements
+							<option value="7" >7 Elements
+							<option value="8" >8 Elements
+							<option value="9" >9 Elements
+							<option value="10">10 Elements
+							<option value="11">11 Elements
+							<option value="12">12 Elements
+							<option value="13">13 Elements
+							<option value="14">14 Elements
+							<option value="15">Range of Elements
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Restricted user address type:
+					</th>
+					<td>
+						<select id="Restricted_user_address_type" onChange="OnChange_Restricted_user_address_type(this.form)">
+							<option value="1">SSI
+							<option value="2">TSI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Restricted user SSI:
+					</th>
+					<td>
+						<input id="Restricted_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Restricted user extension:</th>
+					<td>
+						MCC: <input disabled id="Restricted_user_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Restricted_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Type of restriction change:
+					</th>
+					<td>
+						<select id="Type_of_restriction_change">
+							<option value="0">No modification of the actual restriction value
+							<option value="1">Delete following specified restrictions
+							<option value="2">Delete all restrictions
+							<option value="3">Add following specified restrictions
+							<option value="4">Add restrictions to all elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Activation type:
+					</th>
+					<td>
+						<select id="Activation_type">
+							<option value="0">Not activated
+							<option value="1">Activated
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interception type:
+					</th>
+					<td>
+						<select id="Interception_type">
+							<option value="0">Immediate set-up
+							<option value="1">Dispatcher requested set-up
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Basic service restriction - called party:
+					</th>
+					<td>
+						<select id="Basic_service_restriction_called_party">
+							<option value="0">No restrictions
+							<option value="1">Speech service
+							<option value="2">Data service
+							<option value="3">Speech and data service
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Basic service restriction - calling party:
+					</th>
+					<td>
+						<select id="Basic_service_restriction_calling_party">
+							<option value="0">No restrictions
+							<option value="1">Speech service
+							<option value="2">Data service
+							<option value="3">Speech and data service
+						</select>
+					</td>
+				</tr>
+
+				<tr>
+					<th align="left">
+						Range type for dispatchers:
+					</th>
+					<td>
+						<select id="T2_Range_type_for_dispatchers" onChange="OnChange_T2_Range_type_for_dispatchers(this.form)">
+							<option selected value="0">T2 Not Present
+							<option value="1">T2 Present
+						</select>
+						<br>
+						<select disabled id="Range_type_for_dispatchers" onChange="OnChange_Range_type_for_dispatchers(this.form)">
+							<option value="0" >No Element
+							<option selected value="1" >1 Element
+							<option value="2" >2 Elements
+							<option value="3" >3 Elements
+							<option value="4" >4 Elements
+							<option value="5" >5 Elements
+							<option value="6" >6 Elements
+							<option value="7" >7 Elements
+							<option value="8" >8 Elements
+							<option value="9" >9 Elements
+							<option value="10">10 Elements
+							<option value="11">11 Elements
+							<option value="12">12 Elements
+							<option value="13">13 Elements
+							<option value="14">14 Elements
+							<option value="15">Range of Elements
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Dispatcher address type:
+					</th>
+					<td>
+						<select disabled id="Dispatcher_address_type" onChange="OnChange_Dispatcher_address_type(this.form)">
+							<option value="1">SSI
+							<option value="2">TSI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Dispatcher user SSI:
+					</th>
+					<td>
+						<input disabled id="Dispatcher_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Dispatcher extension:</th>
+					<td>
+						MCC: <input disabled id="Dispatcher_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Dispatcher_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Range type for restricted sources:
+					</th>
+					<td>
+						<select id="T2_Range_type_for_restricted_sources" onChange="OnChange_T2_Range_type_for_restricted_sources(this.form)">
+							<option selected value="0">T2 Not Present
+							<option value="1">T2 Present
+						</select>
+						<br>
+						<select disabled id="Range_type_for_restricted_sources" onChange="OnChange_Range_type_for_restricted_sources(this.form)">
+							<option value="0" >No Element
+							<option selected value="1" >1 Element
+							<option value="2" >2 Elements
+							<option value="3" >3 Elements
+							<option value="4" >4 Elements
+							<option value="5" >5 Elements
+							<option value="6" >6 Elements
+							<option value="7" >7 Elements
+							<option value="8" >8 Elements
+							<option value="9" >9 Elements
+							<option value="10">10 Elements
+							<option value="11">11 Elements
+							<option value="12">12 Elements
+							<option value="13">13 Elements
+							<option value="14">14 Elements
+							<option value="15">Range of Elements
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Restricted source address type:
+					</th>
+					<td>
+						<select disabled id="Restricted_source_address_type" onChange="OnChange_Restricted_source_address_type(this.form)">
+							<option value="1">SSI
+							<option value="2">TSI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Restricted source user SSI:
+					</th>
+					<td>
+						<input disabled id="Restricted_source_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Restricted source extension:</th>
+					<td>
+						MCC: <input disabled id="Restricted_source_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Restricted_source_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Range type for restricted destinations:
+					</th>
+					<td>
+						<select id="T2_Range_type_for_restricted_destinations" onChange="OnChange_T2_Range_type_for_restricted_destinations(this.form)">
+							<option selected value="0">T2 Not Present
+							<option value="1">T2 Present
+						</select>
+						<br>
+						<select disabled id="Range_type_for_restricted_destinations" onChange="OnChange_Range_type_for_restricted_destinations(this.form)">
+							<option value="0" >No Element
+							<option selected value="1" >1 Element
+							<option value="2" >2 Elements
+							<option value="3" >3 Elements
+							<option value="4" >4 Elements
+							<option value="5" >5 Elements
+							<option value="6" >6 Elements
+							<option value="7" >7 Elements
+							<option value="8" >8 Elements
+							<option value="9" >9 Elements
+							<option value="10">10 Elements
+							<option value="11">11 Elements
+							<option value="12">12 Elements
+							<option value="13">13 Elements
+							<option value="14">14 Elements
+							<option value="15">Range of Elements
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Restricted destination address type:
+					</th>
+					<td>
+						<select disabled id="Restricted_destination_address_type" onChange="OnChange_Restricted_destination_address_type(this.form)">
+							<option value="1">SSI
+							<option value="2">TSI
+							<option value="3">External
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Restricted destination user SSI:
+					</th>
+					<td>
+						<input disabled id="Restricted_destination_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Restricted destination extension:</th>
+					<td>
+						MCC: <input disabled id="Restricted_destination_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Restricted_destination_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Restricted destination external subscriber number:</th>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number type:</th>
+					<td>
+						<select disabled id="Number_type">
+							<option selected value="0">All calls
+							<option value="1">Only international calls restricted
+							<option value="2">Only emergency calls allowed
+							<option value="3">Specific number restricted
+							<option value="4">Number starting with the following digits restricted
+							<option value="5">Specific number allowed
+							<option value="6">Number starting with the following digits allowed
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number of external subscriber digits:</th>
+					<td>
+						<input disabled id="Number_of_external_subscriber_digits" value="13" size=2 onChange="OnChange_Number_of_external_subscriber_digits(this.form)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;External subscriber digits:</th>
+					<td>
+						<input disabled id="External_subscriber_digits" value="+#*1234567890" size=20>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Range type for restricted areas:
+					</th>
+					<td>
+						<select id="T2_Range_type_for_restricted_areas" onChange="OnChange_T2_Range_type_for_restricted_areas(this.form)">
+							<option selected value="0">T2 Not Present
+							<option value="1">T2 Present
+						</select>
+						<br>
+						<select disabled id="Range_type_for_restricted_areas" onChange="OnChange_Range_type_for_restricted_areas(this.form)">
+							<option value="0" >No Element
+							<option selected value="1" >1 Element
+							<option value="2" >2 Elements
+							<option value="3" >3 Elements
+							<option value="4" >4 Elements
+							<option value="5" >5 Elements
+							<option value="6" >6 Elements
+							<option value="7" >7 Elements
+							<option value="8" >8 Elements
+							<option value="9" >9 Elements
+							<option value="10">10 Elements
+							<option value="11">11 Elements
+							<option value="12">12 Elements
+							<option value="13">13 Elements
+							<option value="14">14 Elements
+							<option value="15">Range of Elements
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Restricted area (4 bit, decimal 0-15):
+					</th>
+					<td>
+						<input disabled id="Restricted_area" value="3" size=5>
+					</td>
+				</tr>
+				
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Range_type_for_restricted_users = document.getElementById('Range_type_for_restricted_users').value;
+				Restricted_user_address_type = document.getElementById('Restricted_user_address_type').value;
+				Restricted_user_SSI = document.getElementById('Restricted_user_SSI').value;
+				Restricted_user_extension_MCC = document.getElementById('Restricted_user_extension_MCC').value;
+				Restricted_user_extension_MNC = document.getElementById('Restricted_user_extension_MNC').value;
+				Type_of_restriction_change = document.getElementById('Type_of_restriction_change').value;
+				Activation_type = document.getElementById('Activation_type').value;
+				Interception_type = document.getElementById('Interception_type').value;
+				Basic_service_restriction_called_party = document.getElementById('Basic_service_restriction_called_party').value;
+				Basic_service_restriction_calling_party = document.getElementById('Basic_service_restriction_calling_party').value;
+
+				//Optional IEs
+				T2_Range_type_for_dispatchers = document.getElementById('T2_Range_type_for_dispatchers').value;
+				Range_type_for_dispatchers = document.getElementById('Range_type_for_dispatchers').value;
+				Dispatcher_address_type = document.getElementById('Dispatcher_address_type').value;
+				Dispatcher_SSI = document.getElementById('Dispatcher_SSI').value;
+				Dispatcher_extension_MCC = document.getElementById('Dispatcher_extension_MCC').value;
+				Dispatcher_extension_MNC = document.getElementById('Dispatcher_extension_MNC').value;
+
+				T2_Range_type_for_restricted_sources = document.getElementById('T2_Range_type_for_restricted_sources').value;
+				Range_type_for_restricted_sources = document.getElementById('Range_type_for_restricted_sources').value;
+				Restricted_source_address_type = document.getElementById('Restricted_source_address_type').value;
+				Restricted_source_SSI = document.getElementById('Restricted_source_SSI').value;
+				Restricted_source_extension_MCC = document.getElementById('Restricted_source_extension_MCC').value;
+				Restricted_source_extension_MNC = document.getElementById('Restricted_source_extension_MNC').value;
+
+				T2_Range_type_for_restricted_destinations = document.getElementById('T2_Range_type_for_restricted_destinations').value;
+				Range_type_for_restricted_destinations = document.getElementById('Range_type_for_restricted_destinations').value;
+				Restricted_destination_address_type = document.getElementById('Restricted_destination_address_type').value;
+				Restricted_destination_SSI = document.getElementById('Restricted_destination_SSI').value;
+				Restricted_destination_extension_MCC = document.getElementById('Restricted_destination_extension_MCC').value;
+				Restricted_destination_extension_MNC = document.getElementById('Restricted_destination_extension_MNC').value;
+				Number_type = document.getElementById('Number_type').value;
+				Number_of_external_subscriber_digits = document.getElementById('Number_of_external_subscriber_digits').value;
+				External_subscriber_digits = document.getElementById('External_subscriber_digits').value;
+
+				T2_Range_type_for_restricted_areas = document.getElementById('T2_Range_type_for_restricted_areas').value;
+				Range_type_for_restricted_areas = document.getElementById('Range_type_for_restricted_areas').value;
+				Restricted_area = document.getElementById('Restricted_area').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(Range_type_for_restricted_users,4);
+				
+				Restricted_user_identity = dec2bin(Restricted_user_address_type,2);
+				if (Restricted_user_address_type == "1")
+				{
+					Restricted_user_identity += dec2bin(Restricted_user_SSI,24);
+				}
+				else if (Restricted_user_address_type == "2")
+				{
+					Restricted_user_identity += dec2bin(Restricted_user_SSI,24);
+					Restricted_user_identity += dec2bin(Restricted_user_extension_MCC,10);
+					Restricted_user_identity += dec2bin(Restricted_user_extension_MNC,14);
+				}
+				
+				if (Range_type_for_restricted_users == "15")
+				{
+					pdu_bin_value += Restricted_user_identity;
+					pdu_bin_value += Restricted_user_identity;
+				}
+				else
+				{
+					for (i=0; i<Range_type_for_restricted_users; i+=1)
+					{
+						pdu_bin_value += Restricted_user_identity;
+					}
+				}
+				
+				pdu_bin_value += dec2bin(Type_of_restriction_change,4);
+				pdu_bin_value += dec2bin(Activation_type,1);
+				pdu_bin_value += dec2bin(Interception_type,1);
+				pdu_bin_value += dec2bin(Basic_service_restriction_called_party,2);
+				pdu_bin_value += dec2bin(Basic_service_restriction_calling_party,2);
+				
+				T2_option_bit = "0";
+				T2_bin_value = "";
+				
+				if (T2_Range_type_for_dispatchers == "1")
+				{
+					T2_option_bit = "1";
+					//Add the presence bit
+					T2_bin_value += "1";
+					
+					T2_bin_value += dec2bin(Range_type_for_dispatchers,4);
+					Dispatcher_identity = dec2bin(Dispatcher_address_type,2);
+					
+					if (Dispatcher_address_type == "1")
+					{
+						Dispatcher_identity += dec2bin(Dispatcher_SSI,24);
+					}
+					else if (Dispatcher_address_type == "2")
+					{
+						Dispatcher_identity += dec2bin(Dispatcher_SSI,24);
+						Dispatcher_identity += dec2bin(Dispatcher_extension_MCC,10);
+						Dispatcher_identity += dec2bin(Dispatcher_extension_MNC,14);
+					}
+					//Add the dispatchers identity to T2_bin_value
+					if (Range_type_for_dispatchers == "15")
+					{
+						T2_bin_value += Dispatcher_identity;
+						T2_bin_value += Dispatcher_identity;
+					}
+					else
+					{
+						for (i=0; i<Range_type_for_dispatchers; i+=1)
+						{
+							T2_bin_value += Dispatcher_identity;
+						}
+					}
+				}
+				else
+				{
+					T2_bin_value += "0";
+				}
+				
+				if (T2_Range_type_for_restricted_sources == "1")
+				{
+					T2_option_bit = "1";
+					//Add the presence bit
+					T2_bin_value += "1";
+					
+					T2_bin_value += dec2bin(Range_type_for_restricted_sources,4);
+					Restricted_source_identity = dec2bin(Restricted_source_address_type,2);
+					
+					if (Restricted_source_address_type == "1")
+					{
+						Restricted_source_identity += dec2bin(Restricted_source_SSI,24);
+					}
+					else if (Restricted_source_address_type == "2")
+					{
+						Restricted_source_identity += dec2bin(Restricted_source_SSI,24);
+						Restricted_source_identity += dec2bin(Restricted_source_extension_MCC,10);
+						Restricted_source_identity += dec2bin(Restricted_source_extension_MNC,14);
+					}
+					//Add the restricted sources identity to T2_bin_value
+					if (Range_type_for_restricted_sources == "15")
+					{
+						T2_bin_value += Restricted_source_identity;
+						T2_bin_value += Restricted_source_identity;
+					}
+					else
+					{
+						for (i=0; i<Range_type_for_restricted_sources; i+=1)
+						{
+							T2_bin_value += Restricted_source_identity;
+						}
+					}
+				}
+				else
+				{
+					T2_bin_value += "0";
+				}
+
+				if (T2_Range_type_for_restricted_destinations == "1")
+				{
+					T2_option_bit = "1";
+					//Add the presence bit
+					T2_bin_value += "1";
+					
+					T2_bin_value += dec2bin(Range_type_for_restricted_destinations,4);
+					Restricted_destination_identity = dec2bin(Restricted_destination_address_type,2);
+					
+					if (Restricted_destination_address_type == "1")
+					{
+						Restricted_destination_identity += dec2bin(Restricted_destination_SSI,24);
+					}
+					else if (Restricted_destination_address_type == "2")
+					{
+						Restricted_destination_identity += dec2bin(Restricted_destination_SSI,24);
+						Restricted_destination_identity += dec2bin(Restricted_destination_extension_MCC,10);
+						Restricted_destination_identity += dec2bin(Restricted_destination_extension_MNC,14);
+					}
+					
+					else if (Restricted_destination_address_type == "3")
+					{
+						Restricted_destination_identity += dec2bin(Number_type,3);
+						Restricted_destination_identity += dec2bin(Number_of_external_subscriber_digits,5);
+						var Number_of_digits = parseInt(Number_of_external_subscriber_digits,10);
+						var digits = External_subscriber_digits.substring(0,Number_of_digits);
+						Restricted_destination_identity += digit2bin(digits);
+					}
+					
+					
+					//Add the restricted destinations identity to T2_bin_value
+					if (Range_type_for_restricted_destinations == "15")
+					{
+						T2_bin_value += Restricted_destination_identity;
+						T2_bin_value += Restricted_destination_identity;
+					}
+					else
+					{
+						for (i=0; i<Range_type_for_restricted_destinations; i+=1)
+						{
+							T2_bin_value += Restricted_destination_identity;
+						}
+					}
+				}
+				else
+				{
+					T2_bin_value += "0";
+				}
+
+				if (T2_Range_type_for_restricted_areas == "1")
+				{
+					T2_option_bit = "1";
+					//Add the presence bit
+					T2_bin_value += "1";
+					
+					//Add the restricted areas value(s) to T2_bin_value
+					if (Range_type_for_restricted_areas == "15")
+					{
+						T2_bin_value += dec2bin(Restricted_area,4);
+						T2_bin_value += dec2bin(Restricted_area,4);
+					}
+					else
+					{
+						for (i=0; i<Range_type_for_restricted_areas; i+=1)
+						{
+							T2_bin_value += dec2bin(Restricted_area,4);
+						}
+					}
+				}
+				else
+				{
+					T2_bin_value += "0";
+				}
+				
+				pdu_bin_value += T2_option_bit;
+				if (T2_option_bit == "1")
+				{
+					pdu_bin_value += T2_bin_value;
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Restricted_user_address_type(form)
+			{
+				Restricted_user_address_type = document.getElementById('Restricted_user_address_type').value;
+				if (Restricted_user_address_type == "1") 
+				{
+					document.getElementById('Restricted_user_SSI').disabled = false;
+					document.getElementById('Restricted_user_extension_MCC').disabled = true;
+					document.getElementById('Restricted_user_extension_MNC').disabled = true;
+				}
+				else
+				if (Restricted_user_address_type == "2") 
+				{
+					document.getElementById('Restricted_user_SSI').disabled = false;
+					document.getElementById('Restricted_user_extension_MCC').disabled = false;
+					document.getElementById('Restricted_user_extension_MNC').disabled = false;
+				}
+			}
+			function OnChange_T2_Range_type_for_dispatchers(form)
+			{
+				T2_Range_type_for_dispatchers = document.getElementById('T2_Range_type_for_dispatchers').value;
+				if (T2_Range_type_for_dispatchers == "1")
+				{
+					document.getElementById('Range_type_for_dispatchers').disabled = false;
+					document.getElementById('Dispatcher_address_type').disabled = false;
+					document.getElementById('Dispatcher_SSI').disabled = false;
+					document.getElementById('Dispatcher_extension_MCC').disabled = false;
+					document.getElementById('Dispatcher_extension_MNC').disabled = false;
+					OnChange_Range_type_for_dispatchers(form)
+				}
+				else
+				{
+					document.getElementById('Range_type_for_dispatchers').disabled = true;
+					document.getElementById('Dispatcher_address_type').disabled = true;
+					document.getElementById('Dispatcher_SSI').disabled = true;
+					document.getElementById('Dispatcher_extension_MCC').disabled = true;
+					document.getElementById('Dispatcher_extension_MNC').disabled = true;
+				}
+			}
+			function OnChange_Range_type_for_dispatchers(form)
+			{
+				Range_type_for_dispatchers = document.getElementById('Range_type_for_dispatchers').value;
+				if (Range_type_for_dispatchers == "0")
+				{
+					document.getElementById('Dispatcher_address_type').disabled = true;
+					document.getElementById('Dispatcher_SSI').disabled = true;
+					document.getElementById('Dispatcher_extension_MCC').disabled = true;
+					document.getElementById('Dispatcher_extension_MNC').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Dispatcher_address_type').disabled = false;
+					document.getElementById('Dispatcher_SSI').disabled = false;
+					OnChange_Dispatcher_address_type(form);
+				}
+			}
+			function OnChange_Dispatcher_address_type(form)
+			{
+				Dispatcher_address_type = document.getElementById('Dispatcher_address_type').value;
+				if (Dispatcher_address_type == "1") 
+				{
+					document.getElementById('Dispatcher_SSI').disabled = false;
+					document.getElementById('Dispatcher_extension_MCC').disabled = true;
+					document.getElementById('Dispatcher_extension_MNC').disabled = true;
+				}
+				else
+				if (Dispatcher_address_type == "2") 
+				{
+					document.getElementById('Dispatcher_SSI').disabled = false;
+					document.getElementById('Dispatcher_extension_MCC').disabled = false;
+					document.getElementById('Dispatcher_extension_MNC').disabled = false;
+				}
+			}
+			function OnChange_T2_Range_type_for_restricted_sources(form)
+			{
+				T2_Range_type_for_restricted_sources = document.getElementById('T2_Range_type_for_restricted_sources').value;
+				if (T2_Range_type_for_restricted_sources == "1")
+				{
+					document.getElementById('Range_type_for_restricted_sources').disabled = false;
+					document.getElementById('Restricted_source_address_type').disabled = false;
+					document.getElementById('Restricted_source_SSI').disabled = false;
+					document.getElementById('Restricted_source_extension_MCC').disabled = false;
+					document.getElementById('Restricted_source_extension_MNC').disabled = false;
+					OnChange_Range_type_for_restricted_sources(form)
+				}
+				else
+				{
+					document.getElementById('Range_type_for_restricted_sources').disabled = true;
+					document.getElementById('Restricted_source_address_type').disabled = true;
+					document.getElementById('Restricted_source_SSI').disabled = true;
+					document.getElementById('Restricted_source_extension_MCC').disabled = true;
+					document.getElementById('Restricted_source_extension_MNC').disabled = true;
+				}
+			}
+			function OnChange_Range_type_for_restricted_sources(form)
+			{
+				Range_type_for_restricted_sources = document.getElementById('Range_type_for_restricted_sources').value;
+				if (Range_type_for_restricted_sources == "0")
+				{
+					document.getElementById('Restricted_source_address_type').disabled = true;
+					document.getElementById('Restricted_source_SSI').disabled = true;
+					document.getElementById('Restricted_source_extension_MCC').disabled = true;
+					document.getElementById('Restricted_source_extension_MNC').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Restricted_source_address_type').disabled = false;
+					document.getElementById('Restricted_source_SSI').disabled = false;
+					OnChange_Restricted_source_address_type(form);
+				}
+			}
+			function OnChange_Restricted_source_address_type(form)
+			{
+				Restricted_source_address_type = document.getElementById('Restricted_source_address_type').value;
+				if (Restricted_source_address_type == "1") 
+				{
+					document.getElementById('Restricted_source_SSI').disabled = false;
+					document.getElementById('Restricted_source_extension_MCC').disabled = true;
+					document.getElementById('Restricted_source_extension_MNC').disabled = true;
+				}
+				else
+				if (Restricted_source_address_type == "2") 
+				{
+					document.getElementById('Restricted_source_SSI').disabled = false;
+					document.getElementById('Restricted_source_extension_MCC').disabled = false;
+					document.getElementById('Restricted_source_extension_MNC').disabled = false;
+				}
+			}
+			function OnChange_T2_Range_type_for_restricted_destinations(form)
+			{
+				T2_Range_type_for_restricted_destinations = document.getElementById('T2_Range_type_for_restricted_destinations').value;
+				if (T2_Range_type_for_restricted_destinations == "1")
+				{
+					document.getElementById('Range_type_for_restricted_destinations').disabled = false;
+					OnChange_Range_type_for_restricted_destinations(form)
+				}
+				else
+				{
+					document.getElementById('Range_type_for_restricted_destinations').disabled = true;
+					document.getElementById('Restricted_destination_address_type').disabled = true;
+					document.getElementById('Restricted_destination_SSI').disabled = true;
+					document.getElementById('Restricted_destination_extension_MCC').disabled = true;
+					document.getElementById('Restricted_destination_extension_MNC').disabled = true;
+					document.getElementById('Number_type').disabled = true;
+					document.getElementById('External_subscriber_digits').disabled = true;
+					document.getElementById('Number_of_external_subscriber_digits').disabled = true;
+				}
+			}
+			function OnChange_Range_type_for_restricted_destinations(form)
+			{
+				Range_type_for_restricted_destinations = document.getElementById('Range_type_for_restricted_destinations').value;
+				if (Range_type_for_restricted_destinations == "0")
+				{
+					document.getElementById('Restricted_destination_address_type').disabled = true;
+					document.getElementById('Restricted_destination_SSI').disabled = true;
+					document.getElementById('Restricted_destination_extension_MCC').disabled = true;
+					document.getElementById('Restricted_destination_extension_MNC').disabled = true;
+					document.getElementById('Number_type').disabled = true;
+					document.getElementById('External_subscriber_digits').disabled = true;
+					document.getElementById('Number_of_external_subscriber_digits').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Restricted_destination_address_type').disabled = false;
+					OnChange_Restricted_destination_address_type(form);
+				}
+			}
+			function OnChange_Restricted_destination_address_type(form)
+			{
+				Restricted_destination_address_type = document.getElementById('Restricted_destination_address_type').value;
+				if (Restricted_destination_address_type == "1")
+				{
+					document.getElementById('Restricted_destination_SSI').disabled = false;
+					document.getElementById('Restricted_destination_extension_MCC').disabled = true;
+					document.getElementById('Restricted_destination_extension_MNC').disabled = true;
+					document.getElementById('Number_type').disabled = true;
+					document.getElementById('External_subscriber_digits').disabled = true;
+					document.getElementById('Number_of_external_subscriber_digits').disabled = true;
+				}
+				else if (Restricted_destination_address_type == "2")
+				{
+					document.getElementById('Restricted_destination_SSI').disabled = false;
+					document.getElementById('Restricted_destination_extension_MCC').disabled = false;
+					document.getElementById('Restricted_destination_extension_MNC').disabled = false;
+					document.getElementById('Number_type').disabled = true;
+					document.getElementById('External_subscriber_digits').disabled = true;
+					document.getElementById('Number_of_external_subscriber_digits').disabled = true;
+				}
+				else if (Restricted_destination_address_type == "3")
+				{
+					document.getElementById('Restricted_destination_SSI').disabled = true;
+					document.getElementById('Restricted_destination_extension_MCC').disabled = true;
+					document.getElementById('Restricted_destination_extension_MNC').disabled = true;
+					document.getElementById('Number_type').disabled = false;
+					document.getElementById('External_subscriber_digits').disabled = false;
+					document.getElementById('Number_of_external_subscriber_digits').disabled = false;
+					OnChange_Number_of_external_subscriber_digits(form);
+				}
+			}
+			function OnChange_Number_of_external_subscriber_digits(form)
+			{
+				Number_of_external_subscriber_digits = document.getElementById('Number_of_external_subscriber_digits').value;
+				var var_external_subscriber_digits = "+#*12345678901234567890123456789";
+				
+				Number_of_digits = parseInt(Number_of_external_subscriber_digits,10);
+				if (Number_of_digits >= 32)
+				{
+					alert("Number of Digits between 0...31");
+					return;
+				}
+				External_subscriber_digits = var_external_subscriber_digits.substring(0,Number_of_digits);
+				document.getElementById('External_subscriber_digits').value = External_subscriber_digits;
+			}
+			function OnChange_T2_Range_type_for_restricted_areas(form)
+			{
+				T2_Range_type_for_restricted_areas = document.getElementById('T2_Range_type_for_restricted_areas').value;
+				if (T2_Range_type_for_restricted_areas == "1")
+				{
+					document.getElementById('Range_type_for_restricted_areas').disabled = false;
+					document.getElementById('Restricted_area').disabled = false;
+					OnChange_Range_type_for_restricted_destinations(form)
+				}
+				else
+				{
+					document.getElementById('Range_type_for_restricted_areas').disabled = true;
+					document.getElementById('Restricted_area').disabled = true;
+				}
+			}
+			function OnChange_Range_type_for_restricted_areas(form)
+			{
+				Range_type_for_restricted_areas = document.getElementById('Range_type_for_restricted_areas').value;
+				if (Range_type_for_restricted_areas == "0")
+				{
+					document.getElementById('Restricted_area').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Restricted_area').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

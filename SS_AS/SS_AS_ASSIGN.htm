@@ -1,0 +1,432 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-AS-ASSIGN</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_AS_01_Table">
+				<tr>
+					<th align="left">
+						Range type for selected area number:
+					</th>
+					<td>
+						<select id="Range_type_for_selected_area_number">
+							<option selected value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Selected area number:
+					</th>
+					<td>
+						<input id="Selected_area_number" value="00110110" size=8 maxlength=8 onkeypress="return AllowDigitOnly(event)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Area type:
+					</th>
+					<td>
+						<select id="Area_type" onChange="OnChange_Area_type(this.form)">
+							<option value="000">Area by site list
+							<option value="001">Area by circle
+							<option value="010">Area by line
+							<option selected value="011">Area by rectangular
+							<option value="100">Registered cell
+							<option value="101">Registered location area
+							<option value="110">Area defined by SwMI
+							<option value="111">All areas in the SwMI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Cirle<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;center point(nn&deg; nn,n'):
+					</th>
+					<td>
+						<select disabled id="Circle_lat_dir">
+							<option value="0">North
+							<option value="1">South
+						</select>
+						<input disabled id="Circle_lat_deg" value="50" size=2 maxlength=2 onkeypress="return AllowNumOnly(event)">
+						&deg;
+						<input disabled id="Circle_lat_min" value="05" size=2 maxlength=2 onkeypress="return AllowNumOnly(event)">
+						.
+						<input disabled id="Circle_lat_half_min" value="0" size=1 maxlength=1 onkeypress="return Allow05Only(event)">'
+						<br>
+						<select disabled id="Circle_lon_dir">
+							<option value="0">West
+							<option value="1">East
+						</select>
+						<input disabled id="Circle_lon_deg" value="14" size=2 maxlength=3 onkeypress="return AllowNumOnly(event)">
+						&deg;
+						<input disabled id="Circle_lon_min" value="25" size=2 maxlength=2 onkeypress="return AllowNumOnly(event)">
+						.
+						<input disabled id="Circle_lon_half_min" value="0" size=1 maxlength=1 onkeypress="return Allow05Only(event)">'
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;radius (km, n&lt;512):
+					</th>
+					<td>
+						<input disabled id="Circle_radius" value="45" size=3 maxlength=3 onkeypress="return AllowNumOnly(event)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Area/line<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endpoint 1 (nn&deg; nn,n'):
+					</th>
+					<td>
+						<select id="Endpoint1_lat_dir">
+							<option value="0">North
+							<option value="1">South
+						</select>
+						<input id="Endpoint1_lat_deg" value="50" size=2 maxlength=2 onkeypress="return AllowNumOnly(event)">
+						&deg;
+						<input id="Endpoint1_lat_min" value="05" size=2 maxlength=2 onkeypress="return AllowNumOnly(event)">
+						.
+						<input id="Endpoint1_lat_half_min" value="0" size=1 maxlength=1 onkeypress="return Allow05Only(event)">'
+						<br>
+						<select id="Endpoint1_lon_dir">
+							<option value="0">West
+							<option value="1">East
+						</select>
+						<input id="Endpoint1_lon_deg" value="14" size=2 maxlength=3 onkeypress="return AllowNumOnly(event)">
+						&deg;
+						<input id="Endpoint1_lon_min" value="25" size=2 maxlength=2 onkeypress="return AllowNumOnly(event)">
+						.
+						<input id="Endpoint1_lon_half_min" value="0" size=1 maxlength=1 onkeypress="return Allow05Only(event)">'
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endpoint 2 (nn&deg; nn,n'):
+					</th>
+					<td>
+						<select id="Endpoint2_lat_dir">
+							<option value="0">North
+							<option value="1">South
+						</select>
+						<input id="Endpoint2_lat_deg" value="48" size=2 maxlength=2 onkeypress="return AllowNumOnly(event)">
+						&deg;
+						<input id="Endpoint2_lat_min" value="10" size=2 maxlength=2 onkeypress="return AllowNumOnly(event)">
+						.
+						<input id="Endpoint2_lat_half_min" value="5" size=1 maxlength=1 onkeypress="return Allow05Only(event)">'
+						<br>
+						<select id="Endpoint2_lon_dir">
+							<option value="0">West
+							<option value="1">East
+						</select>
+						<input id="Endpoint2_lon_deg" value="11" size=2 maxlength=3 onkeypress="return AllowNumOnly(event)">
+						&deg;
+						<input id="Endpoint2_lon_min" value="33" size=2 maxlength=2 onkeypress="return AllowNumOnly(event)">
+						.
+						<input id="Endpoint2_lon_half_min" value="0" size=1 maxlength=1 onkeypress="return Allow05Only(event)">'
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Site list (comma separated numbers):</th>
+					<td>
+						<input disabled id="Site_list" value="13,586,95,4027" size=45  onkeypress="return AllowCSNOnly(event)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Acknowledgement requested:</th>
+					<td>
+						<select id="Acknowledgement_requested">
+							<option selected value="0">Acknowledgement not requested from served user
+							<option value="1">Acknowledgement requested from served user
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Range_type_for_selected_area_number = document.getElementById('Range_type_for_selected_area_number').value;
+				Selected_area_number = document.getElementById('Selected_area_number').value;
+				
+				Area_type = document.getElementById('Area_type').value;
+				Circle_lat_dir = document.getElementById('Circle_lat_dir').value;
+				Circle_lat_deg = document.getElementById('Circle_lat_deg').value;
+				Circle_lat_min = document.getElementById('Circle_lat_min').value;
+				Circle_lat_half_min = document.getElementById('Circle_lat_half_min').value;
+				Circle_lon_dir = document.getElementById('Circle_lon_dir').value;
+				Circle_lon_deg = document.getElementById('Circle_lon_deg').value;
+				Circle_lon_min = document.getElementById('Circle_lon_min').value;
+				Circle_lon_half_min = document.getElementById('Circle_lon_half_min').value;
+				Circle_radius = document.getElementById('Circle_radius').value;
+				Endpoint1_lat_dir = document.getElementById('Endpoint1_lat_dir').value;
+				Endpoint1_lat_deg = document.getElementById('Endpoint1_lat_deg').value;
+				Endpoint1_lat_min = document.getElementById('Endpoint1_lat_min').value;
+				Endpoint1_lat_half_min = document.getElementById('Endpoint1_lat_half_min').value;
+				Endpoint1_lon_dir = document.getElementById('Endpoint1_lon_dir').value;
+				Endpoint1_lon_deg = document.getElementById('Endpoint1_lon_deg').value;
+				Endpoint1_lon_min = document.getElementById('Endpoint1_lon_min').value;
+				Endpoint1_lon_half_min = document.getElementById('Endpoint1_lon_half_min').value;
+				Endpoint2_lat_dir = document.getElementById('Endpoint2_lat_dir').value;
+				Endpoint2_lat_deg = document.getElementById('Endpoint2_lat_deg').value;
+				Endpoint2_lat_min = document.getElementById('Endpoint2_lat_min').value;
+				Endpoint2_lat_half_min = document.getElementById('Endpoint2_lat_half_min').value;
+				Endpoint2_lon_dir = document.getElementById('Endpoint2_lon_dir').value;
+				Endpoint2_lon_deg = document.getElementById('Endpoint2_lon_deg').value;
+				Endpoint2_lon_min = document.getElementById('Endpoint2_lon_min').value;
+				Endpoint2_lon_half_min = document.getElementById('Endpoint2_lon_half_min').value;
+				Site_list = document.getElementById('Site_list').value;
+				
+				Acknowledgement_requested = document.getElementById('Acknowledgement_requested').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Range_type_for_selected_area_number;
+				
+				while (Selected_area_number.length < 8)
+				{
+					Selected_area_number = "0" + Selected_area_number;
+				}
+				
+				if (Range_type_for_selected_area_number == "1111")
+				{
+					pdu_bin_value += Selected_area_number;
+					pdu_bin_value += Selected_area_number;
+				}
+				else
+				{
+					for (i=0; i<parseInt(Range_type_for_selected_area_number,2); i+=1)
+					{
+						pdu_bin_value += Selected_area_number;
+					}
+				}
+				
+				// Area definition block
+				
+				Area_definition = Area_type;
+				if (Area_type == "000")
+				{
+					Site_list = Site_list.replace(/\s/g,'');
+					var Site_list_array = Site_list.split(',');
+					Site_count = Site_list_array.length;
+					if (Site_count > 31) Site_count = 31;
+					Area_definition  += dec2bin(Site_count,5);
+					for (i=0;i<Site_count;i+=1)
+					{
+						Area_definition  += dec2bin(Site_list_array[i],13);
+					}
+				}
+				if (Area_type == "001")
+				{
+					Area_definition  += Circle_lat_dir;
+					Area_definition  += dec2bin(Circle_lat_deg,7);
+					Area_definition  += dec2bin(Circle_lat_min,6);
+					Area_definition  += dec2bin(Circle_lat_half_min/5,1);
+					Area_definition  += Circle_lon_dir;
+					Area_definition  += dec2bin(Circle_lon_deg,8);
+					Area_definition  += dec2bin(Circle_lon_min,6);
+					Area_definition  += dec2bin(Circle_lon_half_min/5,1);
+					Area_definition  += dec2bin(Circle_radius,9);
+				}
+				if (Area_type == "010" || Area_type == "011")
+				{
+					Area_definition  += Endpoint1_lat_dir;
+					Area_definition  += dec2bin(Endpoint1_lat_deg,7);
+					Area_definition  += dec2bin(Endpoint1_lat_min,6);
+					Area_definition  += dec2bin(Endpoint1_lat_half_min/5,1);
+					Area_definition  += Endpoint1_lon_dir;
+					Area_definition  += dec2bin(Endpoint1_lon_deg,8);
+					Area_definition  += dec2bin(Endpoint1_lon_min,6);
+					Area_definition  += dec2bin(Endpoint1_lon_half_min/5,1);
+					Area_definition  += Endpoint2_lat_dir;
+					Area_definition  += dec2bin(Endpoint2_lat_deg,7);
+					Area_definition  += dec2bin(Endpoint2_lat_min,6);
+					Area_definition  += dec2bin(Endpoint2_lat_half_min/5,1);
+					Area_definition  += Endpoint2_lon_dir;
+					Area_definition  += dec2bin(Endpoint2_lon_deg,8);
+					Area_definition  += dec2bin(Endpoint2_lon_min,6);
+					Area_definition  += dec2bin(Endpoint2_lon_half_min/5,1);
+				}
+				Area_definition_length = dec2bin(Area_definition.length,9);
+				
+				pdu_bin_value += Area_definition_length;
+				pdu_bin_value += Area_definition;
+				
+				// End of area definition
+				
+				pdu_bin_value += Acknowledgement_requested;
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Area_type(form)
+			{
+				Area_type = document.getElementById('Area_type').value;
+				if (Area_type == "000")
+				{
+					document.getElementById('Circle_lat_dir').disabled = true;
+					document.getElementById('Circle_lat_deg').disabled = true;
+					document.getElementById('Circle_lat_min').disabled = true;
+					document.getElementById('Circle_lat_half_min').disabled = true;
+					document.getElementById('Circle_lon_dir').disabled = true;
+					document.getElementById('Circle_lon_deg').disabled = true;
+					document.getElementById('Circle_lon_min').disabled = true;
+					document.getElementById('Circle_lon_half_min').disabled = true;
+					document.getElementById('Circle_radius').disabled = true;
+					document.getElementById('Endpoint1_lat_dir').disabled = true;
+					document.getElementById('Endpoint1_lat_deg').disabled = true;
+					document.getElementById('Endpoint1_lat_min').disabled = true;
+					document.getElementById('Endpoint1_lat_half_min').disabled = true;
+					document.getElementById('Endpoint1_lon_dir').disabled = true;
+					document.getElementById('Endpoint1_lon_deg').disabled = true;
+					document.getElementById('Endpoint1_lon_min').disabled = true;
+					document.getElementById('Endpoint1_lon_half_min').disabled = true;
+					document.getElementById('Endpoint2_lat_dir').disabled = true;
+					document.getElementById('Endpoint2_lat_deg').disabled = true;
+					document.getElementById('Endpoint2_lat_min').disabled = true;
+					document.getElementById('Endpoint2_lat_half_min').disabled = true;
+					document.getElementById('Endpoint2_lon_dir').disabled = true;
+					document.getElementById('Endpoint2_lon_deg').disabled = true;
+					document.getElementById('Endpoint2_lon_min').disabled = true;
+					document.getElementById('Endpoint2_lon_half_min').disabled = true;
+					document.getElementById('Site_list').disabled = false;
+				}
+				else if (Area_type == "001")
+				{
+					document.getElementById('Circle_lat_dir').disabled = false;
+					document.getElementById('Circle_lat_deg').disabled = false;
+					document.getElementById('Circle_lat_min').disabled = false;
+					document.getElementById('Circle_lat_half_min').disabled = false;
+					document.getElementById('Circle_lon_dir').disabled = false;
+					document.getElementById('Circle_lon_deg').disabled = false;
+					document.getElementById('Circle_lon_min').disabled = false;
+					document.getElementById('Circle_lon_half_min').disabled = false;
+					document.getElementById('Circle_radius').disabled = false;
+					document.getElementById('Endpoint1_lat_dir').disabled = true;
+					document.getElementById('Endpoint1_lat_deg').disabled = true;
+					document.getElementById('Endpoint1_lat_min').disabled = true;
+					document.getElementById('Endpoint1_lat_half_min').disabled = true;
+					document.getElementById('Endpoint1_lon_dir').disabled = true;
+					document.getElementById('Endpoint1_lon_deg').disabled = true;
+					document.getElementById('Endpoint1_lon_min').disabled = true;
+					document.getElementById('Endpoint1_lon_half_min').disabled = true;
+					document.getElementById('Endpoint2_lat_dir').disabled = true;
+					document.getElementById('Endpoint2_lat_deg').disabled = true;
+					document.getElementById('Endpoint2_lat_min').disabled = true;
+					document.getElementById('Endpoint2_lat_half_min').disabled = true;
+					document.getElementById('Endpoint2_lon_dir').disabled = true;
+					document.getElementById('Endpoint2_lon_deg').disabled = true;
+					document.getElementById('Endpoint2_lon_min').disabled = true;
+					document.getElementById('Endpoint2_lon_half_min').disabled = true;
+					document.getElementById('Site_list').disabled = true;
+				}
+				else if (Area_type == "010" || Area_type == "011")
+				{
+					document.getElementById('Circle_lat_dir').disabled = true;
+					document.getElementById('Circle_lat_deg').disabled = true;
+					document.getElementById('Circle_lat_min').disabled = true;
+					document.getElementById('Circle_lat_half_min').disabled = true;
+					document.getElementById('Circle_lon_dir').disabled = true;
+					document.getElementById('Circle_lon_deg').disabled = true;
+					document.getElementById('Circle_lon_min').disabled = true;
+					document.getElementById('Circle_lon_half_min').disabled = true;
+					document.getElementById('Circle_radius').disabled = true;
+					document.getElementById('Endpoint1_lat_dir').disabled = false;
+					document.getElementById('Endpoint1_lat_deg').disabled = false;
+					document.getElementById('Endpoint1_lat_min').disabled = false;
+					document.getElementById('Endpoint1_lat_half_min').disabled = false;
+					document.getElementById('Endpoint1_lon_dir').disabled = false;
+					document.getElementById('Endpoint1_lon_deg').disabled = false;
+					document.getElementById('Endpoint1_lon_min').disabled = false;
+					document.getElementById('Endpoint1_lon_half_min').disabled = false;
+					document.getElementById('Endpoint2_lat_dir').disabled = false;
+					document.getElementById('Endpoint2_lat_deg').disabled = false;
+					document.getElementById('Endpoint2_lat_min').disabled = false;
+					document.getElementById('Endpoint2_lat_half_min').disabled = false;
+					document.getElementById('Endpoint2_lon_dir').disabled = false;
+					document.getElementById('Endpoint2_lon_deg').disabled = false;
+					document.getElementById('Endpoint2_lon_min').disabled = false;
+					document.getElementById('Endpoint2_lon_half_min').disabled = false;
+					document.getElementById('Site_list').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Circle_lat_dir').disabled = true;
+					document.getElementById('Circle_lat_deg').disabled = true;
+					document.getElementById('Circle_lat_min').disabled = true;
+					document.getElementById('Circle_lat_half_min').disabled = true;
+					document.getElementById('Circle_lon_dir').disabled = true;
+					document.getElementById('Circle_lon_deg').disabled = true;
+					document.getElementById('Circle_lon_min').disabled = true;
+					document.getElementById('Circle_lon_half_min').disabled = true;
+					document.getElementById('Circle_radius').disabled = true;
+					document.getElementById('Endpoint1_lat_dir').disabled = true;
+					document.getElementById('Endpoint1_lat_deg').disabled = true;
+					document.getElementById('Endpoint1_lat_min').disabled = true;
+					document.getElementById('Endpoint1_lat_half_min').disabled = true;
+					document.getElementById('Endpoint1_lon_dir').disabled = true;
+					document.getElementById('Endpoint1_lon_deg').disabled = true;
+					document.getElementById('Endpoint1_lon_min').disabled = true;
+					document.getElementById('Endpoint1_lon_half_min').disabled = true;
+					document.getElementById('Endpoint2_lat_dir').disabled = true;
+					document.getElementById('Endpoint2_lat_deg').disabled = true;
+					document.getElementById('Endpoint2_lat_min').disabled = true;
+					document.getElementById('Endpoint2_lat_half_min').disabled = true;
+					document.getElementById('Endpoint2_lon_dir').disabled = true;
+					document.getElementById('Endpoint2_lon_deg').disabled = true;
+					document.getElementById('Endpoint2_lon_min').disabled = true;
+					document.getElementById('Endpoint2_lon_half_min').disabled = true;
+					document.getElementById('Site_list').disabled = true;
+				}
+			}
+			function AllowDigitOnly(char)
+			{
+					var charCode = (char.which) ? char.which : event.keyCode
+					if (charCode < 48 || charCode > 49)
+							return false;
+					return true;
+			}
+			function AllowNumOnly(char)
+			{
+					var charCode = (char.which) ? char.which : event.keyCode
+					if (charCode < 48 || charCode > 57)
+							return false;
+					return true;
+			}
+			function Allow05Only(char)
+			{
+					var charCode = (char.which) ? char.which : event.keyCode
+					if (charCode == 48 || charCode == 53)
+						return true;
+					return false;
+			}
+			function AllowCSNOnly(char)
+			{
+					var charCode = (char.which) ? char.which : event.keyCode
+					if ((charCode > 47 && charCode < 58) || charCode == 32 || charCode == 44)
+						return true;
+					return false;
+			}
+		</script>
+	</body>
+</html>

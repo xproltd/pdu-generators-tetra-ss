@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <HEAD>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>SS-AL-INVOKE2 ACK</TITLE>
+        <SCRIPT SRC="../SS_Util.js" language="JavaScript" type="text/JavaScript"></SCRIPT>
+        <LINK href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+    </HEAD>
+    <body class="PDU_page">        
+        <form id="Form1" action="">
+            <table ID="Table1">
+                    <tr>                    
+                        <th align="left">Second Listening Party Address Type</th>
+                        <td>
+                            <select onChange="OnChange_SecondListeningPartiesAddressType(this.form)" ID="SecondListeningPartiesAddressType" NAME="SecondListeningPartiesAddressType">                          
+	                            <option value="0" >SNA
+	                            <option selected value="1" >SSI
+	                            <option value="2" >TSI
+	                        </select>
+                            SNA <input disabled id="SecondListeningParties_SNA" value="148" size=1 NAME="SecondListeningParties_SNA">
+                            SSI <input disabled id="SecondListeningParties_SSI" value="62033" size=3 NAME="SecondListeningParties_SSI">                    
+                            TSI SSI <input disabled id="SecondListeningParties_TSI_SSI" value="61044" size=3 NAME="SecondListeningParties_TSI_SSI">
+	                        MCC <input value="234" size=1 disabled ID="SecondListeningParties_TSI_MCC" NAME="SecondListeningParties_TSI_MCC">
+	                        MNC <input value="73" size=1 disabled ID="SecondListeningParties_TSI_MNC" NAME="SecondListeningParties_TSI_MNC">
+                        </td>
+                    </tr>
+                    <tr>                    
+                        <th align="left">Result of invocation</th>
+                        <td>
+                            <select ID="ResultOfInvocation" NAME="InterrogationResult">                          
+	                            <option value="0" >SS-AL invoked for TETRA identity
+	                            <option value="1" >SS-AL not invoked for TETRA identity
+	                            <option value="2" >User not authorized
+	                            <option value="3" >Unknown TETRA identity
+	                            <option value="4" >Parameters not valid
+	                            <option value="5" >Insufficient information
+	                            <option value="6" >Rejected for undefined reason
+	                            <option value="7" >SecondListening user does not support SS-AL
+	                        </select>
+                        </td>
+                    </tr>
+            </table>
+        </form>
+        <script language="JavaScript" type="text/JavaScript">
+    
+            function GetPDUValue(pdu_header)
+            {
+                //Get Information Element values
+
+                SecondListeningPartiesAddressType   = document.getElementById('SecondListeningPartiesAddressType').value;                
+                SecondListeningParties_SNA          = document.getElementById('SecondListeningParties_SNA').value;                
+                SecondListeningParties_SSI          = document.getElementById('SecondListeningParties_SSI').value;
+                SecondListeningParties_TSI_SSI      = document.getElementById('SecondListeningParties_TSI_SSI').value;
+                SecondListeningParties_TSI_MCC      = document.getElementById('SecondListeningParties_TSI_MCC').value;
+                SecondListeningParties_TSI_MNC      = document.getElementById('SecondListeningParties_TSI_MNC').value;
+                                
+                ResultOfInvocation             = document.getElementById('ResultOfInvocation').value;                
+
+                //Build PDU
+                pdu_bin_value = pdu_header;
+                                                
+                pdu_bin_value += dec2bin(SecondListeningPartiesAddressType,2);
+                if (SecondListeningPartiesAddressType == "0")
+                {
+                    pdu_bin_value += dec2bin(SecondListeningParties_SNA,8);
+                }   
+                else
+                if (SecondListeningPartiesAddressType == "1")
+                {
+                    pdu_bin_value += dec2bin(SecondListeningParties_SSI,24);
+                }   
+                else
+                if (SecondListeningPartiesAddressType == "2")
+                {
+                    pdu_bin_value += dec2bin(SecondListeningParties_TSI_SSI,24);
+                    pdu_bin_value += dec2bin(SecondListeningParties_TSI_MCC,10);
+                    pdu_bin_value += dec2bin(SecondListeningParties_TSI_MNC,14);
+                }   
+                
+                pdu_bin_value += dec2bin(ResultOfInvocation,4);
+
+                return pdu_bin_value;
+            }                        
+            function OnChange_SecondListeningPartiesAddressType(form)
+            {
+                SecondListeningPartiesAddressType = document.getElementById('SecondListeningPartiesAddressType').value;
+                
+                document.getElementById('SecondListeningParties_SNA').disabled = true;
+                document.getElementById('SecondListeningParties_SSI').disabled = true;
+                document.getElementById('SecondListeningParties_TSI_SSI').disabled = true;
+                document.getElementById('SecondListeningParties_TSI_MCC').disabled = true;
+                document.getElementById('SecondListeningParties_TSI_MNC').disabled = true;
+                
+                if (SecondListeningPartiesAddressType == "0")
+                {
+                    document.getElementById('SecondListeningParties_SNA').disabled = false;
+                }
+                else if (SecondListeningPartiesAddressType == "1")
+                {
+                    document.getElementById('SecondListeningParties_SSI').disabled = false;
+                }
+                else if (SecondListeningPartiesAddressType == "2")
+                {
+                    document.getElementById('SecondListeningParties_TSI_SSI').disabled = false;
+                    document.getElementById('SecondListeningParties_TSI_MCC').disabled = false;
+                    document.getElementById('SecondListeningParties_TSI_MNC').disabled = false;
+                }
+            }
+                                                
+        </script>
+    </body>
+</HTML>

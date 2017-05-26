@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-AP-INTERROGATE</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_AP_05_Table">
+				<tr>
+					<th align="left">
+						Range type for interrogated subscriber identity:
+					</th>
+					<td>
+                        <select id="Range_type_for_interrogated_subscriber_identity" onChange="OnChange_Range_type_for_interrogated_subscriber_identity(this.form)">
+							<option value="0000">No element
+							<option selected value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interrogated subscriber address type:
+					</th>
+					<td>
+						<select id="Interrogated_subscriber_address_type" onChange="OnChange_Interrogated_subscriber_address_type(this.form)">
+							<option value="00">SNA
+							<option value="01">SSI
+							<option value="10">SSI+Extension
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interrogated subscriber SNA:
+					</th>
+					<td>
+						<input id="Interrogated_subscriber_SNA" value="123" size=5>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interrogated subscriber SSI:
+					</th>
+					<td>
+						<input disabled id="Interrogated_subscriber_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Interrogated subscriber extension:</th>
+					<td>
+						MCC: <input disabled id="Interrogated_subscriber_extension_MCC" value="234" size=5>
+						MNC: <input disabled id="Interrogated_subscriber_extension_MNC" value="73" size=5>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Range_type_for_interrogated_subscriber_identity = document.getElementById('Range_type_for_interrogated_subscriber_identity').value;
+				Interrogated_subscriber_address_type = document.getElementById('Interrogated_subscriber_address_type').value;
+				Interrogated_subscriber_SNA = document.getElementById('Interrogated_subscriber_SNA').value;
+				Interrogated_subscriber_SSI = document.getElementById('Interrogated_subscriber_SSI').value;
+				Interrogated_subscriber_extension_MCC = document.getElementById('Interrogated_subscriber_extension_MCC').value;
+				Interrogated_subscriber_extension_MNC = document.getElementById('Interrogated_subscriber_extension_MNC').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Range_type_for_interrogated_subscriber_identity;
+				
+				if (Range_type_for_interrogated_subscriber_identity != "0000")
+				{
+					Interrogated_subscriber_identity = Interrogated_subscriber_address_type;
+					if (Interrogated_subscriber_address_type == "00")
+					{
+						Interrogated_subscriber_identity += dec2bin(Interrogated_subscriber_SNA,8);
+					}
+					if (Interrogated_subscriber_address_type == "01")
+					{
+						Interrogated_subscriber_identity += dec2bin(Interrogated_subscriber_SSI,24);
+					}
+					if (Interrogated_subscriber_address_type == "10")
+					{
+						Interrogated_subscriber_identity += dec2bin(Interrogated_subscriber_SSI,24);
+						Interrogated_subscriber_identity += dec2bin(Interrogated_subscriber_extension_MCC,10);
+						Interrogated_subscriber_identity += dec2bin(Interrogated_subscriber_extension_MNC,14);
+					}
+					
+					if (Range_type_for_interrogated_subscriber_identity == "1111")
+					{
+						pdu_bin_value += Interrogated_subscriber_identity;
+						pdu_bin_value += Interrogated_subscriber_identity;
+					}
+					else
+					{
+						for (i=0; i<parseInt(Range_type_for_interrogated_subscriber_identity,2); i+=1)
+						{
+							pdu_bin_value += Interrogated_subscriber_identity;
+						}
+					}
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Range_type_for_interrogated_subscriber_identity(form)
+			{
+				Range_type_for_interrogated_subscriber_identity = document.getElementById('Range_type_for_interrogated_subscriber_identity').value;
+				if (Range_type_for_interrogated_subscriber_identity == "0000")
+				{
+					document.getElementById('Interrogated_subscriber_address_type').disabled = true;
+					document.getElementById('Interrogated_subscriber_SNA').disabled = true;
+					document.getElementById('Interrogated_subscriber_SSI').disabled = true;
+					document.getElementById('Interrogated_subscriber_extension_MCC').disabled = true;
+					document.getElementById('Interrogated_subscriber_extension_MNC').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Interrogated_subscriber_address_type').disabled = false;
+					document.getElementById('Interrogated_subscriber_SNA').disabled = false;
+					document.getElementById('Interrogated_subscriber_SSI').disabled = false;
+					document.getElementById('Interrogated_subscriber_extension_MCC').disabled = false;
+					document.getElementById('Interrogated_subscriber_extension_MNC').disabled = false;
+					OnChange_Interrogated_subscriber_address_type(form);
+				}
+			}
+			function OnChange_Interrogated_subscriber_address_type(form)
+			{
+				Interrogated_subscriber_address_type = document.getElementById('Interrogated_subscriber_address_type').value;
+				if (Interrogated_subscriber_address_type == "00") 
+				{
+					document.getElementById('Interrogated_subscriber_SNA').disabled = false;
+					document.getElementById('Interrogated_subscriber_SSI').disabled = true;
+					document.getElementById('Interrogated_subscriber_extension_MCC').disabled = true;
+					document.getElementById('Interrogated_subscriber_extension_MNC').disabled = true;
+				}
+				if (Interrogated_subscriber_address_type == "01") 
+				{
+					document.getElementById('Interrogated_subscriber_SNA').disabled = true;
+					document.getElementById('Interrogated_subscriber_SSI').disabled = false;
+					document.getElementById('Interrogated_subscriber_extension_MCC').disabled = true;
+					document.getElementById('Interrogated_subscriber_extension_MNC').disabled = true;
+				}
+				else
+				if (Interrogated_subscriber_address_type == "10") 
+				{
+					document.getElementById('Interrogated_subscriber_SNA').disabled = true;
+					document.getElementById('Interrogated_subscriber_SSI').disabled = false;
+					document.getElementById('Interrogated_subscriber_extension_MCC').disabled = false;
+					document.getElementById('Interrogated_subscriber_extension_MNC').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

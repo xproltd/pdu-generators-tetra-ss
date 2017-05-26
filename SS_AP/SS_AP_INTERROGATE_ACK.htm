@@ -1,0 +1,394 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-AP-INTERROGATE_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_AP_06_Table">
+				<tr>
+					<th align="left">
+						Range type for interrogated subscriber identity:
+					</th>
+					<td>
+                        <select id="Range_type_for_interrogated_subscriber_identity" onChange="OnChange_Range_type_for_interrogated_subscriber_identity(this.form)">
+							<option value="0000">No element
+							<option selected value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interrogated subscriber address type:
+					</th>
+					<td>
+						<select id="Interrogated_subscriber_address_type" onChange="OnChange_Interrogated_subscriber_address_type(this.form)">
+							<option value="01">SSI
+							<option value="10">SSI+Extension
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interrogated subscriber SSI:
+					</th>
+					<td>
+						<input disabled id="Interrogated_subscriber_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Interrogated subscriber extension:</th>
+					<td>
+						MCC: <input disabled id="Interrogated_subscriber_extension_MCC" value="234" size=5>
+						MNC: <input disabled id="Interrogated_subscriber_extension_MNC" value="73" size=5>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Multiple user mask present:
+					</th>
+					<td>
+						<select id="Multiple_user_mask_present" onChange="OnChange_Multiple_user_mask_present(this.form)">
+							<option value="0">Not Present
+							<option selected value="1">Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Multiple user mask:
+					</th>
+					<td>
+						<input id="Multiple_user_mask" value="1" size="15" onkeypress="return AllowDigitOnly(event)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interrogation result:
+					</th>
+					<td>
+						<select id="Interrogation_result" onChange="OnChange_Interrogation_result(this.form)">
+							<option value="0">Not accepted
+							<option selected value="1">Accepted
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Interrogation failure reason:
+					</th>
+					<td>
+						<select disabled id="Interrogation_failure_reason">
+							<option value="000">Rejected for any reason
+							<option value="001">User not authorized
+							<option value="010">Unknown TETRA identity
+							<option value="011">Range not supported
+							<option value="100">Invalid PDU contents
+							<option value="101">SS not subscribed for user addressed
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Range type for services:
+					</th>
+					<td>
+                        <select id="Range_type_for_services" onChange="OnChange_Range_type_for_services(this.form)">
+							<option value="0000">No element
+							<option selected value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Services:
+					</th>
+					<td>
+						<select id="Services">
+							<option value="00001">Circuit mode speech
+							<option value="00010">Circuit mode data
+							<option value="00100">Packet mode data
+							<option value="01000">SDS
+							<option value="10000">Supplementary services management
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						APL for low priority:
+					</th>
+					<td>
+						<select id="APL_for_low_priority">
+							<option value="000">0
+							<option selected value="001">1
+							<option value="010">2
+							<option value="011">3
+							<option value="100">4
+							<option value="101">5
+							<option value="110">6
+							<option value="111">Reserved for emergency
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						APL for high priority:
+					</th>
+					<td>
+						<select id="APL_for_high_priority">
+							<option value="000">0
+							<option selected value="001">1
+							<option value="010">2
+							<option value="011">3
+							<option value="100">4
+							<option value="101">5
+							<option value="110">6
+							<option value="111">Reserved for emergency
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Range_type_for_interrogated_subscriber_identity = document.getElementById('Range_type_for_interrogated_subscriber_identity').value;
+				Interrogated_subscriber_address_type = document.getElementById('Interrogated_subscriber_address_type').value;
+				Interrogated_subscriber_SSI = document.getElementById('Interrogated_subscriber_SSI').value;
+				Interrogated_subscriber_extension_MCC = document.getElementById('Interrogated_subscriber_extension_MCC').value;
+				Interrogated_subscriber_extension_MNC = document.getElementById('Interrogated_subscriber_extension_MNC').value;
+				
+				Multiple_user_mask_present = document.getElementById('Multiple_user_mask_present').value;
+				Multiple_user_mask = document.getElementById('Multiple_user_mask').value;
+				
+				Interrogation_result = document.getElementById('Interrogation_result').value;
+				Interrogation_failure_reason = document.getElementById('Interrogation_failure_reason').value;
+				
+				Range_type_for_services = document.getElementById('Range_type_for_services').value;
+				Services = document.getElementById('Services').value;
+				APL_for_low_priority = document.getElementById('APL_for_low_priority').value;
+				APL_for_high_priority = document.getElementById('APL_for_high_priority').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Range_type_for_interrogated_subscriber_identity;
+				
+				if (Range_type_for_interrogated_subscriber_identity != "0000")
+				{
+					Interrogated_subscriber_identity = Interrogated_subscriber_address_type;
+					if (Interrogated_subscriber_address_type == "01")
+					{
+						Interrogated_subscriber_identity += dec2bin(Interrogated_subscriber_SSI,24);
+					}
+					if (Interrogated_subscriber_address_type == "10")
+					{
+						Interrogated_subscriber_identity += dec2bin(Interrogated_subscriber_SSI,24);
+						Interrogated_subscriber_identity += dec2bin(Interrogated_subscriber_extension_MCC,10);
+						Interrogated_subscriber_identity += dec2bin(Interrogated_subscriber_extension_MNC,14);
+					}
+					
+					if (Range_type_for_interrogated_subscriber_identity == "1111")
+					{
+						pdu_bin_value += Interrogated_subscriber_identity;
+						pdu_bin_value += Interrogated_subscriber_identity;
+					}
+					else
+					{
+						for (i=0; i<parseInt(Range_type_for_interrogated_subscriber_identity,2); i+=1)
+						{
+							pdu_bin_value += Interrogated_subscriber_identity;
+						}
+					}
+				}
+				
+				pdu_bin_value += Multiple_user_mask_present;
+				
+				if ( Multiple_user_mask_present == "1")
+				{
+					//To validate the Multiple_user_mask first we calculate how many elements there are in the range
+					Number_of_range_elements = 1;
+					if (Range_type_for_interrogated_subscriber_identity != "1111")
+					{
+						Number_of_range_elements = parseInt(Range_type_for_interrogated_subscriber_identity,2);
+					}
+					//The length of Multiple_user_mask is the Number_of_range_elements
+					//Let's trim it, and then pad with "0"s if it is shorter than it should be.
+					Multiple_user_mask = Multiple_user_mask.substring(0,Number_of_range_elements);
+					while (Multiple_user_mask.length < Number_of_range_elements)
+					{
+						Multiple_user_mask = "0" + Multiple_user_mask; 
+					}
+					
+					pdu_bin_value += Multiple_user_mask;
+				}
+				
+				pdu_bin_value += Interrogation_result;
+				
+				if (Interrogation_result == "0")
+				{
+					pdu_bin_value += Interrogation_failure_reason;
+				}
+				else
+				{
+					pdu_bin_value += Range_type_for_services;
+					
+					if (Range_type_for_services != "0000")
+					{
+						Service_definition = Services;
+						Service_definition += APL_for_low_priority;
+						Service_definition += APL_for_high_priority;
+						
+						if (Range_type_for_services == "1111")
+						{
+							pdu_bin_value += Service_definition;
+							pdu_bin_value += Service_definition;
+						}
+						else
+						{
+							for (i=0; i<parseInt(Range_type_for_services,2); i+=1)
+							{
+								pdu_bin_value += Service_definition;
+							}
+						}
+					}
+				}
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Range_type_for_interrogated_subscriber_identity(form)
+			{
+				Range_type_for_interrogated_subscriber_identity = document.getElementById('Range_type_for_interrogated_subscriber_identity').value;
+				if (Range_type_for_interrogated_subscriber_identity == "0000")
+				{
+					document.getElementById('Interrogated_subscriber_address_type').disabled = true;
+					document.getElementById('Interrogated_subscriber_SSI').disabled = true;
+					document.getElementById('Interrogated_subscriber_extension_MCC').disabled = true;
+					document.getElementById('Interrogated_subscriber_extension_MNC').disabled = true;
+					Update_Multiple_user_mask(form);
+					document.getElementById('Multiple_user_mask').disabled = true;
+					document.getElementById('Multiple_user_mask_present').value = 0;
+				}
+				else
+				{
+					document.getElementById('Interrogated_subscriber_address_type').disabled = false;
+					document.getElementById('Interrogated_subscriber_SSI').disabled = false;
+					document.getElementById('Interrogated_subscriber_extension_MCC').disabled = false;
+					document.getElementById('Interrogated_subscriber_extension_MNC').disabled = false;
+					document.getElementById('Multiple_user_mask').disabled = false;
+					OnChange_Interrogated_subscriber_address_type(form);
+					OnChange_Multiple_user_mask_present(form);
+					Update_Multiple_user_mask(form);
+				}
+			}
+			function OnChange_Interrogated_subscriber_address_type(form)
+			{
+				Interrogated_subscriber_address_type = document.getElementById('Interrogated_subscriber_address_type').value;
+				if (Interrogated_subscriber_address_type == "01") 
+				{
+					document.getElementById('Interrogated_subscriber_SSI').disabled = false;
+					document.getElementById('Interrogated_subscriber_extension_MCC').disabled = true;
+					document.getElementById('Interrogated_subscriber_extension_MNC').disabled = true;
+				}
+				else
+				if (Interrogated_subscriber_address_type == "10") 
+				{
+					document.getElementById('Interrogated_subscriber_SSI').disabled = false;
+					document.getElementById('Interrogated_subscriber_extension_MCC').disabled = false;
+					document.getElementById('Interrogated_subscriber_extension_MNC').disabled = false;
+				}
+			}
+			function OnChange_Multiple_user_mask_present(form)
+			{
+				Multiple_user_mask_present = document.getElementById('Multiple_user_mask_present').value;
+				if (Multiple_user_mask_present == "0")
+				{
+					document.getElementById('Multiple_user_mask').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Multiple_user_mask').disabled = false;
+				}
+			}
+			function Update_Multiple_user_mask(form)
+			{
+				Range_type_for_interrogated_subscriber_identity = document.getElementById('Range_type_for_interrogated_subscriber_identity').value;
+				Number_of_range_elements = 0;
+				if (parseInt(Range_type_for_interrogated_subscriber_identity,2) > 0 && parseInt(Range_type_for_interrogated_subscriber_identity,2) < 15)
+				{
+					Number_of_range_elements = parseInt(Range_type_for_interrogated_subscriber_identity,2);
+				}
+				document.getElementById('Multiple_user_mask').value = "101010101010101010".substring(0,Number_of_range_elements);
+			}
+			function OnChange_Interrogation_result(form)
+			{
+				Interrogation_result = document.getElementById('Interrogation_result').value;
+				if (Interrogation_result == "0")
+				{
+					document.getElementById('Interrogation_failure_reason').disabled = false;
+					document.getElementById('Range_type_for_services').disabled = true;
+					document.getElementById('Services').disabled = true;
+					document.getElementById('APL_for_low_priority').disabled = true;
+					document.getElementById('APL_for_high_priority').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Interrogation_failure_reason').disabled = true;
+					document.getElementById('Range_type_for_services').disabled = false;
+					document.getElementById('Services').disabled = false;
+					document.getElementById('APL_for_low_priority').disabled = false;
+					document.getElementById('APL_for_high_priority').disabled = false;
+					OnChange_Range_type_for_services(form);
+				}
+			}
+			function OnChange_Range_type_for_services(form)
+			{
+				Range_type_for_services = document.getElementById('Range_type_for_services').value;
+				if (Range_type_for_services == "0000")
+				{
+					document.getElementById('Services').disabled = true;
+					document.getElementById('APL_for_low_priority').disabled = true;
+					document.getElementById('APL_for_high_priority').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Services').disabled = false;
+					document.getElementById('APL_for_low_priority').disabled = false;
+					document.getElementById('APL_for_high_priority').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

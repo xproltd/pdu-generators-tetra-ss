@@ -1,0 +1,248 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CAD-ACTIVATE_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_CAD_04_Table">
+				<tr>
+					<th align="left">
+						Range type for restricted users:
+					</th>
+					<td>
+						<select id="Range_type_for_restricted_users" onChange="Update_Multiple_user_mask(this.form)">
+							<option selected value="1" >1 Element
+							<option value="2" >2 Elements
+							<option value="3" >3 Elements
+							<option value="4" >4 Elements
+							<option value="5" >5 Elements
+							<option value="6" >6 Elements
+							<option value="7" >7 Elements
+							<option value="8" >8 Elements
+							<option value="9" >9 Elements
+							<option value="10">10 Elements
+							<option value="11">11 Elements
+							<option value="12">12 Elements
+							<option value="13">13 Elements
+							<option value="14">14 Elements
+							<option value="15">Range of Elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Restricted user address type:
+					</th>
+					<td>
+						<select id="Restricted_user_address_type" onChange="OnChange_Restricted_user_address_type(this.form)">
+							<option value="1">SSI
+							<option value="2">TSI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Restricted user SSI:
+					</th>
+					<td>
+						<input id="Restricted_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Restricted user extension:</th>
+					<td>
+						MCC: <input disabled id="Restricted_user_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Restricted_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Multiple user mask present:
+					</th>
+					<td>
+						<select id="Multiple_user_mask_present" onChange="OnChange_Multiple_user_mask_present(this.form)">
+							<option value="0">Not Present
+							<option selected value="1">Present
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Multiple user mask:
+					</th>
+					<td>
+						<input id="Multiple_user_mask" value="1" size="15" onkeypress="return AllowDigitOnly(event)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Activation result:
+					</th>
+					<td>
+						<select id="Activation_result" onChange="OnChange_Activation_result(this.form)">
+							<option value="0">Not accepted
+							<option value="1">Accepted
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Activation failure reason:
+					</th>
+					<td>
+						<select id="Activation_failure_reason">
+							<option value="0000000">Rejected for undefined reason
+							<option value="0000001">Not authorized restricted user
+							<option value="0000010">Not valid restricted user
+							<option value="0000100">Not authorized dispatcher
+							<option value="0001000">Not valid dispatcher
+							<option value="0010000">No dispatchers available
+							<option value="0100000">Undecodeable PDU
+							<option value="1000000">Range not supported
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Range_type_for_restricted_users = document.getElementById('Range_type_for_restricted_users').value;
+				Restricted_user_address_type = document.getElementById('Restricted_user_address_type').value;
+				Restricted_user_SSI = document.getElementById('Restricted_user_SSI').value;
+				Restricted_user_extension_MCC = document.getElementById('Restricted_user_extension_MCC').value;
+				Restricted_user_extension_MNC = document.getElementById('Restricted_user_extension_MNC').value;
+				Multiple_user_mask_present = document.getElementById('Multiple_user_mask_present').value;
+				Multiple_user_mask = document.getElementById('Multiple_user_mask').value;
+				Activation_result = document.getElementById('Activation_result').value;
+				Activation_failure_reason = document.getElementById('Activation_failure_reason').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(Range_type_for_restricted_users,4);
+				
+				Restricted_user_identity = dec2bin(Restricted_user_address_type,2);
+				if (Restricted_user_address_type == "1")
+				{
+					Restricted_user_identity += dec2bin(Restricted_user_SSI,24);
+				}
+				else if (Restricted_user_address_type == "2")
+				{
+					Restricted_user_identity += dec2bin(Restricted_user_SSI,24);
+					Restricted_user_identity += dec2bin(Restricted_user_extension_MCC,10);
+					Restricted_user_identity += dec2bin(Restricted_user_extension_MNC,14);
+				}
+				
+				if (Range_type_for_restricted_users == "15")
+				{
+					pdu_bin_value += Restricted_user_identity;
+					pdu_bin_value += Restricted_user_identity;
+				}
+				else
+				{
+					for (i=0; i<Range_type_for_restricted_users; i+=1)
+					{
+						pdu_bin_value += Restricted_user_identity;
+					}
+				}
+				
+				pdu_bin_value += Multiple_user_mask_present;
+				
+				if ( Multiple_user_mask_present == "1")
+				{
+					//To validate the Multiple_user_mask first we calculate how many elements there are in the range
+					
+					Number_of_range_elements = 1;
+					if (Range_type_for_restricted_users < 15)
+					{
+						Number_of_range_elements = Range_type_for_restricted_users;
+					}
+					//The length of Multiple_user_mask is the Number_of_range_elements
+					//Let's trim it, and then pad with "0"s if it is shorter than it should be.
+					
+					Multiple_user_mask = Multiple_user_mask.substring(0,Number_of_range_elements);
+					while (Multiple_user_mask.length < Number_of_range_elements)
+					{
+						Multiple_user_mask = "0" + Multiple_user_mask; 
+					}
+					
+					pdu_bin_value += Multiple_user_mask;
+				}
+				
+				pdu_bin_value += Activation_result;
+				
+				if (Activation_result == "0")
+				{
+					pdu_bin_value += Activation_failure_reason;
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Restricted_user_address_type(form)
+			{
+				Restricted_user_address_type = document.getElementById('Restricted_user_address_type').value;
+				if (Restricted_user_address_type == "1") 
+				{
+					document.getElementById('Restricted_user_SSI').disabled = false;
+					document.getElementById('Restricted_user_extension_MCC').disabled = true;
+					document.getElementById('Restricted_user_extension_MNC').disabled = true;
+				}
+				else
+				if (Restricted_user_address_type == "2") 
+				{
+					document.getElementById('Restricted_user_SSI').disabled = false;
+					document.getElementById('Restricted_user_extension_MCC').disabled = false;
+					document.getElementById('Restricted_user_extension_MNC').disabled = false;
+				}
+			}
+			function OnChange_Multiple_user_mask_present(form)
+			{
+				Multiple_user_mask_present = document.getElementById('Multiple_user_mask_present').value;
+				if (Multiple_user_mask_present == "0") 
+				{
+					document.getElementById('Multiple_user_mask').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Multiple_user_mask').disabled = false;
+				}
+			}
+			function Update_Multiple_user_mask(form)
+			{
+				Range_type_for_restricted_users = document.getElementById('Range_type_for_restricted_users').value;
+				Number_of_range_elements = 1;
+				if (Range_type_for_restricted_users > 1 && Range_type_for_restricted_users < 15)
+				{
+					Number_of_range_elements = Range_type_for_restricted_users;
+				}
+				document.getElementById('Multiple_user_mask').value = "101010101010101010".substring(0,Number_of_range_elements);
+			}
+			function OnChange_Activation_result(form)
+			{
+				Activation_result = document.getElementById('Activation_result').value;
+				if (Activation_result == "0") 
+				{
+					document.getElementById('Activation_failure_reason').disabled = false;
+				}
+				else
+				{
+					document.getElementById('Activation_failure_reason').disabled = true;
+				}
+			}
+			function AllowDigitOnly(digits)
+			{
+				var charCode = (digits.which) ? digits.which : event.keyCode
+				if (charCode < 48 || charCode > 49)
+					return false;
+				return true;
+			}
+		</script>
+	</body>
+</html>

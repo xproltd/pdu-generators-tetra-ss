@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-AP-ASSIGN_ACK</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_AP_02_Table">
+				<tr>
+					<th align="left">
+						Assignment result:
+					</th>
+					<td>
+						<select id="Assignment_result" onChange="OnChange_Assignment_result(this.form)">
+							<option value="0">Not accepted
+							<option selected value="1">Accepted
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Services:
+					</th>
+					<td>
+						<select id="Services">
+							<option value="00001">Circuit mode speech
+							<option value="00010">Circuit mode data
+							<option value="00100">Packet mode data
+							<option value="01000">SDS
+							<option value="10000">Supplementary services management
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Assignment_result = document.getElementById('Assignment_result').value;
+				Services = document.getElementById('Services').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Assignment_result;
+				
+				if (Assignment_result == "1")
+				{
+					pdu_bin_value += Services;
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Assignment_result(form)
+			{
+				Assignment_result = document.getElementById('Assignment_result').value;
+				if (Assignment_result == "0")
+				{
+					document.getElementById('Services').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Services').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<meta name="keywords" content="Tetra, TETRA SS, Tetra Supplementary Services, PDU Genrator, Tetra stack, Tetra protocol, List Search Call, LSC, ACTIVATE, ACTIVATE ACK, DEACTIVATE, DEACTIVATE ACK, DEFINE, DEFINE ACK, INTERROGATE, INTERROGATE ACK, LSC INVOKED, LSC INVOKED FOR CALLING USER">
+		<meta name="description" content="TETRA SS List Search Call (LSC) PDU generator">
+		<title>TETRA SS - List Search Call (LSC) PDU generator</title>
+		<script SRC="SS_Util.js" LANGUAGE="JavaScript" type="text/JavaScript"></script>
+		<link href="SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-34349720-4']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	</head>
+	<body class="darkblue">
+		<a href="http://www.xpro.co" target="_parent"><img alt="XPro Ltd logo" border="0" src="xpro.png" align="right" width="120"></a>
+		<form action="">
+			<p>
+				<span class="header">TETRA SS - List Search Call (LSC) PDU generator</span>
+				<br>Copyright &#64; <a href="http://www.xpro.co" target="_parent">XPro Ltd</a> 2012
+			</p>
+			<table>
+				<col width="160">
+				<tr>
+					<th class="h" align="right"> Information element</th><th class="h" align="left">Value</th>
+				</tr>
+				<tr>
+					<th align="left">SS Type</th><th align="left">SS-LSC</th>
+				</tr>
+				<tr>
+					<th nowrap align="right">SS-LSC PDU type</th>
+					<td>
+						<select id="LSC_PDU_type" onchange="this.form.PDU_Hex_Value.value = ''; document.getElementById('SS_Proto_IFrame').src = GetValue(this.form.LSC_PDU_type.value,0)">
+								<option value="SS_LSC/SS_LSC_ACTIVATE.htm,                     00101">ACTIVATE
+								<option value="SS_LSC/SS_LSC_ACTIVATE_ACK.htm,                 00110">ACTIVATE ACK
+								<option value="SS_LSC/SS_LSC_DEACTIVATE.htm,                   00111">DEACTIVATE
+								<option value="SS_LSC/SS_LSC_DEACTIVATE_ACK.htm,               01000">DEACTIVATE ACK
+								<option value="SS_LSC/SS_LSC_DEFINE.htm,                       01001">DEFINE
+								<option value="SS_LSC/SS_LSC_DEFINE_ACK.htm,                   01010">DEFINE ACK
+								<option value="SS_LSC/SS_LSC_INTERROGATE.htm,                  01011">INTERROGATE
+								<option value="SS_LSC/SS_LSC_INTERROGATE_ACK.htm,              01100">INTERROGATE ACK
+								<option value="SS_LSC/SS_LSC_LSC_INVOKED.htm,                  01101">LSC INVOKED
+								<option value="SS_LSC/SS_LSC_LSC_INVOKED_FOR_CALLING_USER.htm, 01110">LSC INVOKED FOR CALLING USER
+						</select>
+					</td>
+				</tr>
+			</table>
+			<iframe name="SS_Proto_IFrame" id="SS_Proto_IFrame" onLoad="Autosize_IFrame(this)" frameborder="0" height="308" width="500" src="SS_LSC/SS_LSC_ACTIVATE.htm"></iframe>
+			<table>
+				<tr>
+					<th>
+						<p>
+							<input type="button" value="Generate" onClick="WritePDUToCtrl(this.form.PDU_Hex_Value)">                
+							<input type="button" value="Write To File" onClick="WritePDUToFile(this.form.FileName.value)">
+							<input id="FileName" value="C:\Temp\SS_LSC_PDUs.ss" size=32 >
+							<br>
+							User Header:  <input id="UserHeader" value="" size=51 NAME="UserHeader">
+							<br>
+							<textarea id="PDU_Hex_Value" rows="4" cols="60"></textarea>
+						</p>
+						<p>
+							<a HREF="SS_PDU_Generator.htm">SS Home</a>
+						</p>
+					</th>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetPDU_Hex()
+			{
+				pdu_bin_value = dec2bin(5,6);
+				pdu_bin_value += GetValue(document.getElementById('LSC_PDU_type').value,1); 
+				
+				return document.getElementById('UserHeader').value + document.getElementById("SS_Proto_IFrame").contentWindow.GetHexValue(pdu_bin_value);
+			}
+
+			function WritePDUToCtrl(ctrl)
+			{
+				pdu_hex_value = GetPDU_Hex();
+				ctrl.value = pdu_hex_value;
+			}
+
+			function WritePDUToFile(filename)
+			{
+				pdu_hex_value = GetPDU_Hex();
+				document.getElementById('PDU_Hex_Value').value = pdu_hex_value;
+				WriteToFile(filename,pdu_hex_value);
+			}
+		</script>
+	</body>
+</html>

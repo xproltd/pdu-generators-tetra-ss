@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-CAD-ACTIVATE</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form name="Form1" id="Form1" action="">
+			<table ID="SS_CAD_03_Table">
+				<tr>
+					<th align="left">
+						Range type for restricted users:
+					</th>
+					<td>
+						<select id="Range_type_for_restricted_users">
+							<option selected value="1" >1 Element
+							<option value="2" >2 Elements
+							<option value="3" >3 Elements
+							<option value="4" >4 Elements
+							<option value="5" >5 Elements
+							<option value="6" >6 Elements
+							<option value="7" >7 Elements
+							<option value="8" >8 Elements
+							<option value="9" >9 Elements
+							<option value="10">10 Elements
+							<option value="11">11 Elements
+							<option value="12">12 Elements
+							<option value="13">13 Elements
+							<option value="14">14 Elements
+							<option value="15">Range of Elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Restricted user address type:
+					</th>
+					<td>
+						<select id="Restricted_user_address_type" onChange="OnChange_Restricted_user_address_type(this.form)">
+							<option value="1">SSI
+							<option value="2">TSI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Restricted user SSI:
+					</th>
+					<td>
+						<input id="Restricted_user_SSI" value="62033" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Restricted user extension:</th>
+					<td>
+						MCC: <input disabled id="Restricted_user_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Restricted_user_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Range type for dispatchers:
+					</th>
+					<td>
+						<select id="T2_Range_type_for_dispatchers" onChange="OnChange_T2_Range_type_for_dispatchers(this.form)">
+							<option selected value="0">T2 Not Present
+							<option value="1">T2 Present
+						</select>
+						<br>
+						<select disabled id="Range_type_for_dispatchers" onChange="OnChange_Range_type_for_dispatchers(this.form)">
+							<option value="0" >No Element
+							<option selected value="1" >1 Element
+							<option value="2" >2 Elements
+							<option value="3" >3 Elements
+							<option value="4" >4 Elements
+							<option value="5" >5 Elements
+							<option value="6" >6 Elements
+							<option value="7" >7 Elements
+							<option value="8" >8 Elements
+							<option value="9" >9 Elements
+							<option value="10">10 Elements
+							<option value="11">11 Elements
+							<option value="12">12 Elements
+							<option value="13">13 Elements
+							<option value="14">14 Elements
+							<option value="15">Range of Elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Dispatcher address type:
+					</th>
+					<td>
+						<select disabled id="Dispatcher_address_type" onChange="OnChange_Dispatcher_address_type(this.form)">
+							<option value="1">SSI
+							<option value="2">TSI
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Dispatcher user SSI:
+					</th>
+					<td>
+						<input disabled id="Dispatcher_SSI" value="62034" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Dispatcher extension:</th>
+					<td>
+						MCC: <input disabled id="Dispatcher_extension_MCC" value="234" size=5 >
+						MNC: <input disabled id="Dispatcher_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+				Range_type_for_restricted_users = document.getElementById('Range_type_for_restricted_users').value;
+				Restricted_user_address_type = document.getElementById('Restricted_user_address_type').value;
+				Restricted_user_SSI = document.getElementById('Restricted_user_SSI').value;
+				Restricted_user_extension_MCC = document.getElementById('Restricted_user_extension_MCC').value;
+				Restricted_user_extension_MNC = document.getElementById('Restricted_user_extension_MNC').value;
+				T2_Range_type_for_dispatchers = document.getElementById('T2_Range_type_for_dispatchers').value;
+				Range_type_for_dispatchers = document.getElementById('Range_type_for_dispatchers').value;
+				Dispatcher_address_type = document.getElementById('Dispatcher_address_type').value;
+				Dispatcher_SSI = document.getElementById('Dispatcher_SSI').value;
+				Dispatcher_extension_MCC = document.getElementById('Dispatcher_extension_MCC').value;
+				Dispatcher_extension_MNC = document.getElementById('Dispatcher_extension_MNC').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += dec2bin(Range_type_for_restricted_users,4);
+				
+				Restricted_user_identity = dec2bin(Restricted_user_address_type,2);
+				if (Restricted_user_address_type == "1")
+				{
+					Restricted_user_identity += dec2bin(Restricted_user_SSI,24);
+				}
+				else if (Restricted_user_address_type == "2")
+				{
+					Restricted_user_identity += dec2bin(Restricted_user_SSI,24);
+					Restricted_user_identity += dec2bin(Restricted_user_extension_MCC,10);
+					Restricted_user_identity += dec2bin(Restricted_user_extension_MNC,14);
+				}
+				
+				if (Range_type_for_restricted_users == "15")
+				{
+					pdu_bin_value += Restricted_user_identity;
+					pdu_bin_value += Restricted_user_identity;
+				}
+				else
+				{
+					for (i=0; i<Range_type_for_restricted_users; i+=1)
+					{
+						pdu_bin_value += Restricted_user_identity;
+					}
+				}
+				
+				// T2 presence bit. There is only one optional T2 element.
+				//Its presence defines the T2 presence bit.
+				T2_bin_value = T2_Range_type_for_dispatchers;
+					
+				if (T2_Range_type_for_dispatchers == "1")
+				{
+					//Add the presence bit
+					T2_bin_value += "1";
+					
+					T2_bin_value += dec2bin(Range_type_for_dispatchers,4);
+					Dispatcher_identity = dec2bin(Dispatcher_address_type,2);
+					
+					if (Dispatcher_address_type == "1")
+					{
+						Dispatcher_identity += dec2bin(Dispatcher_SSI,24);
+					}
+					else if (Dispatcher_address_type == "2")
+					{
+						Dispatcher_identity += dec2bin(Dispatcher_SSI,24);
+						Dispatcher_identity += dec2bin(Dispatcher_extension_MCC,10);
+						Dispatcher_identity += dec2bin(Dispatcher_extension_MNC,14);
+					}
+					//Add the dispatchers identity to T2_bin_value
+					if (Range_type_for_dispatchers == "15")
+					{
+						T2_bin_value += Dispatcher_identity;
+						T2_bin_value += Dispatcher_identity;
+					}
+					else
+					{
+						for (i=0; i<Range_type_for_dispatchers; i+=1)
+						{
+							T2_bin_value += Dispatcher_identity;
+						}
+					}
+				}
+
+				pdu_bin_value += T2_bin_value;
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Restricted_user_address_type(form)
+			{
+				Restricted_user_address_type = document.getElementById('Restricted_user_address_type').value;
+				if (Restricted_user_address_type == "1") 
+				{
+					document.getElementById('Restricted_user_SSI').disabled = false;
+					document.getElementById('Restricted_user_extension_MCC').disabled = true;
+					document.getElementById('Restricted_user_extension_MNC').disabled = true;
+				}
+				else
+				if (Restricted_user_address_type == "2") 
+				{
+					document.getElementById('Restricted_user_SSI').disabled = false;
+					document.getElementById('Restricted_user_extension_MCC').disabled = false;
+					document.getElementById('Restricted_user_extension_MNC').disabled = false;
+				}
+			}
+			function OnChange_T2_Range_type_for_dispatchers(form)
+			{
+				T2_Range_type_for_dispatchers = document.getElementById('T2_Range_type_for_dispatchers').value;
+				if (T2_Range_type_for_dispatchers == "1")
+				{
+					document.getElementById('Range_type_for_dispatchers').disabled = false;
+					document.getElementById('Dispatcher_address_type').disabled = false;
+					document.getElementById('Dispatcher_SSI').disabled = false;
+					document.getElementById('Dispatcher_extension_MCC').disabled = false;
+					document.getElementById('Dispatcher_extension_MNC').disabled = false;
+					OnChange_Range_type_for_dispatchers(form)
+				}
+				else
+				{
+					document.getElementById('Range_type_for_dispatchers').disabled = true;
+					document.getElementById('Dispatcher_address_type').disabled = true;
+					document.getElementById('Dispatcher_SSI').disabled = true;
+					document.getElementById('Dispatcher_extension_MCC').disabled = true;
+					document.getElementById('Dispatcher_extension_MNC').disabled = true;
+				}
+			}
+			function OnChange_Range_type_for_dispatchers(form)
+			{
+				Range_type_for_dispatchers = document.getElementById('Range_type_for_dispatchers').value;
+				if (Range_type_for_dispatchers == "0")
+				{
+					document.getElementById('Dispatcher_address_type').disabled = true;
+					document.getElementById('Dispatcher_SSI').disabled = true;
+					document.getElementById('Dispatcher_extension_MCC').disabled = true;
+					document.getElementById('Dispatcher_extension_MNC').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Dispatcher_address_type').disabled = false;
+					document.getElementById('Dispatcher_SSI').disabled = false;
+					OnChange_Dispatcher_address_type(form);
+				}
+			}
+			function OnChange_Dispatcher_address_type(form)
+			{
+				Dispatcher_address_type = document.getElementById('Dispatcher_address_type').value;
+				if (Dispatcher_address_type == "1") 
+				{
+					document.getElementById('Dispatcher_SSI').disabled = false;
+					document.getElementById('Dispatcher_extension_MCC').disabled = true;
+					document.getElementById('Dispatcher_extension_MNC').disabled = true;
+				}
+				else
+				if (Dispatcher_address_type == "2") 
+				{
+					document.getElementById('Dispatcher_SSI').disabled = false;
+					document.getElementById('Dispatcher_extension_MCC').disabled = false;
+					document.getElementById('Dispatcher_extension_MNC').disabled = false;
+				}
+			}
+		</script>
+	</body>
+</html>

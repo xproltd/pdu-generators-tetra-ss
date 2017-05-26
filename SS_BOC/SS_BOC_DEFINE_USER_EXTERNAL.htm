@@ -1,0 +1,407 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-BOC-DEFINE_USER_EXTERNAL</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_BOC_06_Table">
+				<tr>
+					<th align="left">
+						Acknowledgement from affected user:
+					</th>
+					<td>
+						<select id="Acknowledgement_from_affected_user">
+							<option value="0">Acknowledgement not requested
+							<option value="1">Acknowledgement requested
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Definition type:
+					</th>
+					<td>
+						<select id="Definition_type" onChange="OnChange_Definition_type(this.form)">
+							<option selected value="00">Addition
+							<option value="01">Replacement
+							<option value="10">Removal
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Number of services:
+					</th>
+					<td>
+						<select id="Number_of_services">
+							<option value="001">One service
+							<option value="010">Two services
+							<option value="011">Three services
+							<option value="100">Four services
+							<option value="101">Five services
+							<option value="110">Six services
+							<option value="111">Seven services
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Service:
+					</th>
+					<td>
+						<select id="Service">
+							<option value="001">All applicable services
+							<option value="010">Circuit mode speech service
+							<option value="011">Circuit mode data service
+							<option value="100">Short Data Service (SDS)
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Range type for closed user group identities:
+					</th>
+					<td>
+                        <select id="Range_type_for_closed_user_group_identities" onChange="OnChange_Range_type_for_closed_user_group_identities(this.form)">
+							<option value="0000">No element
+							<option selected value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Closed user group SSI:
+					</th>
+					<td>
+						<input id="Closed_user_group_SSI" value="62034" size=15>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Closed user group extension:</th>
+					<td>
+						<select id="Closed_user_group_extension_present" onChange="OnChange_Closed_user_group_extension_present(this.form)">
+							<option value="0">Not present
+							<option selected value="1">Present
+						</select>
+						MCC: <input id="Closed_user_group_extension_MCC" value="234" size=5 >
+						MNC: <input id="Closed_user_group_extension_MNC" value="73" size=5 >
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Range type for restricted external numbers:
+					</th>
+					<td>
+                        <select id="Range_type_for_restricted_external_numbers" onChange="OnChange_Range_type_for_restricted_external_numbers(this.form)">
+							<option value="0000">No element
+							<option selected value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Restricted external number length indicator:</th>
+					<td>
+						<input id="Restricted_external_number_length_indicator" value="13" size=2 onChange="OnChange_Restricted_external_number_length_indicator(this.form)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Restricted external number:</th>
+					<td>
+						<input id="Restricted_external_number" value="+#*1234567890" maxlength=31 size=20>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">
+						Range type for exception to restricted external numbers:
+					</th>
+					<td>
+                        <select id="Range_type_for_exception_to_restricted_external_numbers" onChange="OnChange_Range_type_for_exception_to_restricted_external_numbers(this.form)">
+							<option value="0000">No element
+							<option selected value="0001">1 element
+							<option value="0010">2 elements
+							<option value="0011">3 elements
+							<option value="0100">4 elements
+							<option value="0101">5 elements
+							<option value="0110">6 elements
+							<option value="0111">7 elements
+							<option value="1000">8 elements
+							<option value="1001">9 elements
+							<option value="1010">10 elements
+							<option value="1011">11 elements
+							<option value="1100">12 elements
+							<option value="1101">13 elements
+							<option value="1110">14 elements
+							<option value="1111">Range of elements
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Exception to restricted external number length indicator:</th>
+					<td>
+						<input id="Exception_to_restricted_external_number_length_indicator" value="13" size=2 onChange="OnChange_Exception_to_restricted_external_number_length_indicator(this.form)">
+					</td>
+				</tr>
+				<tr>
+					<th align="left">Exception to restricted external number:</th>
+					<td>
+						<input id="Exception_to_restricted_external_number" value="+#*1234567890" maxlength=31 size=20>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				//Get Mandatory Information Element values
+
+				Acknowledgement_from_affected_user = document.getElementById('Acknowledgement_from_affected_user').value;
+				Definition_type = document.getElementById('Definition_type').value;
+				Number_of_services = document.getElementById('Number_of_services').value;
+				Service = document.getElementById('Service').value;
+
+				Range_type_for_closed_user_group_identities = document.getElementById('Range_type_for_closed_user_group_identities').value;
+				Closed_user_group_SSI = document.getElementById('Closed_user_group_SSI').value;
+				Closed_user_group_extension_present = document.getElementById('Closed_user_group_extension_present').value;
+				Closed_user_group_extension_MCC = document.getElementById('Closed_user_group_extension_MCC').value;
+				Closed_user_group_extension_MNC = document.getElementById('Closed_user_group_extension_MNC').value;
+
+				Range_type_for_restricted_external_numbers = document.getElementById('Range_type_for_restricted_external_numbers').value;
+				Restricted_external_number_length_indicator = document.getElementById('Restricted_external_number_length_indicator').value;
+				Restricted_external_number = document.getElementById('Restricted_external_number').value;
+
+				Range_type_for_exception_to_restricted_external_numbers = document.getElementById('Range_type_for_exception_to_restricted_external_numbers').value;
+				Exception_to_restricted_external_number_length_indicator = document.getElementById('Exception_to_restricted_external_number_length_indicator').value;
+				Exception_to_restricted_external_number = document.getElementById('Exception_to_restricted_external_number').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Acknowledgement_from_affected_user;
+				pdu_bin_value += Definition_type;
+				pdu_bin_value += Number_of_services;
+				for (i=0; i<parseInt(Number_of_services,2); i+=1)
+				{
+					pdu_bin_value += Service;
+				}
+				
+				if (Definition_type != "10")
+				{
+					// Closed user group identity block
+					
+					pdu_bin_value += Range_type_for_closed_user_group_identities;
+					
+					if (Range_type_for_closed_user_group_identities != "0000")
+					{
+						Closed_user_group_identity = dec2bin(Closed_user_group_SSI,24);
+						Closed_user_group_identity += Closed_user_group_extension_present;
+						if (Closed_user_group_extension_present == "1")
+						{
+							Closed_user_group_identity += dec2bin(Closed_user_group_extension_MCC,10);
+							Closed_user_group_identity += dec2bin(Closed_user_group_extension_MNC,14);
+						}
+						if (Range_type_for_closed_user_group_identities == "1111")
+						{
+							pdu_bin_value += Closed_user_group_identity;
+							pdu_bin_value += Closed_user_group_identity;
+						}
+						else
+						{
+							for (i=0; i<parseInt(Range_type_for_closed_user_group_identities,2); i+=1)
+							{
+								pdu_bin_value += Closed_user_group_identity;
+							}
+						}
+					}
+					
+					// Restricted external number block
+					pdu_bin_value += Range_type_for_restricted_external_numbers;
+
+					if (Range_type_for_restricted_external_numbers != "0000")
+					{
+						Restricted_external_number_definition = dec2bin(Restricted_external_number_length_indicator,5);
+						
+						var Number_of_digits = parseInt(Restricted_external_number_length_indicator,10);
+						var digits = Restricted_external_number.substring(0,Number_of_digits);
+						Restricted_external_number_definition += digit2bin(digits);
+						
+						if (Range_type_for_restricted_external_numbers == "1111")
+						{
+							pdu_bin_value += Restricted_external_number_definition;
+							pdu_bin_value += Restricted_external_number_definition;
+						}
+						else
+						{
+							for (i=0; i<parseInt(Range_type_for_restricted_external_numbers,2); i+=1)
+							{
+								pdu_bin_value += Restricted_external_number_definition;
+							}
+						}
+					}
+					
+					// Exception to restricted external number block
+					pdu_bin_value += Range_type_for_exception_to_restricted_external_numbers;
+					
+					if (Range_type_for_exception_to_restricted_external_numbers != "0000")
+					{
+						Exception_to_restricted_external_number_definition = dec2bin(Exception_to_restricted_external_number_length_indicator,5);
+						
+						var Number_of_digits = parseInt(Exception_to_restricted_external_number_length_indicator,10);
+						var digits = Exception_to_restricted_external_number.substring(0,Number_of_digits);
+						Exception_to_restricted_external_number_definition += digit2bin(digits);
+						
+						if (Range_type_for_exception_to_restricted_external_numbers == "1111")
+						{
+							pdu_bin_value += Exception_to_restricted_external_number_definition;
+							pdu_bin_value += Exception_to_restricted_external_number_definition;
+						}
+						else
+						{
+							for (i=0; i<parseInt(Range_type_for_exception_to_restricted_external_numbers,2); i+=1)
+							{
+								pdu_bin_value += Exception_to_restricted_external_number_definition;
+							}
+						}
+					}
+				}
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+			function OnChange_Range_type_for_closed_user_group_identities(form)
+			{
+				Range_type_for_closed_user_group_identities = document.getElementById('Range_type_for_closed_user_group_identities').value;
+				if (Range_type_for_closed_user_group_identities == "0000")
+				{
+					document.getElementById('Closed_user_group_SSI').disabled = true;
+					document.getElementById('Closed_user_group_extension_present').disabled = true;
+					document.getElementById('Closed_user_group_extension_MCC').disabled = true;
+					document.getElementById('Closed_user_group_extension_MNC').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Closed_user_group_SSI').disabled = false;
+					document.getElementById('Closed_user_group_extension_present').disabled = false;
+					document.getElementById('Closed_user_group_extension_MCC').disabled = false;
+					document.getElementById('Closed_user_group_extension_MNC').disabled = false;
+					OnChange_Closed_user_group_extension_present(form);
+				}
+			}
+			function OnChange_Closed_user_group_extension_present(form)
+			{
+				Closed_user_group_extension_present = document.getElementById('Closed_user_group_extension_present').value;
+				if (Closed_user_group_extension_present == "0")
+				{
+					document.getElementById('Closed_user_group_extension_MCC').disabled = true;
+					document.getElementById('Closed_user_group_extension_MNC').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Closed_user_group_extension_MCC').disabled = false;
+					document.getElementById('Closed_user_group_extension_MNC').disabled = false;
+				}
+			}
+			function OnChange_Range_type_for_restricted_external_numbers(form)
+			{
+				Range_type_for_restricted_external_numbers = document.getElementById('Range_type_for_restricted_external_numbers').value;
+				if (Range_type_for_restricted_external_numbers == "0000")
+				{
+					document.getElementById('Restricted_external_number_length_indicator').disabled = true;
+					document.getElementById('Restricted_external_number').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Restricted_external_number_length_indicator').disabled = false;
+					document.getElementById('Restricted_external_number').disabled = false;
+				}
+			}
+			function OnChange_Restricted_external_number_length_indicator(form)
+			{
+				Restricted_external_number_length_indicator = document.getElementById('Restricted_external_number_length_indicator').value;
+				var var_external_subscriber_digits = "+#*12345678901234567890123456789";
+				
+				Number_of_digits = parseInt(Restricted_external_number_length_indicator,10);
+				External_subscriber_number = var_external_subscriber_digits.substring(0,Number_of_digits);
+				document.getElementById('Restricted_external_number').value = External_subscriber_number;
+			}
+			function OnChange_Range_type_for_exception_to_restricted_external_numbers(form)
+			{
+				Range_type_for_exception_to_restricted_external_numbers = document.getElementById('Range_type_for_exception_to_restricted_external_numbers').value;
+				if (Range_type_for_exception_to_restricted_external_numbers == "0000")
+				{
+					document.getElementById('Exception_to_restricted_external_number_length_indicator').disabled = true;
+					document.getElementById('Exception_to_restricted_external_number').disabled = true;
+				}
+				else
+				{
+					document.getElementById('Exception_to_restricted_external_number_length_indicator').disabled = false;
+					document.getElementById('Exception_to_restricted_external_number').disabled = false;
+				}
+			}
+			function OnChange_Exception_to_restricted_external_number_length_indicator(form)
+			{
+				Exception_to_restricted_external_number_length_indicator = document.getElementById('Exception_to_restricted_external_number_length_indicator').value;
+				var var_external_subscriber_digits = "+#*12345678901234567890123456789";
+				
+				Number_of_digits = parseInt(Exception_to_restricted_external_number_length_indicator,10);
+				External_subscriber_number = var_external_subscriber_digits.substring(0,Number_of_digits);
+				document.getElementById('Exception_to_restricted_external_number').value = External_subscriber_number;
+			}
+			function OnChange_Definition_type(form)
+			{
+				Definition_type = document.getElementById('Definition_type').value;
+				for(i=4;i<form.length;i++)
+				{
+					form.elements[i].disabled = true;
+				}
+				if (Definition_type != "10")
+				{
+					document.getElementById('Range_type_for_closed_user_group_identities').disabled = false;
+					document.getElementById('Closed_user_group_SSI').disabled = false;
+					document.getElementById('Closed_user_group_extension_present').disabled = false;
+					OnChange_Closed_user_group_extension_present(form);
+					OnChange_Range_type_for_closed_user_group_identities(form);
+					document.getElementById('Range_type_for_restricted_external_numbers').disabled = false;
+					document.getElementById('Restricted_external_number_length_indicator').disabled = false;
+					document.getElementById('Restricted_external_number').disabled = false;
+					OnChange_Range_type_for_restricted_external_numbers(form);
+					document.getElementById('Range_type_for_exception_to_restricted_external_numbers').disabled = false;
+					document.getElementById('Exception_to_restricted_external_number_length_indicator').disabled = false;
+					document.getElementById('Exception_to_restricted_external_number').disabled = false;
+					OnChange_Range_type_for_exception_to_restricted_external_numbers(form);
+				}
+			}
+		</script>
+	</body>
+</html>

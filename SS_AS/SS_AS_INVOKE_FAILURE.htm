@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+		<title>Tetra SS - SS-AS-INVOKE_FAILURE</title>
+		<script src="../SS_Util.js" language="JavaScript" type="text/JavaScript"></script>
+		<link href="../SS_PDU_Generator.css" rel="stylesheet" type="text/css">
+	</head>
+	<body style="" class="PDU_page">
+		<form id="Form1" action="">
+			<table ID="SS_AS_07_Table">
+				<tr>
+					<th align="left">
+						Invocation failure cause:
+					</th>
+					<td>
+						<select id="Invocation_failure_cause">
+							<option value="0000">SS-AS not subscribed for served user/group
+							<option value="0001">Invoked selected area number not defined
+							<option value="0010">SS-AS not supported by called user/group home SwMI
+							<option value="0011">SS-AS option not supported by called user/group home SwMI
+							<option value="0100">SS-AS option not supported by called user/group home SwMI
+							<option value="0101">SS-AS not supported by terminating SwMI
+							<option value="0110">SS-AS not supported by group controlling SwMI (group linking)
+							<option value="0111">SS-AS not supported by critical participating SwMI(s)
+							<option value="1000">SS-AS not supported by participating SwMI(s) non-critical
+							<option value="1001">SS-AS not supported by originating SwMI - non-critical failure
+							<option value="1010">Type of definition not supported by terminating SwMI
+							<option value="1011">Type of definition not supported by group controlling SwMI
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<script language="JavaScript" type="text/JavaScript">
+			function GetHexValue(pdu_header)
+			{
+				Invocation_failure_cause = document.getElementById('Invocation_failure_cause').value;
+				
+				//Initialize using the PDU Header
+				pdu_bin_value = pdu_header;
+				
+				pdu_bin_value += Invocation_failure_cause;
+				
+				//Convert the final binary result to hex and return
+				return bin2hex(pdu_bin_value);
+			}
+		</script>
+	</body>
+</html>
